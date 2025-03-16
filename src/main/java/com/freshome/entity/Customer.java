@@ -1,12 +1,19 @@
 package com.freshome.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import jakarta.persistence.Entity;
+import jakarta.persistence.OneToOne;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
-//@AllArgsConstructor
-//@NoArgsConstructor
+@Getter
 @SuperBuilder
+@AllArgsConstructor
+@NoArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
+@Entity
 public class Customer extends User {
+
+    @OneToOne
+    Credit credit;
 }

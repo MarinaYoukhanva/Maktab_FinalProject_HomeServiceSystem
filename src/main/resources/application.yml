@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: Home Service System
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/spring
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        show_sql: true
+        default_schema: home
+
+server:
+  port: 8081
+
+

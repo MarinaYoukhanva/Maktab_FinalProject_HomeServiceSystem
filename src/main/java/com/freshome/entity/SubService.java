@@ -1,6 +1,8 @@
 package com.freshome.entity;
 
-import jakarta.persistence.*;
+import com.freshome.entity.base.BaseEntity;
+import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,24 +10,18 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
-import java.util.List;
-
 @Getter
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-public class Expert extends User {
+public class SubService extends BaseEntity<Long> {
 
-    byte[] profileImage;
-    Long score;
+    String name;
+    Long basePrice;
+    String description;
 
-    @ManyToMany
-    @JoinTable(uniqueConstraints = @UniqueConstraint(
-            columnNames = {"sub_services_id", "expert_id"}))
-    List<SubService> subServices;
-
-    @OneToOne
-    Credit credit;
+    @ManyToOne
+    ServiceCategory category;
 }
