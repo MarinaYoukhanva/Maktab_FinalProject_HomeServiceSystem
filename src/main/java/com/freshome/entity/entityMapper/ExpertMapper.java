@@ -17,6 +17,7 @@ public class ExpertMapper {
                 .phoneNumber(expertCreatDTO.getPhoneNumber())
                 .profileImage(expertCreatDTO.getProfileImage())
                 .score(expertCreatDTO.getScore())
+                .credit(expertCreatDTO.getCredit())
                 .build();
     }
 
@@ -31,7 +32,8 @@ public class ExpertMapper {
                 expert.getStatus(),
                 expert.getPhoneNumber(),
                 expert.getProfileImage(),
-                expert.getScore()
+                expert.getScore(),
+                expert.getCredit()
         );
     }
 }

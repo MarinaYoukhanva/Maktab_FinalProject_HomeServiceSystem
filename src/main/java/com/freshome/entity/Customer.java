@@ -7,6 +7,7 @@ import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
 @Getter
+@Setter
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -14,6 +15,6 @@ import lombok.experimental.SuperBuilder;
 @Entity
 public class Customer extends User {
 
-    @OneToOne
+    @OneToOne(orphanRemoval = true)
     Credit credit;
 }

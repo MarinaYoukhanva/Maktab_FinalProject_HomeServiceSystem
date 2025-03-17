@@ -1,29 +1,30 @@
 package com.freshome.entity.dto;
 
-import com.freshome.entity.Credit;
-import com.freshome.entity.Customer;
 import com.freshome.entity.enumeration.UserStatus;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
 
 @Getter
-public class CustomerCreateDTO extends UserCreateDTO {
+public class CustomerUpdateDto extends UserCreateDTO{
 
-    Credit credit;
+    @NotNull(message = "id can not be null for updating")
+    @PositiveOrZero
+    Long id;
 
-    public CustomerCreateDTO(
+    public CustomerUpdateDto(
+            Long id,
             String firstname,
             String lastname,
             String email,
             String password,
             LocalDateTime registerDateTime,
             UserStatus status,
-            String phoneNumber,
-            Credit credit) {
+            String phoneNumber) {
         super(firstname, lastname, email, password, registerDateTime, status, phoneNumber);
-        this.credit = credit;
+        this.id = id;
     }
-
-
 }

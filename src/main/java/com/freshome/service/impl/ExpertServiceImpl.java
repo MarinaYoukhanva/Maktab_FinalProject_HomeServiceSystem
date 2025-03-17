@@ -1,9 +1,10 @@
-package com.freshome.service;
+package com.freshome.service.impl;
 
 import com.freshome.entity.dto.ExpertCreatDTO;
 import com.freshome.entity.dto.ExpertResponseDTO;
 import com.freshome.entity.entityMapper.ExpertMapper;
 import com.freshome.repository.ExpertRepository;
+import com.freshome.service.ExpertService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

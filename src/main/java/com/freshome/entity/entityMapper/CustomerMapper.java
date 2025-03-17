@@ -3,6 +3,7 @@ package com.freshome.entity.entityMapper;
 import com.freshome.entity.Customer;
 import com.freshome.entity.dto.CustomerCreateDTO;
 import com.freshome.entity.dto.CustomerResponseDTO;
+import com.freshome.entity.dto.CustomerUpdateDto;
 
 public class CustomerMapper {
 
@@ -15,6 +16,7 @@ public class CustomerMapper {
                 .registerDateTime(customerCreateDTO.getRegisterDateTime())
                 .status(customerCreateDTO.getStatus())
                 .phoneNumber(customerCreateDTO.getPhoneNumber())
+                .credit(customerCreateDTO.getCredit())
                 .build();
     }
 
@@ -27,19 +29,20 @@ public class CustomerMapper {
                 customer.getPassword(),
                 customer.getRegisterDateTime(),
                 customer.getStatus(),
-                customer.getPhoneNumber()
+                customer.getPhoneNumber(),
+                customer.getCredit()
         );
     }
-//    public static CustomerResponseDTO from(Customer customer) {
-//        return CustomerResponseDTO.builder()
-//                .id(customer.getId())
-//                .firstname(customer.getFirstname())
-//                .lastname(customer.getLastname())
-//                .email(customer.getEmail())
-//                .password(customer.getPassword())
-//                .registerDateTime(customer.getRegisterDateTime())
-//                .status(customer.getStatus())
-//                .phoneNumber(customer.getPhoneNumber())
-//                .build();
-//    }
+
+    public static Customer customerFromDto(Customer customer, CustomerUpdateDto customerUpdateDto) {
+        customer.setFirstname(customerUpdateDto.getFirstname());
+        customer.setLastname(customerUpdateDto.getLastname());
+        customer.setEmail(customerUpdateDto.getEmail());
+        customer.setPassword(customerUpdateDto.getPassword());
+        customer.setRegisterDateTime(customerUpdateDto.getRegisterDateTime());
+        customer.setStatus(customerUpdateDto.getStatus());
+        customer.setPhoneNumber(customerUpdateDto.getPhoneNumber());
+        return customer;
+    }
+
 }

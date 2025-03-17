@@ -1,5 +1,6 @@
 package com.freshome.entity.dto;
 
+import com.freshome.entity.Credit;
 import com.freshome.entity.enumeration.UserStatus;
 import java.time.LocalDateTime;
 
@@ -13,6 +14,7 @@ public record CustomerResponseDTO(
         String password,
         LocalDateTime registerDateTime,
         UserStatus status,
-        String phoneNumber
+        String phoneNumber,
+        Credit credit
 ) {
 }
