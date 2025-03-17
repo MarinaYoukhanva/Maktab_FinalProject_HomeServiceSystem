@@ -28,4 +28,5 @@ public class Expert extends User {
 
     @OneToOne
     Credit credit;
+
 }

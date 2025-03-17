@@ -27,6 +27,6 @@ public class Review extends BaseEntity<Long> {
     @ManyToOne
     Order order;
 
-//    @ManyToOne
-//    Expert expert;
+    @ManyToOne
+    Expert expert;
 }
