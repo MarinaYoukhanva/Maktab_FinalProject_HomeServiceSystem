@@ -1,11 +1,11 @@
-package com.freshome.entity.dto;
+package com.freshome.entity.dto.expert;
 
 import com.freshome.entity.Credit;
 import com.freshome.entity.enumeration.UserStatus;
+
 import java.time.LocalDateTime;
 
-
-public record CustomerResponseDTO(
+public record ExpertResponseDTO(
 
         Long id,
         String firstname,
@@ -15,6 +15,8 @@ public record CustomerResponseDTO(
         LocalDateTime registerDateTime,
         UserStatus status,
         String phoneNumber,
-        Credit credit
+        byte[] profileImage,
+        Long score,
+        Long creditId
 ) {
 }

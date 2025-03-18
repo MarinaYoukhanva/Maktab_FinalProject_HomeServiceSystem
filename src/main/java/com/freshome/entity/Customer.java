@@ -15,6 +15,6 @@ import lombok.experimental.SuperBuilder;
 @Entity
 public class Customer extends User {
 
-    @OneToOne(orphanRemoval = true)
+    @OneToOne(optional = false, orphanRemoval = true)
     Credit credit;
 }

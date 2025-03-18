@@ -1,8 +1,9 @@
 package com.freshome.entity.entityMapper;
 
 import com.freshome.entity.Expert;
-import com.freshome.entity.dto.ExpertCreatDTO;
-import com.freshome.entity.dto.ExpertResponseDTO;
+import com.freshome.entity.dto.expert.ExpertCreatDTO;
+import com.freshome.entity.dto.expert.ExpertResponseDTO;
+import com.freshome.entity.dto.expert.ExpertUpdateDTO;
 
 public class ExpertMapper {
 
@@ -17,7 +18,7 @@ public class ExpertMapper {
                 .phoneNumber(expertCreatDTO.getPhoneNumber())
                 .profileImage(expertCreatDTO.getProfileImage())
                 .score(expertCreatDTO.getScore())
-                .credit(expertCreatDTO.getCredit())
+//                .credit(expertCreatDTO.getCredit())
                 .build();
     }
 
@@ -33,7 +34,20 @@ public class ExpertMapper {
                 expert.getPhoneNumber(),
                 expert.getProfileImage(),
                 expert.getScore(),
-                expert.getCredit()
+                expert.getCredit().getId()
         );
+    }
+
+    public static Expert expertFromDto(Expert expert, ExpertUpdateDTO expertUpdateDTO) {
+        expert.setFirstname(expertUpdateDTO.getFirstname());
+        expert.setLastname(expertUpdateDTO.getLastname());
+        expert.setEmail(expertUpdateDTO.getEmail());
+        expert.setPassword(expertUpdateDTO.getPassword());
+        expert.setRegisterDateTime(expertUpdateDTO.getRegisterDateTime());
+        expert.setStatus(expertUpdateDTO.getStatus());
+        expert.setPhoneNumber(expertUpdateDTO.getPhoneNumber());
+        expert.setProfileImage(expertUpdateDTO.getProfileImage());
+        expert.setScore(expertUpdateDTO.getScore());
+        return expert;
     }
 }

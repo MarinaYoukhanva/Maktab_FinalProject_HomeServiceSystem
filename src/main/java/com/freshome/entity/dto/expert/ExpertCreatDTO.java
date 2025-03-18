@@ -1,9 +1,9 @@
-package com.freshome.entity.dto;
+package com.freshome.entity.dto.expert;
 
 import com.freshome.entity.Credit;
+import com.freshome.entity.dto.UserCreateDTO;
 import com.freshome.entity.enumeration.UserStatus;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
 
@@ -11,11 +11,11 @@ import java.time.LocalDateTime;
 
 @Getter
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class ExpertCreatDTO extends UserCreateDTO{
+public class ExpertCreatDTO extends UserCreateDTO {
 
     byte[] profileImage;
     Long score;
-    Credit credit;
+//    Credit credit;
 
     public ExpertCreatDTO(
             String firstname,
@@ -25,11 +25,10 @@ public class ExpertCreatDTO extends UserCreateDTO{
             UserStatus status,
             String phoneNumber,
             byte[] profileImage,
-            Long score,
-            Credit credit) {
+            Long score) {
         super(firstname, lastname, email, password, registerDateTime, status, phoneNumber);
         this.profileImage = profileImage;
         this.score = score;
-        this.credit = credit;
+//        this.credit = credit;
     }
 }

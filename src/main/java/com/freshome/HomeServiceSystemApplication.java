@@ -1,16 +1,12 @@
 package com.freshome;
 
-import com.freshome.entity.Credit;
-import com.freshome.entity.Customer;
-import com.freshome.entity.Expert;
-import com.freshome.entity.Order;
-import com.freshome.entity.dto.CustomerCreateDTO;
-import com.freshome.entity.dto.CustomerUpdateDto;
+import com.freshome.entity.dto.customer.CustomerCreateDTO;
+import com.freshome.entity.dto.expert.ExpertCreatDTO;
+import com.freshome.entity.dto.expert.ExpertUpdateDTO;
 import com.freshome.entity.enumeration.UserStatus;
-import com.freshome.repository.CreditRepository;
 import com.freshome.service.CreditService;
 import com.freshome.service.CustomerService;
-import lombok.experimental.SuperBuilder;
+import com.freshome.service.ExpertService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -38,6 +34,24 @@ public class HomeServiceSystemApplication {
 
 		CustomerService customerService = spring.getBean(CustomerService.class);
 		CreditService creditService = spring .getBean(CreditService.class);
+		ExpertService expertService = spring.getBean(ExpertService.class);
+
+//		try{
+//			expertService.createExpert(new ExpertCreatDTO(
+//					"m",null,null,null,LocalDateTime.now(),
+//					null,null,null,null,null
+//			));
+//		}catch (Exception e){
+//			System.out.println(e.getMessage());
+//		}
+//		try{
+//			expertService.updateExpert(new ExpertUpdateDTO(
+//					4L, "aa",null,null,null, null,
+//					null,null,null,null
+//			));
+//		}catch (Exception e){
+//			System.out.println(e.getMessage());
+//		}
 
 //		System.out.println(customerService.findCustomerById(2L).credit());
 
@@ -53,10 +67,11 @@ public class HomeServiceSystemApplication {
 //		}
 
 		try {
-			customerService.createCustomer(new CustomerCreateDTO(
+			var res = customerService.createCustomer(new CustomerCreateDTO(
 					"m", "y", null, null, LocalDateTime.now(),
-					UserStatus.PENDING_APPROVAL, null, null
+					UserStatus.PENDING_APPROVAL, null
 			));
+			System.out.println(res);
 		}catch (Exception e){
 			System.out.println(e.getMessage());
 		}

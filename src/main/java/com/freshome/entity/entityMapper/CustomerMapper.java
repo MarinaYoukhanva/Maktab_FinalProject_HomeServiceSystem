@@ -1,9 +1,9 @@
 package com.freshome.entity.entityMapper;
 
 import com.freshome.entity.Customer;
-import com.freshome.entity.dto.CustomerCreateDTO;
-import com.freshome.entity.dto.CustomerResponseDTO;
-import com.freshome.entity.dto.CustomerUpdateDto;
+import com.freshome.entity.dto.customer.CustomerCreateDTO;
+import com.freshome.entity.dto.customer.CustomerResponseDTO;
+import com.freshome.entity.dto.customer.CustomerUpdateDTO;
 
 public class CustomerMapper {
 
@@ -16,7 +16,7 @@ public class CustomerMapper {
                 .registerDateTime(customerCreateDTO.getRegisterDateTime())
                 .status(customerCreateDTO.getStatus())
                 .phoneNumber(customerCreateDTO.getPhoneNumber())
-                .credit(customerCreateDTO.getCredit())
+//                .credit(customerCreateDTO.getCredit())
                 .build();
     }
 
@@ -30,11 +30,12 @@ public class CustomerMapper {
                 customer.getRegisterDateTime(),
                 customer.getStatus(),
                 customer.getPhoneNumber(),
-                customer.getCredit()
+//                customer.getCredit() != null ? customer.getCredit().getId() : null
+                customer.getCredit().getId()
         );
     }
 
-    public static Customer customerFromDto(Customer customer, CustomerUpdateDto customerUpdateDto) {
+    public static Customer customerFromDto(Customer customer, CustomerUpdateDTO customerUpdateDto) {
         customer.setFirstname(customerUpdateDto.getFirstname());
         customer.setLastname(customerUpdateDto.getLastname());
         customer.setEmail(customerUpdateDto.getEmail());
@@ -44,5 +45,4 @@ public class CustomerMapper {
         customer.setPhoneNumber(customerUpdateDto.getPhoneNumber());
         return customer;
     }
-
 }
