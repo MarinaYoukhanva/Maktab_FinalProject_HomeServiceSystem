@@ -3,14 +3,12 @@ package com.freshome.entity;
 import com.freshome.entity.base.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
 @Getter
+@Setter
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -24,9 +22,9 @@ public class Review extends BaseEntity<Long> {
     @ManyToOne
     Customer customer;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     Order order;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     Expert expert;
 }

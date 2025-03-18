@@ -17,6 +17,9 @@ import java.util.List;
 public class Expert extends User {
 
     byte[] profileImage;
+
+    //    @Transient
+//    todo: in getter -> average based on ratings
     Long score;
 
     @ManyToMany

@@ -1,5 +1,6 @@
 package com.freshome.service;
 
+import com.freshome.entity.Expert;
 import com.freshome.entity.dto.expert.ExpertCreatDTO;
 import com.freshome.entity.dto.expert.ExpertResponseDTO;
 import com.freshome.entity.dto.expert.ExpertUpdateDTO;
@@ -7,6 +8,7 @@ import jakarta.validation.Valid;
 import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
+import java.util.Optional;
 
 @Validated
 public interface ExpertService {
@@ -15,9 +17,11 @@ public interface ExpertService {
 
     ExpertResponseDTO findExpertById(Long id);
 
+    Optional<Expert> findOptionalExpertById(Long id);
+
     List<ExpertResponseDTO> findAllExperts();
 
-    void deleteExpert(Long id);
+    void deleteExpertById(Long id);
 
     ExpertResponseDTO updateExpert(@Valid ExpertUpdateDTO expertUpdateDto);
 }

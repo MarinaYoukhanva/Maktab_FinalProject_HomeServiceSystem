@@ -49,6 +49,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
+//    @Transactional
     public Optional<Customer> findOptionalCustomerById(Long id) {
         return customerRepository.findById(id);
     }

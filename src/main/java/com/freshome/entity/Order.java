@@ -4,10 +4,7 @@ import com.freshome.entity.base.BaseEntity;
 import com.freshome.entity.embeddable.Address;
 import com.freshome.entity.enumeration.OrderStatus;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
@@ -15,6 +12,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
+@Setter
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -33,13 +31,13 @@ public class Order extends BaseEntity<Long> {
     @Enumerated(EnumType.STRING)
     OrderStatus status;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     Customer customer;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     Expert expert;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     SubService subService;
 
     @OneToMany(mappedBy = "order")

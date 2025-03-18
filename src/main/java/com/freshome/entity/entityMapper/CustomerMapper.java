@@ -29,9 +29,9 @@ public class CustomerMapper {
                 customer.getPassword(),
                 customer.getRegisterDateTime(),
                 customer.getStatus(),
-                customer.getPhoneNumber(),
+                customer.getPhoneNumber()
 //                customer.getCredit() != null ? customer.getCredit().getId() : null
-                customer.getCredit().getId()
+//                customer.getCredit().getId()
         );
     }
 

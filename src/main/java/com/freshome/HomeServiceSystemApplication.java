@@ -3,10 +3,14 @@ package com.freshome;
 import com.freshome.entity.dto.customer.CustomerCreateDTO;
 import com.freshome.entity.dto.expert.ExpertCreatDTO;
 import com.freshome.entity.dto.expert.ExpertUpdateDTO;
+import com.freshome.entity.dto.order.OrderCreateDTO;
+import com.freshome.entity.embeddable.Address;
+import com.freshome.entity.enumeration.OrderStatus;
 import com.freshome.entity.enumeration.UserStatus;
 import com.freshome.service.CreditService;
 import com.freshome.service.CustomerService;
 import com.freshome.service.ExpertService;
+import com.freshome.service.OrderService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -35,6 +39,7 @@ public class HomeServiceSystemApplication {
 		CustomerService customerService = spring.getBean(CustomerService.class);
 		CreditService creditService = spring .getBean(CreditService.class);
 		ExpertService expertService = spring.getBean(ExpertService.class);
+		OrderService orderService = spring.getBean(OrderService.class);
 
 //		try{
 //			expertService.createExpert(new ExpertCreatDTO(
@@ -66,15 +71,28 @@ public class HomeServiceSystemApplication {
 //			System.out.println(e.getMessage());
 //		}
 
-		try {
-			var res = customerService.createCustomer(new CustomerCreateDTO(
-					"m", "y", null, null, LocalDateTime.now(),
-					UserStatus.PENDING_APPROVAL, null
-			));
-			System.out.println(res);
-		}catch (Exception e){
-			System.out.println(e.getMessage());
-		}
+//		try {
+//			var res = customerService.createCustomer(new CustomerCreateDTO(
+//					"m", "y", null, null, LocalDateTime.now(),
+//					UserStatus.PENDING_APPROVAL, null
+//			));
+//			System.out.println(res);
+//		}catch (Exception e){
+//			System.out.println(e.getMessage());
+//		}
+
+//		try{
+//			var res = orderService.createOrder(new OrderCreateDTO(
+//					200L, "aa", LocalDateTime.now(), null,
+//					new Address("a", "b", "c", 10), OrderStatus.WAITING_FOR_EXPERT_OFFERS,
+//					5L,4L,2L)
+//			);
+//			System.out.println(res);
+//		}catch (Exception e){
+//			System.out.println(e.getMessage());
+//		}
+//		System.out.println(customerService.findCustomerById(2L));
+//		System.out.println(customerService.findOptionalCustomerById(2L).orElse(null));
 	}
 
 }

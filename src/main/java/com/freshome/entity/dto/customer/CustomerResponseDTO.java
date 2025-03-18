@@ -14,7 +14,7 @@ public record CustomerResponseDTO(
         String password,
         LocalDateTime registerDateTime,
         UserStatus status,
-        String phoneNumber,
-        Long creditId
+        String phoneNumber
+//        Long creditId
 ) {
 }

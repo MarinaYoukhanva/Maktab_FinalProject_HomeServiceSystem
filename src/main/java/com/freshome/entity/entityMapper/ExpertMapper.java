@@ -33,8 +33,8 @@ public class ExpertMapper {
                 expert.getStatus(),
                 expert.getPhoneNumber(),
                 expert.getProfileImage(),
-                expert.getScore(),
-                expert.getCredit().getId()
+                expert.getScore()
+//                expert.getCredit().getId()
         );
     }
 

@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -48,6 +49,11 @@ public class ExpertServiceImpl implements ExpertService {
     }
 
     @Override
+    public Optional<Expert> findOptionalExpertById(Long id) {
+        return expertRepository.findById(id);
+    }
+
+    @Override
     public List<ExpertResponseDTO> findAllExperts() {
         return expertRepository.findAll()
                 .stream().map(ExpertMapper::dtoFromExpert)
@@ -56,7 +62,7 @@ public class ExpertServiceImpl implements ExpertService {
 
     @Override
     @Transactional
-    public void deleteExpert(Long id) {
+    public void deleteExpertById(Long id) {
         if (!expertRepository.existsById(id))
             throw new NotFoundException(Expert.class, id);
         expertRepository.deleteById(id);
