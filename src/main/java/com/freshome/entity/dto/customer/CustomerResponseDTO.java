@@ -11,7 +11,6 @@ public record CustomerResponseDTO(
         String firstname,
         String lastname,
         String email,
-        String password,
         LocalDateTime registerDateTime,
         UserStatus status,
         String phoneNumber

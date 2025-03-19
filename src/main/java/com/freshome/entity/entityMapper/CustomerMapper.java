@@ -4,15 +4,20 @@ import com.freshome.entity.Customer;
 import com.freshome.entity.dto.customer.CustomerCreateDTO;
 import com.freshome.entity.dto.customer.CustomerResponseDTO;
 import com.freshome.entity.dto.customer.CustomerUpdateDTO;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class CustomerMapper {
+
+    private static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     public static Customer customerFromDto(CustomerCreateDTO customerCreateDTO) {
         return Customer.builder()
                 .firstname(customerCreateDTO.getFirstname())
                 .lastname(customerCreateDTO.getLastname())
                 .email(customerCreateDTO.getEmail())
-                .password(customerCreateDTO.getPassword())
+                .password(passwordEncoder.encode(customerCreateDTO.getPassword()))
                 .registerDateTime(customerCreateDTO.getRegisterDateTime())
                 .status(customerCreateDTO.getStatus())
                 .phoneNumber(customerCreateDTO.getPhoneNumber())
@@ -26,7 +31,6 @@ public class CustomerMapper {
                 customer.getFirstname(),
                 customer.getLastname(),
                 customer.getEmail(),
-                customer.getPassword(),
                 customer.getRegisterDateTime(),
                 customer.getStatus(),
                 customer.getPhoneNumber()

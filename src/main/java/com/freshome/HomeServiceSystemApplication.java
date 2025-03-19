@@ -52,12 +52,12 @@ public class HomeServiceSystemApplication {
 //		System.out.println(c);
 //		System.out.println(c.getName());
 //
-		List<SingularAttribute<?, ?>> fields = Arrays.asList(Expert_.firstname, Expert_.lastname);
-		List<Operator> operators = Arrays.asList(Operator.CONTAINS, Operator.ENDS_WITH);
-		List<String> values = Arrays.asList("w", "e");
-
-		expertService.searchExpert(fields,operators, values, "cle")
-				.forEach(System.out::println);
+//		List<SingularAttribute<?, ?>> fields = Arrays.asList(Expert_.firstname, Expert_.lastname);
+//		List<Operator> operators = Arrays.asList(Operator.CONTAINS, Operator.ENDS_WITH);
+//		List<String> values = Arrays.asList("w", "e");
+//
+//		expertService.searchExpert(fields,operators, values, "cle")
+//				.forEach(System.out::println);
 
 //		customerService.searchCustomer(fields, operators, values)
 //				.forEach(System.out::println);
@@ -97,15 +97,15 @@ public class HomeServiceSystemApplication {
 //			System.out.println(e.getMessage());
 //		}
 
-//		try {
-//			var res = customerService.createCustomer(new CustomerCreateDTO(
-//					"m", "y", null, null, LocalDateTime.now(),
-//					UserStatus.PENDING_APPROVAL, null
-//			));
-//			System.out.println(res);
-//		}catch (Exception e){
-//			System.out.println(e.getMessage());
-//		}
+		try {
+			var res = customerService.createCustomer(new CustomerCreateDTO(
+					"m", "y", null, "a12S@tt", LocalDateTime.now(),
+					UserStatus.PENDING_APPROVAL, null
+			));
+			System.out.println(res);
+		}catch (Exception e){
+			System.out.println(e.getMessage() + e.getCause());
+		}
 
 //		try{
 //			var res = orderService.createOrder(new OrderCreateDTO(
