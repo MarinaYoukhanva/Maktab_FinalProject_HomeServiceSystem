@@ -7,6 +7,7 @@ import com.freshome.entity.dto.expert.ExpertCreatDTO;
 import com.freshome.entity.dto.expert.ExpertResponseDTO;
 import com.freshome.entity.dto.expert.ExpertUpdateDTO;
 import com.freshome.entity.entityMapper.ExpertMapper;
+import com.freshome.exception.ChangePasswordException;
 import com.freshome.exception.NotFoundException;
 import com.freshome.repository.ExpertRepository;
 import com.freshome.service.CreditService;
@@ -15,6 +16,7 @@ import com.freshome.specification.ExpertSpecification;
 import com.freshome.specification.Operator;
 import jakarta.persistence.metamodel.SingularAttribute;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +29,7 @@ import java.util.Optional;
 public class ExpertServiceImpl implements ExpertService {
 
     private final ExpertRepository expertRepository;
+    private final PasswordEncoder passwordEncoder;
     private final CreditService creditService;
 
 
@@ -89,5 +92,17 @@ public class ExpertServiceImpl implements ExpertService {
     ){
         return expertRepository.findAll(
                 ExpertSpecification.searchExpert(fields, operators, values, expertise));
+    }
+
+    @Override
+    @Transactional
+    public void changePassword(Long expertId, String oldPassword, String newPassword) {
+        Expert expert = expertRepository.findById(expertId)
+                .orElseThrow(() -> new NotFoundException(Expert.class, expertId));
+        if (oldPassword.equals(newPassword)
+                || !passwordEncoder.matches(oldPassword, expert.getPassword()))
+            throw new ChangePasswordException();
+        expert.setPassword(passwordEncoder.encode(newPassword));
+        expertRepository.save(expert);
     }
 }

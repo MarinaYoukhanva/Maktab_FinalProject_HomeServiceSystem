@@ -47,6 +47,12 @@ public class HomeServiceSystemApplication {
 		ExpertService expertService = spring.getBean(ExpertService.class);
 		OrderService orderService = spring.getBean(OrderService.class);
 
+		try{
+			customerService.changePassword(16L, "1234", "1234");
+		}catch (Exception e){
+			System.out.println(e.getMessage());
+		}
+
 //		SingularAttribute<?, ?> c = Customer_.firstname;
 //		System.out.println(c.getJavaType());
 //		System.out.println(c);
@@ -97,15 +103,15 @@ public class HomeServiceSystemApplication {
 //			System.out.println(e.getMessage());
 //		}
 
-		try {
-			var res = customerService.createCustomer(new CustomerCreateDTO(
-					"m", "y", null, "a12S@tt", LocalDateTime.now(),
-					UserStatus.PENDING_APPROVAL, null
-			));
-			System.out.println(res);
-		}catch (Exception e){
-			System.out.println(e.getMessage() + e.getCause());
-		}
+//		try {
+//			var res = customerService.createCustomer(new CustomerCreateDTO(
+//					"m", "y", null, "a12S@tt", LocalDateTime.now(),
+//					UserStatus.PENDING_APPROVAL, null
+//			));
+//			System.out.println(res);
+//		}catch (Exception e){
+//			System.out.println(e.getMessage() + e.getCause());
+//		}
 
 //		try{
 //			var res = orderService.createOrder(new OrderCreateDTO(

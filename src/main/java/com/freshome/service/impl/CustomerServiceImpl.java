@@ -7,6 +7,7 @@ import com.freshome.entity.dto.customer.CustomerCreateDTO;
 import com.freshome.entity.dto.customer.CustomerResponseDTO;
 import com.freshome.entity.dto.customer.CustomerUpdateDTO;
 import com.freshome.entity.entityMapper.CustomerMapper;
+import com.freshome.exception.ChangePasswordException;
 import com.freshome.exception.NotFoundException;
 import com.freshome.repository.CustomerRepository;
 import com.freshome.service.CreditService;
@@ -15,6 +16,7 @@ import com.freshome.specification.CustomerSpecification;
 import com.freshome.specification.Operator;
 import jakarta.persistence.metamodel.SingularAttribute;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +30,7 @@ import java.util.Optional;
 public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepository customerRepository;
+    private final PasswordEncoder passwordEncoder;
     private final CreditService creditService;
 
     @Override
@@ -86,8 +89,20 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public List<Customer> searchCustomer(
             List<SingularAttribute<?, ?>> fields, List<Operator> operators, List<String> values
-    ){
+    ) {
         return customerRepository.findAll(
                 CustomerSpecification.searchCustomer(fields, operators, values));
+    }
+
+    @Override
+    @Transactional
+    public void changePassword(Long customerId, String oldPassword, String newPassword) {
+        Customer customer = customerRepository.findById(customerId)
+                .orElseThrow(() -> new NotFoundException(Customer.class, customerId));
+        if (oldPassword.equals(newPassword)
+                || !passwordEncoder.matches(oldPassword, customer.getPassword()))
+            throw new ChangePasswordException();
+        customer.setPassword(passwordEncoder.encode(newPassword));
+        customerRepository.save(customer);
     }
 }

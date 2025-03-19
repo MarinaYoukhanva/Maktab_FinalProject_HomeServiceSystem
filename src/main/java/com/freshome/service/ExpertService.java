@@ -31,4 +31,6 @@ public interface ExpertService {
             List<SingularAttribute<?, ?>> fields, List<Operator> operators, List<String> values,
             String expertise
     );
+
+    void changePassword(Long expertId, String oldPassword, String newPassword);
 }

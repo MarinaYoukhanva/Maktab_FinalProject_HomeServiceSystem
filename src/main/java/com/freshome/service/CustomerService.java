@@ -30,4 +30,6 @@ public interface CustomerService {
     List<Customer> searchCustomer(
             List<SingularAttribute<?, ?>> fields, List<Operator> operators, List<String> values
     );
+
+    void changePassword(Long customerId, String oldPassword, String newPassword);
 }
