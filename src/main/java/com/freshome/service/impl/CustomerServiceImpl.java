@@ -11,6 +11,9 @@ import com.freshome.exception.NotFoundException;
 import com.freshome.repository.CustomerRepository;
 import com.freshome.service.CreditService;
 import com.freshome.service.CustomerService;
+import com.freshome.specification.CustomerSpecification;
+import com.freshome.specification.Operator;
+import jakarta.persistence.metamodel.SingularAttribute;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -78,5 +81,13 @@ public class CustomerServiceImpl implements CustomerService {
                 customerRepository.save(
                         CustomerMapper.customerFromDto(customer, customerUpdateDto))
         );
+    }
+
+    @Override
+    public List<Customer> searchCustomer(
+            List<SingularAttribute<?, ?>> fields, List<Operator> operators, List<String> values
+    ){
+        return customerRepository.findAll(
+                CustomerSpecification.searchCustomer(fields, operators, values));
     }
 }

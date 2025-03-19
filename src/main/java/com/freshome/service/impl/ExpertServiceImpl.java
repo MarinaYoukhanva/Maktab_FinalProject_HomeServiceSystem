@@ -11,6 +11,9 @@ import com.freshome.exception.NotFoundException;
 import com.freshome.repository.ExpertRepository;
 import com.freshome.service.CreditService;
 import com.freshome.service.ExpertService;
+import com.freshome.specification.ExpertSpecification;
+import com.freshome.specification.Operator;
+import jakarta.persistence.metamodel.SingularAttribute;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -77,5 +80,14 @@ public class ExpertServiceImpl implements ExpertService {
                 expertRepository.save(
                         ExpertMapper.expertFromDto(expert, expertUpdateDto))
         );
+    }
+
+    @Override
+    public List<Expert> searchExpert(
+            List<SingularAttribute<?, ?>> fields, List<Operator> operators, List<String> values,
+            String expertise
+    ){
+        return expertRepository.findAll(
+                ExpertSpecification.searchExpert(fields, operators, values, expertise));
     }
 }

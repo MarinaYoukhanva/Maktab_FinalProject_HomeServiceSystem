@@ -4,6 +4,8 @@ import com.freshome.entity.Customer;
 import com.freshome.entity.dto.customer.CustomerCreateDTO;
 import com.freshome.entity.dto.customer.CustomerResponseDTO;
 import com.freshome.entity.dto.customer.CustomerUpdateDTO;
+import com.freshome.specification.Operator;
+import jakarta.persistence.metamodel.SingularAttribute;
 import jakarta.validation.Valid;
 import org.springframework.validation.annotation.Validated;
 
@@ -24,4 +26,8 @@ public interface CustomerService {
     void deleteCustomer(Long id);
 
     CustomerResponseDTO updateCustomer(@Valid CustomerUpdateDTO customerUpdateDto);
+
+    List<Customer> searchCustomer(
+            List<SingularAttribute<?, ?>> fields, List<Operator> operators, List<String> values
+    );
 }

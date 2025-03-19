@@ -1,5 +1,6 @@
 package com.freshome;
 
+import com.freshome.entity.*;
 import com.freshome.entity.dto.customer.CustomerCreateDTO;
 import com.freshome.entity.dto.expert.ExpertCreatDTO;
 import com.freshome.entity.dto.expert.ExpertUpdateDTO;
@@ -11,10 +12,15 @@ import com.freshome.service.CreditService;
 import com.freshome.service.CustomerService;
 import com.freshome.service.ExpertService;
 import com.freshome.service.OrderService;
+import com.freshome.specification.Operator;
+import jakarta.persistence.metamodel.SingularAttribute;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @SpringBootApplication(scanBasePackages = "com.freshome.*")
 public class HomeServiceSystemApplication {
@@ -41,10 +47,30 @@ public class HomeServiceSystemApplication {
 		ExpertService expertService = spring.getBean(ExpertService.class);
 		OrderService orderService = spring.getBean(OrderService.class);
 
+//		SingularAttribute<?, ?> c = Customer_.firstname;
+//		System.out.println(c.getJavaType());
+//		System.out.println(c);
+//		System.out.println(c.getName());
+//
+		List<SingularAttribute<?, ?>> fields = Arrays.asList(Expert_.firstname, Expert_.lastname);
+		List<Operator> operators = Arrays.asList(Operator.CONTAINS, Operator.ENDS_WITH);
+		List<String> values = Arrays.asList("w", "e");
+
+		expertService.searchExpert(fields,operators, values, "cle")
+				.forEach(System.out::println);
+
+//		customerService.searchCustomer(fields, operators, values)
+//				.forEach(System.out::println);
+
+//		expertService.findOptionalExpertById(4L).get().getSubServices()
+//				.stream().map(SubService::getName)
+//				.toList()
+//				.forEach(System.out::println);
+
 //		try{
 //			expertService.createExpert(new ExpertCreatDTO(
 //					"m",null,null,null,LocalDateTime.now(),
-//					null,null,null,null,null
+//					null,null,null,null
 //			));
 //		}catch (Exception e){
 //			System.out.println(e.getMessage());
