@@ -1,10 +1,8 @@
 package com.freshome.entity.entityMapper;
 
 import com.freshome.entity.Customer;
-import com.freshome.entity.dto.customer.CustomerCreateDTO;
-import com.freshome.entity.dto.customer.CustomerResponseDTO;
-import com.freshome.entity.dto.customer.CustomerUpdateDTO;
-import lombok.RequiredArgsConstructor;
+import com.freshome.dto.customer.CustomerCreateDTO;
+import com.freshome.dto.customer.CustomerResponseDTO;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -37,16 +35,5 @@ public class CustomerMapper {
 //                customer.getCredit() != null ? customer.getCredit().getId() : null
 //                customer.getCredit().getId()
         );
-    }
-
-    public static Customer customerFromDto(Customer customer, CustomerUpdateDTO customerUpdateDto) {
-        customer.setFirstname(customerUpdateDto.getFirstname());
-        customer.setLastname(customerUpdateDto.getLastname());
-        customer.setEmail(customerUpdateDto.getEmail());
-        customer.setPassword(customerUpdateDto.getPassword());
-        customer.setRegisterDateTime(customerUpdateDto.getRegisterDateTime());
-        customer.setStatus(customerUpdateDto.getStatus());
-        customer.setPhoneNumber(customerUpdateDto.getPhoneNumber());
-        return customer;
     }
 }

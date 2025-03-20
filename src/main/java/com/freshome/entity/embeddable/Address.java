@@ -1,11 +1,11 @@
 package com.freshome.entity.embeddable;
 
 import jakarta.persistence.Embeddable;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+@Getter
+@Setter
 @Embeddable
 @AllArgsConstructor
 @NoArgsConstructor

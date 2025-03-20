@@ -1,4 +1,4 @@
-package com.freshome.entity.dto.expert;
+package com.freshome.dto.expert;
 
 import com.freshome.entity.Credit;
 import com.freshome.entity.enumeration.UserStatus;

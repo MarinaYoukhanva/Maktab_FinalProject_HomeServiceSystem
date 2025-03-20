@@ -1,10 +1,10 @@
 package com.freshome.service;
 
 import com.freshome.entity.Order;
-import com.freshome.entity.dto.order.OrderCreateDTO;
-import com.freshome.entity.dto.order.OrderResponseDTO;
+import com.freshome.dto.order.OrderCreateDTO;
+import com.freshome.dto.order.OrderResponseDTO;
+import com.freshome.dto.order.OrderUpdateDTO;
 import jakarta.validation.Valid;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import java.util.Optional;
@@ -17,6 +17,8 @@ public interface OrderService {
     OrderResponseDTO findOrderById(Long id);
 
     Optional<Order> findOptionalOrderById(Long id);
+
+    OrderResponseDTO updateOrder(@Valid OrderUpdateDTO updateDTO);
 
     void deleteOrderById(Long id);
 }

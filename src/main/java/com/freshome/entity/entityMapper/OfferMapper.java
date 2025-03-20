@@ -1,8 +1,8 @@
 package com.freshome.entity.entityMapper;
 
 import com.freshome.entity.Offer;
-import com.freshome.entity.dto.offer.OfferCreateDTO;
-import com.freshome.entity.dto.offer.OfferResponseDTO;
+import com.freshome.dto.offer.OfferCreateDTO;
+import com.freshome.dto.offer.OfferResponseDTO;
 
 public class OfferMapper {
 

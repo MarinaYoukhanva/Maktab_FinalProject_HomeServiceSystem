@@ -1,4 +1,4 @@
-package com.freshome.entity.dto.subService;
+package com.freshome.dto.subService;
 
 public record SubServiceResponseDTO(
         Long id,

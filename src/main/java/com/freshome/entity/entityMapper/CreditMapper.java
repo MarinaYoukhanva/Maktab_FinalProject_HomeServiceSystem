@@ -1,8 +1,8 @@
 package com.freshome.entity.entityMapper;
 
 import com.freshome.entity.Credit;
-import com.freshome.entity.dto.credit.CreditCreateDTO;
-import com.freshome.entity.dto.credit.CreditResponseDTO;
+import com.freshome.dto.credit.CreditCreateDTO;
+import com.freshome.dto.credit.CreditResponseDTO;
 
 public class CreditMapper {
 

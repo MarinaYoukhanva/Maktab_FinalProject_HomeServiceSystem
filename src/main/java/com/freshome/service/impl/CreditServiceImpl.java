@@ -2,8 +2,9 @@ package com.freshome.service.impl;
 
 import com.freshome.entity.Credit;
 import com.freshome.entity.Customer;
-import com.freshome.entity.dto.credit.CreditCreateDTO;
-import com.freshome.entity.dto.credit.CreditResponseDTO;
+import com.freshome.dto.credit.CreditCreateDTO;
+import com.freshome.dto.credit.CreditResponseDTO;
+import com.freshome.dto.credit.CreditUpdateDTO;
 import com.freshome.entity.entityMapper.CreditMapper;
 import com.freshome.exception.NotFoundException;
 import com.freshome.repository.CreditRepository;
@@ -53,9 +54,25 @@ public class CreditServiceImpl implements CreditService {
     }
 
     @Override
+    @Transactional
+    public CreditResponseDTO updateCredit(CreditUpdateDTO updateDTO){
+        Credit credit = creditRepository.findById(updateDTO.id())
+                .orElseThrow(()-> new NotFoundException(Credit.class, updateDTO.id()));
+        updateFields(credit, updateDTO);
+        return CreditMapper.dtoFromCredit(
+                creditRepository.save(credit)
+        );
+    }
+
+    @Override
     public void deleteCredit(Long id) {
         if (!creditRepository.existsById(id))
             throw new NotFoundException(Customer.class, id);
         creditRepository.deleteById(id);
+    }
+
+    private void updateFields(Credit credit, CreditUpdateDTO updateDTO) {
+        if (updateDTO.balance() != null)
+            credit.setBalance(updateDTO.balance());
     }
 }

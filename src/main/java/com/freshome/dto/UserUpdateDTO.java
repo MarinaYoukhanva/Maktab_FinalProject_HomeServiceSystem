@@ -1,27 +1,26 @@
-package com.freshome.entity.dto;
+package com.freshome.dto;
 
 import com.freshome.entity.enumeration.UserStatus;
-import jakarta.persistence.Column;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
-
-import java.time.LocalDateTime;
+import lombok.experimental.SuperBuilder;
 
 @AllArgsConstructor
 @Getter
+@SuperBuilder
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public abstract class UserCreateDTO {
+public abstract class UserUpdateDTO {
 
-    @Column(nullable = false)
-    @NotBlank(message = "firstname can not be blank")
+    @Size(min = 2)
     String firstname;
+
+    @Size(min = 2)
     String lastname;
     String email;
-    String password;
-    LocalDateTime registerDateTime;
+//    String password;
     UserStatus status;
     String phoneNumber;
 }

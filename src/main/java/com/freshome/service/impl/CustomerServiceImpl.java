@@ -2,10 +2,10 @@ package com.freshome.service.impl;
 
 import com.freshome.entity.Credit;
 import com.freshome.entity.Customer;
-import com.freshome.entity.dto.credit.CreditCreateDTO;
-import com.freshome.entity.dto.customer.CustomerCreateDTO;
-import com.freshome.entity.dto.customer.CustomerResponseDTO;
-import com.freshome.entity.dto.customer.CustomerUpdateDTO;
+import com.freshome.dto.credit.CreditCreateDTO;
+import com.freshome.dto.customer.CustomerCreateDTO;
+import com.freshome.dto.customer.CustomerResponseDTO;
+import com.freshome.dto.customer.CustomerUpdateDTO;
 import com.freshome.entity.entityMapper.CustomerMapper;
 import com.freshome.exception.ChangePasswordException;
 import com.freshome.exception.NotFoundException;
@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Optional;
@@ -77,12 +78,12 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     @Transactional
-    public CustomerResponseDTO updateCustomer(CustomerUpdateDTO customerUpdateDto) {
-        Customer customer = customerRepository.findById(customerUpdateDto.getId())
-                .orElseThrow(() -> new NotFoundException(Customer.class, customerUpdateDto.getId()));
+    public CustomerResponseDTO updateCustomer(CustomerUpdateDTO updateDTO) {
+        Customer customer = customerRepository.findById(updateDTO.getId())
+                .orElseThrow(() -> new NotFoundException(Customer.class, updateDTO.getId()));
+        updateFields(customer, updateDTO);
         return CustomerMapper.dtoFromCustomer(
-                customerRepository.save(
-                        CustomerMapper.customerFromDto(customer, customerUpdateDto))
+                customerRepository.save(customer)
         );
     }
 
@@ -104,5 +105,22 @@ public class CustomerServiceImpl implements CustomerService {
             throw new ChangePasswordException();
         customer.setPassword(passwordEncoder.encode(newPassword));
         customerRepository.save(customer);
+    }
+
+    private void updateFields (Customer customer, CustomerUpdateDTO updateDTO){
+        if (StringUtils.hasText(updateDTO.getFirstname()))
+            customer.setFirstname(updateDTO.getFirstname());
+
+        if (StringUtils.hasText(updateDTO.getLastname()))
+            customer.setLastname(updateDTO.getLastname());
+
+        if (StringUtils.hasText(updateDTO.getEmail()))
+            customer.setEmail(updateDTO.getEmail());
+
+        if (updateDTO.getStatus() != null)
+            customer.setStatus(updateDTO.getStatus());
+
+        if (StringUtils.hasText(updateDTO.getPhoneNumber()))
+            customer.setPhoneNumber(updateDTO.getPhoneNumber());
     }
 }

@@ -1,9 +1,9 @@
 package com.freshome.service;
 
 import com.freshome.entity.Customer;
-import com.freshome.entity.dto.customer.CustomerCreateDTO;
-import com.freshome.entity.dto.customer.CustomerResponseDTO;
-import com.freshome.entity.dto.customer.CustomerUpdateDTO;
+import com.freshome.dto.customer.CustomerCreateDTO;
+import com.freshome.dto.customer.CustomerResponseDTO;
+import com.freshome.dto.customer.CustomerUpdateDTO;
 import com.freshome.specification.Operator;
 import jakarta.persistence.metamodel.SingularAttribute;
 import jakarta.validation.Valid;
@@ -25,7 +25,7 @@ public interface CustomerService {
 
     void deleteCustomer(Long id);
 
-    CustomerResponseDTO updateCustomer(@Valid CustomerUpdateDTO customerUpdateDto);
+    CustomerResponseDTO updateCustomer(@Valid CustomerUpdateDTO updateDTO);
 
     List<Customer> searchCustomer(
             List<SingularAttribute<?, ?>> fields, List<Operator> operators, List<String> values

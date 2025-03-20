@@ -1,7 +1,6 @@
-package com.freshome.entity.dto.expert;
+package com.freshome.dto.expert;
 
-import com.freshome.entity.Credit;
-import com.freshome.entity.dto.UserCreateDTO;
+import com.freshome.dto.UserCreateDTO;
 import com.freshome.entity.enumeration.UserStatus;
 import lombok.AccessLevel;
 import lombok.Getter;

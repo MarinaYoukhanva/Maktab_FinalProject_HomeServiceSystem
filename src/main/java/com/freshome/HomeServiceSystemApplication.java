@@ -1,32 +1,21 @@
 package com.freshome;
 
-import com.freshome.entity.*;
-import com.freshome.entity.dto.customer.CustomerCreateDTO;
-import com.freshome.entity.dto.expert.ExpertCreatDTO;
-import com.freshome.entity.dto.expert.ExpertUpdateDTO;
-import com.freshome.entity.dto.order.OrderCreateDTO;
-import com.freshome.entity.embeddable.Address;
+import com.freshome.dto.order.OrderUpdateDTO;
 import com.freshome.entity.enumeration.OrderStatus;
-import com.freshome.entity.enumeration.UserStatus;
 import com.freshome.service.CreditService;
 import com.freshome.service.CustomerService;
 import com.freshome.service.ExpertService;
 import com.freshome.service.OrderService;
-import com.freshome.specification.Operator;
-import jakarta.persistence.metamodel.SingularAttribute;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 @SpringBootApplication(scanBasePackages = "com.freshome.*")
 public class HomeServiceSystemApplication {
 
-	public static void main(String[] args) {
-		var spring = SpringApplication.run(HomeServiceSystemApplication.class, args);
+    public static void main(String[] args) {
+        var spring = SpringApplication.run(HomeServiceSystemApplication.class, args);
 //
 //		LocalDateTime a = LocalDateTime.of(2020, 12, 1, 12,30);
 //		Expert e = Expert.builder()
@@ -42,16 +31,41 @@ public class HomeServiceSystemApplication {
 //		System.out.println(c2);
 //		System.out.println(c1.equals(c2));
 
-		CustomerService customerService = spring.getBean(CustomerService.class);
-		CreditService creditService = spring .getBean(CreditService.class);
-		ExpertService expertService = spring.getBean(ExpertService.class);
-		OrderService orderService = spring.getBean(OrderService.class);
+        CustomerService customerService = spring.getBean(CustomerService.class);
+        CreditService creditService = spring.getBean(CreditService.class);
+        ExpertService expertService = spring.getBean(ExpertService.class);
+        OrderService orderService = spring.getBean(OrderService.class);
 
-		try{
-			customerService.changePassword(16L, "1234", "1234");
-		}catch (Exception e){
-			System.out.println(e.getMessage());
-		}
+//        try {
+//            CustomerUpdateDTO c = CustomerUpdateDTO.builder()
+//                    .id(15L)
+//                    .firstname("abab")
+//                    .lastname("    ")
+//                    .status(null)
+//                    .build();
+//            customerService.updateCustomer(c);
+//
+//        } catch (Exception e) {
+//            System.out.println(e.getMessage());
+//        }
+
+        try{
+            var o = OrderUpdateDTO.builder()
+                    .id(1L)
+                    .street("new street")
+                    .orderExecutionDateTime(LocalDateTime.now().plusDays(4))
+                    .status(OrderStatus.STARTED)
+                    .build();
+            orderService.updateOrder(o);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+
+//		try{
+//			customerService.changePassword(16L, "1234", "1234");
+//		}catch (Exception e){
+//			System.out.println(e.getMessage());
+//		}
 
 //		SingularAttribute<?, ?> c = Customer_.firstname;
 //		System.out.println(c.getJavaType());
@@ -125,6 +139,6 @@ public class HomeServiceSystemApplication {
 //		}
 //		System.out.println(customerService.findCustomerById(2L));
 //		System.out.println(customerService.findOptionalCustomerById(2L).orElse(null));
-	}
+    }
 
 }

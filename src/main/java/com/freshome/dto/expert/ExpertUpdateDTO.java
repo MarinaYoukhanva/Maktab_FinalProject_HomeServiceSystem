@@ -1,36 +1,33 @@
-package com.freshome.entity.dto.expert;
+package com.freshome.dto.expert;
 
-import com.freshome.entity.dto.UserCreateDTO;
+import com.freshome.dto.UserUpdateDTO;
 import com.freshome.entity.enumeration.UserStatus;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.Getter;
-
-import java.time.LocalDateTime;
+import lombok.experimental.SuperBuilder;
 
 @Getter
-public class ExpertUpdateDTO extends UserCreateDTO {
+@SuperBuilder
+public class ExpertUpdateDTO extends UserUpdateDTO {
 
     @NotNull(message = "id can not be null for updating! ")
     @Positive
     Long id;
     byte[] profileImage;
-    Long score;
+//    Long score;
 
     public ExpertUpdateDTO(
             Long id,
             String firstname,
             String lastname,
             String email,
-            String password,
-            LocalDateTime registerDateTime,
             UserStatus status,
             String phoneNumber,
-            byte[] profileImage,
-            Long score) {
-        super(firstname, lastname, email, password, registerDateTime, status, phoneNumber);
+            byte[] profileImage) {
+        super(firstname, lastname, email, status, phoneNumber);
         this.id = id;
         this.profileImage = profileImage;
-        this.score = score;
+//        this.score = score;
     }
 }

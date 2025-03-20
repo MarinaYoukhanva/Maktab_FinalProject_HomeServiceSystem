@@ -1,8 +1,8 @@
 package com.freshome.entity.entityMapper;
 
 import com.freshome.entity.Order;
-import com.freshome.entity.dto.order.OrderCreateDTO;
-import com.freshome.entity.dto.order.OrderResponseDTO;
+import com.freshome.dto.order.OrderCreateDTO;
+import com.freshome.dto.order.OrderResponseDTO;
 
 public class OrderMapper {
 

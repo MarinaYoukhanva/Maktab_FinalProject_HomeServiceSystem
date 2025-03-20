@@ -1,4 +1,4 @@
-package com.freshome.entity.dto.offer;
+package com.freshome.dto.offer;
 
 import com.freshome.entity.Expert;
 import com.freshome.entity.Order;

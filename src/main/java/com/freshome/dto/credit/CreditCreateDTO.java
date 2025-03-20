@@ -1,4 +1,4 @@
-package com.freshome.entity.dto.credit;
+package com.freshome.dto.credit;
 
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;

@@ -1,8 +1,8 @@
 package com.freshome.entity.entityMapper;
 
 import com.freshome.entity.ServiceCategory;
-import com.freshome.entity.dto.serviceCategory.ServiceCategoryCreateDTO;
-import com.freshome.entity.dto.serviceCategory.ServiceCategoryResponseDTO;
+import com.freshome.dto.serviceCategory.ServiceCategoryCreateDTO;
+import com.freshome.dto.serviceCategory.ServiceCategoryResponseDTO;
 
 public class ServiceCategoryMapper {
 

@@ -2,10 +2,10 @@ package com.freshome.service.impl;
 
 import com.freshome.entity.Credit;
 import com.freshome.entity.Expert;
-import com.freshome.entity.dto.credit.CreditCreateDTO;
-import com.freshome.entity.dto.expert.ExpertCreatDTO;
-import com.freshome.entity.dto.expert.ExpertResponseDTO;
-import com.freshome.entity.dto.expert.ExpertUpdateDTO;
+import com.freshome.dto.credit.CreditCreateDTO;
+import com.freshome.dto.expert.ExpertCreatDTO;
+import com.freshome.dto.expert.ExpertResponseDTO;
+import com.freshome.dto.expert.ExpertUpdateDTO;
 import com.freshome.entity.entityMapper.ExpertMapper;
 import com.freshome.exception.ChangePasswordException;
 import com.freshome.exception.NotFoundException;
@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Optional;
@@ -76,13 +77,12 @@ public class ExpertServiceImpl implements ExpertService {
 
     @Override
     @Transactional
-    public ExpertResponseDTO updateExpert(ExpertUpdateDTO expertUpdateDto) {
-        Expert expert = expertRepository.findById(expertUpdateDto.getId())
-                .orElseThrow(() -> new NotFoundException(Expert.class, expertUpdateDto.getId()));
-        return ExpertMapper.dtoFromExpert(
-                expertRepository.save(
-                        ExpertMapper.expertFromDto(expert, expertUpdateDto))
-        );
+    public ExpertResponseDTO updateExpert(ExpertUpdateDTO updateDTO) {
+        Expert expert = expertRepository.findById(updateDTO.getId())
+                .orElseThrow(() -> new NotFoundException(Expert.class, updateDTO.getId()));
+       updateFields(expert, updateDTO);
+       return ExpertMapper.dtoFromExpert(
+               expertRepository.save(expert));
     }
 
     @Override
@@ -104,5 +104,25 @@ public class ExpertServiceImpl implements ExpertService {
             throw new ChangePasswordException();
         expert.setPassword(passwordEncoder.encode(newPassword));
         expertRepository.save(expert);
+    }
+
+    private void updateFields (Expert expert, ExpertUpdateDTO updateDTO) {
+        if (StringUtils.hasText(updateDTO.getFirstname()))
+            expert.setFirstname(updateDTO.getFirstname());
+
+        if (StringUtils.hasText(updateDTO.getLastname()))
+            expert.setLastname(updateDTO.getLastname());
+
+        if (StringUtils.hasText(updateDTO.getEmail()))
+            expert.setEmail(updateDTO.getEmail());
+
+        if (updateDTO.getStatus() != null)
+            expert.setStatus(updateDTO.getStatus());
+
+        if (StringUtils.hasText(updateDTO.getPhoneNumber()))
+            expert.setPhoneNumber(updateDTO.getPhoneNumber());
+
+        if (updateDTO.getProfileImage() != null)
+            expert.setProfileImage(updateDTO.getProfileImage());
     }
 }

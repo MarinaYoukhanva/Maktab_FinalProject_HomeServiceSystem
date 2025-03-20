@@ -1,4 +1,4 @@
-package com.freshome.entity.dto.review;
+package com.freshome.dto.review;
 
 public record ReviewResponseDTO(
         Long id,

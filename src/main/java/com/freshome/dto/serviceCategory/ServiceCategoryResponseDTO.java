@@ -1,4 +1,4 @@
-package com.freshome.entity.dto.serviceCategory;
+package com.freshome.dto.serviceCategory;
 
 public record ServiceCategoryResponseDTO(
         Long id,

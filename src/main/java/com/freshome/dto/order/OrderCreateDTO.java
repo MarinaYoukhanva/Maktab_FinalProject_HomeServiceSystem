@@ -1,4 +1,4 @@
-package com.freshome.entity.dto.order;
+package com.freshome.dto.order;
 
 import com.freshome.entity.embeddable.Address;
 import com.freshome.entity.enumeration.OrderStatus;

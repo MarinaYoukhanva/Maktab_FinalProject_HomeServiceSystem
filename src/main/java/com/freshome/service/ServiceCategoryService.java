@@ -1,8 +1,9 @@
 package com.freshome.service;
 
 import com.freshome.entity.ServiceCategory;
-import com.freshome.entity.dto.serviceCategory.ServiceCategoryCreateDTO;
-import com.freshome.entity.dto.serviceCategory.ServiceCategoryResponseDTO;
+import com.freshome.dto.serviceCategory.ServiceCategoryCreateDTO;
+import com.freshome.dto.serviceCategory.ServiceCategoryResponseDTO;
+import com.freshome.dto.serviceCategory.ServiceCategoryUpdateDTO;
 import jakarta.validation.Valid;
 import org.springframework.validation.annotation.Validated;
 
@@ -16,6 +17,8 @@ public interface ServiceCategoryService {
     ServiceCategoryResponseDTO findServiceCategoryById(Long id);
 
     Optional<ServiceCategory> findOptionalServiceCategoryById(Long id);
+
+    ServiceCategoryResponseDTO updateServiceCategory(@Valid ServiceCategoryUpdateDTO updateDTO);
 
     void deleteServiceCategoryById(Long id);
 }

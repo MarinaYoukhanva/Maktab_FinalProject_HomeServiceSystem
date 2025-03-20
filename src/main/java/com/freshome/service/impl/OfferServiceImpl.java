@@ -3,8 +3,9 @@ package com.freshome.service.impl;
 import com.freshome.entity.Expert;
 import com.freshome.entity.Offer;
 import com.freshome.entity.Order;
-import com.freshome.entity.dto.offer.OfferCreateDTO;
-import com.freshome.entity.dto.offer.OfferResponseDTO;
+import com.freshome.dto.offer.OfferCreateDTO;
+import com.freshome.dto.offer.OfferResponseDTO;
+import com.freshome.dto.offer.OfferUpdateDTO;
 import com.freshome.entity.entityMapper.OfferMapper;
 import com.freshome.exception.NotFoundException;
 import com.freshome.repository.OfferRepository;
@@ -51,9 +52,31 @@ public class OfferServiceImpl implements OfferService {
 
     @Override
     @Transactional
+    public OfferResponseDTO updateOffer(OfferUpdateDTO updateDTO) {
+        Offer offer = offerRepository.findById(updateDTO.id())
+                .orElseThrow(()-> new NotFoundException(Offer.class, updateDTO.id()));
+        updateFields(offer, updateDTO);
+        return OfferMapper.dtoFromOffer(
+                offerRepository.save(offer)
+        );
+    }
+
+    @Override
+    @Transactional
     public void deleteOffer(Long id){
         if (!offerRepository.existsById(id))
             throw new NotFoundException(Offer.class, id);
         offerRepository.deleteById(id);
+    }
+
+    private void updateFields (Offer offer, OfferUpdateDTO updateDTO) {
+        if (updateDTO.suggestedPriceByExpert() != null)
+            offer.setSuggestedPriceByExpert(updateDTO.suggestedPriceByExpert());
+
+        if (updateDTO.durationInHours() != null)
+            offer.setDurationInHours(updateDTO.durationInHours());
+
+        if(updateDTO.startDateTime() != null)
+            offer.setStartDateTime(updateDTO.startDateTime());
     }
 }

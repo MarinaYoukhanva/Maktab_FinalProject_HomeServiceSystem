@@ -1,8 +1,8 @@
 package com.freshome.entity.entityMapper;
 
 import com.freshome.entity.Review;
-import com.freshome.entity.dto.review.ReviewCreateDTO;
-import com.freshome.entity.dto.review.ReviewResponseDTO;
+import com.freshome.dto.review.ReviewCreateDTO;
+import com.freshome.dto.review.ReviewResponseDTO;
 
 public class ReviewMapper {
 

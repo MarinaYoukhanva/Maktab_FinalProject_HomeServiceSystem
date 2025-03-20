@@ -4,8 +4,9 @@ import com.freshome.entity.Customer;
 import com.freshome.entity.Expert;
 import com.freshome.entity.Order;
 import com.freshome.entity.SubService;
-import com.freshome.entity.dto.order.OrderCreateDTO;
-import com.freshome.entity.dto.order.OrderResponseDTO;
+import com.freshome.dto.order.OrderCreateDTO;
+import com.freshome.dto.order.OrderResponseDTO;
+import com.freshome.dto.order.OrderUpdateDTO;
 import com.freshome.entity.entityMapper.OrderMapper;
 import com.freshome.exception.NotFoundException;
 import com.freshome.repository.OrderRepository;
@@ -16,6 +17,7 @@ import com.freshome.service.SubServiceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.Optional;
 
@@ -61,11 +63,45 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.findById(id);
     }
 
+    @Override
+    @Transactional
+    public OrderResponseDTO updateOrder(OrderUpdateDTO updateDTO){
+        Order order = orderRepository.findById(updateDTO.id())
+                .orElseThrow(() -> new NotFoundException(Order.class, updateDTO.id()));
+        updateFields(order, updateDTO);
+        return OrderMapper.dtoFromOrder(
+                orderRepository.save(order)
+        );
+    }
+
     @Transactional
     @Override
     public void deleteOrderById(Long id){
         if (!orderRepository.existsById(id))
             throw new NotFoundException(Order.class, id);
         orderRepository.deleteById(id);
+    }
+
+    private void updateFields (Order order, OrderUpdateDTO updateDTO){
+        if (updateDTO.suggestedPriceByCustomer() != null)
+            order.setSuggestedPriceByCustomer(updateDTO.suggestedPriceByCustomer());
+
+        if(StringUtils.hasText(updateDTO.description()))
+            order.setDescription(updateDTO.description());
+
+        if (updateDTO.orderExecutionDateTime() != null)
+            order.setOrderExecutionDateTime(updateDTO.orderExecutionDateTime());
+
+        if (StringUtils.hasText(updateDTO.street()))
+            order.getAddress().setStreet(updateDTO.street());
+
+        if (StringUtils.hasText(updateDTO.avenue()))
+            order.getAddress().setAvenue(updateDTO.avenue());
+
+        if (updateDTO.plaque() != null)
+            order.getAddress().setPlaque(updateDTO.plaque());
+
+        if (updateDTO.status() != null)
+            order.setStatus(updateDTO.status());
     }
 }

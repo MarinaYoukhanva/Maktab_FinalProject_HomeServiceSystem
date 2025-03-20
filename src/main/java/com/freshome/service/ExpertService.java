@@ -1,9 +1,9 @@
 package com.freshome.service;
 
 import com.freshome.entity.Expert;
-import com.freshome.entity.dto.expert.ExpertCreatDTO;
-import com.freshome.entity.dto.expert.ExpertResponseDTO;
-import com.freshome.entity.dto.expert.ExpertUpdateDTO;
+import com.freshome.dto.expert.ExpertCreatDTO;
+import com.freshome.dto.expert.ExpertResponseDTO;
+import com.freshome.dto.expert.ExpertUpdateDTO;
 import com.freshome.specification.Operator;
 import jakarta.persistence.metamodel.SingularAttribute;
 import jakarta.validation.Valid;
@@ -25,7 +25,7 @@ public interface ExpertService {
 
     void deleteExpertById(Long id);
 
-    ExpertResponseDTO updateExpert(@Valid ExpertUpdateDTO expertUpdateDto);
+    ExpertResponseDTO updateExpert(@Valid ExpertUpdateDTO updateDTO);
 
     List<Expert> searchExpert(
             List<SingularAttribute<?, ?>> fields, List<Operator> operators, List<String> values,

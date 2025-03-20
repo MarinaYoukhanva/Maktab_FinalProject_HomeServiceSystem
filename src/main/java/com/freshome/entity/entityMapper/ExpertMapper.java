@@ -1,9 +1,8 @@
 package com.freshome.entity.entityMapper;
 
 import com.freshome.entity.Expert;
-import com.freshome.entity.dto.expert.ExpertCreatDTO;
-import com.freshome.entity.dto.expert.ExpertResponseDTO;
-import com.freshome.entity.dto.expert.ExpertUpdateDTO;
+import com.freshome.dto.expert.ExpertCreatDTO;
+import com.freshome.dto.expert.ExpertResponseDTO;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -39,18 +38,5 @@ public class ExpertMapper {
                 expert.getScore()
 //                expert.getCredit().getId()
         );
-    }
-
-    public static Expert expertFromDto(Expert expert, ExpertUpdateDTO expertUpdateDTO) {
-        expert.setFirstname(expertUpdateDTO.getFirstname());
-        expert.setLastname(expertUpdateDTO.getLastname());
-        expert.setEmail(expertUpdateDTO.getEmail());
-        expert.setPassword(expertUpdateDTO.getPassword());
-        expert.setRegisterDateTime(expertUpdateDTO.getRegisterDateTime());
-        expert.setStatus(expertUpdateDTO.getStatus());
-        expert.setPhoneNumber(expertUpdateDTO.getPhoneNumber());
-        expert.setProfileImage(expertUpdateDTO.getProfileImage());
-        expert.setScore(expertUpdateDTO.getScore());
-        return expert;
     }
 }

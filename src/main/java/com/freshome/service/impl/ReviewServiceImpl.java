@@ -4,8 +4,9 @@ import com.freshome.entity.Customer;
 import com.freshome.entity.Expert;
 import com.freshome.entity.Order;
 import com.freshome.entity.Review;
-import com.freshome.entity.dto.review.ReviewCreateDTO;
-import com.freshome.entity.dto.review.ReviewResponseDTO;
+import com.freshome.dto.review.ReviewCreateDTO;
+import com.freshome.dto.review.ReviewResponseDTO;
+import com.freshome.dto.review.ReviewUpdateDTO;
 import com.freshome.entity.entityMapper.ReviewMapper;
 import com.freshome.exception.NotFoundException;
 import com.freshome.repository.ReviewRepository;
@@ -16,6 +17,7 @@ import com.freshome.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.Optional;
 
@@ -61,9 +63,28 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     @Transactional
+    public ReviewResponseDTO updateReview(ReviewUpdateDTO updateDTO) {
+        Review review = reviewRepository.findById(updateDTO.id())
+                .orElseThrow(()-> new NotFoundException(Review.class, updateDTO.id()));
+        updateFields(review, updateDTO);
+        return ReviewMapper.dtoFromReview(
+                reviewRepository.save(review)
+        );
+    }
+
+    @Override
+    @Transactional
     public void deleteReviewById(Long id) {
         if (!reviewRepository.existsById(id))
             throw new NotFoundException(Review.class, id);
         reviewRepository.deleteById(id);
+    }
+
+    private void updateFields(Review review, ReviewUpdateDTO updateDTO) {
+        if (StringUtils.hasText(updateDTO.comment()))
+            review.setComment(updateDTO.comment());
+
+        if (updateDTO.rating() != null)
+            review.setRating(updateDTO.rating());
     }
 }

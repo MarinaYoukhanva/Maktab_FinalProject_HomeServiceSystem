@@ -1,8 +1,8 @@
 package com.freshome.entity.entityMapper;
 
 import com.freshome.entity.SubService;
-import com.freshome.entity.dto.subService.SubServiceCreateDTO;
-import com.freshome.entity.dto.subService.SubServiceResponseDTO;
+import com.freshome.dto.subService.SubServiceCreateDTO;
+import com.freshome.dto.subService.SubServiceResponseDTO;
 
 public class SubServiceMapper {
 
