@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -59,6 +60,13 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public Optional<Review> findOptionalReviewById(Long id) {
         return reviewRepository.findById(id);
+    }
+
+    @Override
+    public List<ReviewResponseDTO> findAllReviews() {
+        return reviewRepository.findAll()
+                .stream().map(ReviewMapper::dtoFromReview)
+                .toList();
     }
 
     @Override

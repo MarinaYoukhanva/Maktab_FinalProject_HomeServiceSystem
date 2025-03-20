@@ -7,6 +7,7 @@ import com.freshome.dto.serviceCategory.ServiceCategoryUpdateDTO;
 import jakarta.validation.Valid;
 import org.springframework.validation.annotation.Validated;
 
+import java.util.List;
 import java.util.Optional;
 
 @Validated
@@ -17,6 +18,8 @@ public interface ServiceCategoryService {
     ServiceCategoryResponseDTO findServiceCategoryById(Long id);
 
     Optional<ServiceCategory> findOptionalServiceCategoryById(Long id);
+
+    List<ServiceCategoryResponseDTO> findAllServiceCategory();
 
     ServiceCategoryResponseDTO updateServiceCategory(@Valid ServiceCategoryUpdateDTO updateDTO);
 

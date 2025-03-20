@@ -6,12 +6,16 @@ import com.freshome.dto.offer.OfferUpdateDTO;
 import jakarta.validation.Valid;
 import org.springframework.validation.annotation.Validated;
 
+import java.util.List;
+
 @Validated
 public interface OfferService {
 
     OfferResponseDTO createOffer(@Valid OfferCreateDTO offerCreateDTO);
 
     OfferResponseDTO findOfferById(Long id);
+
+    List<OfferResponseDTO> findAllOffers();
 
     OfferResponseDTO updateOffer(@Valid OfferUpdateDTO updateDTO);
 

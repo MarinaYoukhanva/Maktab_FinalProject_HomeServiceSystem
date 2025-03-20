@@ -7,6 +7,7 @@ import com.freshome.dto.subService.SubServiceUpdateDTO;
 import jakarta.validation.Valid;
 import org.springframework.validation.annotation.Validated;
 
+import java.util.List;
 import java.util.Optional;
 
 @Validated
@@ -17,6 +18,8 @@ public interface SubServiceService {
     SubServiceResponseDTO findSubServiceById(Long id);
 
     Optional<SubService> findOptionalSubServiceById(Long id);
+
+    List<SubServiceResponseDTO> findAllSubServices();
 
     SubServiceResponseDTO updateSubService(@Valid SubServiceUpdateDTO updateDTO);
 

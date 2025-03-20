@@ -7,6 +7,7 @@ import com.freshome.dto.review.ReviewUpdateDTO;
 import jakarta.validation.Valid;
 import org.springframework.validation.annotation.Validated;
 
+import java.util.List;
 import java.util.Optional;
 
 @Validated
@@ -17,6 +18,8 @@ public interface ReviewService {
     ReviewResponseDTO findReviewById(Long id);
 
     Optional<Review> findOptionalReviewById(Long id);
+
+    List<ReviewResponseDTO> findAllReviews();
 
     ReviewResponseDTO updateReview(@Valid ReviewUpdateDTO updateDTO);
 

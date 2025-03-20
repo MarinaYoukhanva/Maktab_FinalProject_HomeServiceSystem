@@ -16,6 +16,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 //@Transactional
@@ -48,6 +50,13 @@ public class OfferServiceImpl implements OfferService {
                 offerRepository.findById(id)
                         .orElseThrow(() -> new NotFoundException(Offer.class, id))
         );
+    }
+
+    @Override
+    public List<OfferResponseDTO> findAllOffers() {
+        return offerRepository.findAll()
+                .stream().map(OfferMapper::dtoFromOffer)
+                .toList();
     }
 
     @Override

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -50,6 +51,13 @@ public class SubServiceServiceImpl implements SubServiceService {
     @Override
     public Optional<SubService> findOptionalSubServiceById(Long id) {
         return subServiceRepository.findById(id);
+    }
+
+    @Override
+    public List<SubServiceResponseDTO> findAllSubServices() {
+        return subServiceRepository.findAll()
+                .stream().map(SubServiceMapper::dtoFromSubService)
+                .toList();
     }
 
     @Override
