@@ -7,6 +7,7 @@ import jakarta.persistence.MappedSuperclass;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.SoftDelete;
+import org.hibernate.annotations.Where;
 
 import java.io.Serializable;
 
@@ -17,6 +18,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @MappedSuperclass
 @SoftDelete
+//@Where(clause = "deleted = false")
 public abstract class BaseEntity<ID extends Serializable> {
 
     @Id

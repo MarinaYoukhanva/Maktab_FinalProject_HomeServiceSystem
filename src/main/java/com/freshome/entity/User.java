@@ -19,16 +19,27 @@ import java.time.LocalDateTime;
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class User extends BaseEntity<Long> {
 
+    @Column(nullable = false, length = 50)
     String firstname;
+
+    @Column(nullable = false, length = 50)
     String lastname;
+
+    @Column(nullable = false, unique = true, length = 150)
     String email;
+
+    @Column(nullable = false)
     String password;
+
+    @Column(nullable = false, updatable = false)
     LocalDateTime registerDateTime;
 
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     UserStatus status;
 
-//    String username;
+    @Column(unique = true, length = 15)
     String phoneNumber;
 
+    //    String username;
 }

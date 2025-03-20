@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 public class ExpertCreatDTO extends UserCreateDTO {
 
     byte[] profileImage;
-    Long score;
+//    Double score;
 //    Credit credit;
 
     public ExpertCreatDTO(
@@ -23,11 +23,10 @@ public class ExpertCreatDTO extends UserCreateDTO {
             LocalDateTime registerDateTime,
             UserStatus status,
             String phoneNumber,
-            byte[] profileImage,
-            Long score) {
+            byte[] profileImage) {
         super(firstname, lastname, email, password, registerDateTime, status, phoneNumber);
         this.profileImage = profileImage;
-        this.score = score;
+//        this.score = score;
 //        this.credit = credit;
     }
 }

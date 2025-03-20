@@ -24,4 +24,6 @@ public interface ReviewService {
     ReviewResponseDTO updateReview(@Valid ReviewUpdateDTO updateDTO);
 
     void deleteReviewById(Long id);
+
+    Double expertScoreFromRatingsAverage(Long expertId);
 }

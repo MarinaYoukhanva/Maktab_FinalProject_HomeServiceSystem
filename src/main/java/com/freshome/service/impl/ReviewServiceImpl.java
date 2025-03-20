@@ -88,6 +88,12 @@ public class ReviewServiceImpl implements ReviewService {
         reviewRepository.deleteById(id);
     }
 
+    @Override
+    public Double expertScoreFromRatingsAverage(Long expertId){
+        Double score = reviewRepository.expertScoreFromRatingsAverage(expertId);
+        return score == null ? 0.0 : score;
+    }
+
     private void updateFields(Review review, ReviewUpdateDTO updateDTO) {
         if (StringUtils.hasText(updateDTO.comment()))
             review.setComment(updateDTO.comment());

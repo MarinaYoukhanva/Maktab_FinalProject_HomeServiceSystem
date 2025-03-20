@@ -15,7 +15,7 @@ public record ExpertResponseDTO(
         UserStatus status,
         String phoneNumber,
         byte[] profileImage,
-        Long score
+        Double score
 //        Long creditId
 ) {
 }

@@ -10,8 +10,10 @@ import com.freshome.entity.entityMapper.ExpertMapper;
 import com.freshome.exception.ChangePasswordException;
 import com.freshome.exception.NotFoundException;
 import com.freshome.repository.ExpertRepository;
+import com.freshome.repository.ReviewRepository;
 import com.freshome.service.CreditService;
 import com.freshome.service.ExpertService;
+import com.freshome.service.ReviewService;
 import com.freshome.specification.ExpertSpecification;
 import com.freshome.specification.Operator;
 import jakarta.persistence.metamodel.SingularAttribute;
@@ -32,7 +34,8 @@ public class ExpertServiceImpl implements ExpertService {
     private final ExpertRepository expertRepository;
     private final PasswordEncoder passwordEncoder;
     private final CreditService creditService;
-
+    //    private final ReviewService reviewService;
+    private final ReviewRepository reviewRepository;
 
     @Override
     @Transactional
@@ -41,6 +44,7 @@ public class ExpertServiceImpl implements ExpertService {
         Expert expert = ExpertMapper.expertFromDto(expertCreatDTO);
         Credit credit = creditService.createReturnCredit(new CreditCreateDTO(0L));
         expert.setCredit(credit);
+        expert.setScore(0.0);
 
         return ExpertMapper.dtoFromExpert(
                 expertRepository.save(expert)
@@ -49,15 +53,21 @@ public class ExpertServiceImpl implements ExpertService {
 
     @Override
     public ExpertResponseDTO findExpertById(Long id) {
-        return ExpertMapper.dtoFromExpert(
-                expertRepository.findById(id)
-                        .orElseThrow(() -> new NotFoundException(Expert.class, id))
-        );
+        Expert expert = expertRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(Expert.class, id));
+        Double score = reviewRepository.expertScoreFromRatingsAverage(id);
+        expert.setScore(score == null ? 0.0 : score);
+        return ExpertMapper.dtoFromExpert(expert);
     }
 
     @Override
     public Optional<Expert> findOptionalExpertById(Long id) {
-        return expertRepository.findById(id);
+        return expertRepository.findById(id)
+                .map(expert -> {
+                    Double score = reviewRepository.expertScoreFromRatingsAverage(id);
+                    expert.setScore(score == null ? 0.0 : score);
+                    return expert;
+                });
     }
 
     @Override
@@ -80,18 +90,18 @@ public class ExpertServiceImpl implements ExpertService {
     public ExpertResponseDTO updateExpert(ExpertUpdateDTO updateDTO) {
         Expert expert = expertRepository.findById(updateDTO.getId())
                 .orElseThrow(() -> new NotFoundException(Expert.class, updateDTO.getId()));
-       updateFields(expert, updateDTO);
-       return ExpertMapper.dtoFromExpert(
-               expertRepository.save(expert));
+        updateFields(expert, updateDTO);
+        return ExpertMapper.dtoFromExpert(
+                expertRepository.save(expert));
     }
 
     @Override
     public List<ExpertResponseDTO> searchExpert(
             List<SingularAttribute<?, ?>> fields, List<Operator> operators, List<String> values,
             String expertise
-    ){
+    ) {
         return expertRepository.findAll(
-                ExpertSpecification.searchExpert(fields, operators, values, expertise))
+                        ExpertSpecification.searchExpert(fields, operators, values, expertise))
                 .stream().map(ExpertMapper::dtoFromExpert)
                 .toList();
     }
@@ -108,7 +118,7 @@ public class ExpertServiceImpl implements ExpertService {
         expertRepository.save(expert);
     }
 
-    private void updateFields (Expert expert, ExpertUpdateDTO updateDTO) {
+    private void updateFields(Expert expert, ExpertUpdateDTO updateDTO) {
         if (StringUtils.hasText(updateDTO.getFirstname()))
             expert.setFirstname(updateDTO.getFirstname());
 

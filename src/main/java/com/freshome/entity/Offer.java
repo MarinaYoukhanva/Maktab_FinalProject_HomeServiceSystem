@@ -20,9 +20,15 @@ import java.util.List;
                 columnNames = {"order_id", "expert_id"}))
 public class Offer extends BaseEntity<Long> {
 
+    @Column(nullable = false, updatable = false)
     LocalDateTime offerRegisterDateTime;
+
+    @Column(nullable = false)
     Long suggestedPriceByExpert;
+
+    @Column(nullable = false)
     Integer durationInHours;
+
     LocalDateTime startDateTime;
 
     @ManyToOne(optional = false)

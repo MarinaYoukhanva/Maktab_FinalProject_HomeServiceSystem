@@ -1,8 +1,10 @@
 package com.freshome.entity;
 
 import com.freshome.entity.base.BaseEntity;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
@@ -16,7 +18,9 @@ import lombok.experimental.SuperBuilder;
 @Entity
 public class Review extends BaseEntity<Long> {
 
+    @Column(nullable = false)
     Integer rating;
+
     String comment;
 
     @ManyToOne

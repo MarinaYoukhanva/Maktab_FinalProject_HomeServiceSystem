@@ -1,15 +1,28 @@
 package com.freshome;
 
+import com.freshome.dto.credit.CreditCreateDTO;
+import com.freshome.dto.credit.CreditUpdateDTO;
+import com.freshome.dto.customer.CustomerCreateDTO;
+import com.freshome.dto.customer.CustomerUpdateDTO;
+import com.freshome.dto.expert.ExpertCreatDTO;
+import com.freshome.dto.offer.OfferCreateDTO;
+import com.freshome.dto.order.OrderCreateDTO;
 import com.freshome.dto.order.OrderUpdateDTO;
+import com.freshome.entity.Customer_;
+import com.freshome.entity.Expert_;
+import com.freshome.entity.embeddable.Address;
 import com.freshome.entity.enumeration.OrderStatus;
-import com.freshome.service.CreditService;
-import com.freshome.service.CustomerService;
-import com.freshome.service.ExpertService;
-import com.freshome.service.OrderService;
+import com.freshome.entity.enumeration.UserStatus;
+import com.freshome.repository.ReviewRepository;
+import com.freshome.service.*;
+import com.freshome.specification.Operator;
+import jakarta.persistence.metamodel.SingularAttribute;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
 
 @SpringBootApplication(scanBasePackages = "com.freshome.*")
 public class HomeServiceSystemApplication {
@@ -35,12 +48,31 @@ public class HomeServiceSystemApplication {
         CreditService creditService = spring.getBean(CreditService.class);
         ExpertService expertService = spring.getBean(ExpertService.class);
         OrderService orderService = spring.getBean(OrderService.class);
+        ReviewService reviewService = spring.getBean(ReviewService.class);
+        ReviewRepository rrepo = spring.getBean(ReviewRepository.class);
+        OfferService offerService = spring.getBean(OfferService.class);
+
+
+        System.out.println(expertService.findExpertById(1L));
+
+//        rrepo.findAll();
+
+//        try{
+//            orderService.createOrder(new OrderCreateDTO(
+//                    10L, "asdf", LocalDateTime.now(), null,
+//                    null,null,null,null, OrderStatus.WAITING_FOR_EXPERT_OFFERS, 15L, 4L, 2L
+//            ));
+//        }catch (Exception e){
+//            System.out.println(e.getMessage());
+//            e.printStackTrace();
+//        }
 
 //        try {
 //            CustomerUpdateDTO c = CustomerUpdateDTO.builder()
 //                    .id(15L)
-//                    .firstname("abab")
-//                    .lastname("    ")
+//                    .firstname("qwe")
+//                    .lastname("")
+//                    .email("asdfg")
 //                    .status(null)
 //                    .build();
 //            customerService.updateCustomer(c);
@@ -49,17 +81,17 @@ public class HomeServiceSystemApplication {
 //            System.out.println(e.getMessage());
 //        }
 
-        try{
-            var o = OrderUpdateDTO.builder()
-                    .id(1L)
-                    .street("new street")
-                    .orderExecutionDateTime(LocalDateTime.now().plusDays(4))
-                    .status(OrderStatus.STARTED)
-                    .build();
-            orderService.updateOrder(o);
-        }catch (Exception e){
-            System.out.println(e.getMessage());
-        }
+//        try{
+//            var o = OrderUpdateDTO.builder()
+//                    .id(1L)
+//                    .street("new street")
+//                    .orderExecutionDateTime(LocalDateTime.now().plusDays(4))
+//                    .status(OrderStatus.STARTED)
+//                    .build();
+//            orderService.updateOrder(o);
+//        }catch (Exception e){
+//            System.out.println(e.getMessage());
+//        }
 
 //		try{
 //			customerService.changePassword(16L, "1234", "1234");
@@ -72,14 +104,14 @@ public class HomeServiceSystemApplication {
 //		System.out.println(c);
 //		System.out.println(c.getName());
 //
-//		List<SingularAttribute<?, ?>> fields = Arrays.asList(Expert_.firstname, Expert_.lastname);
-//		List<Operator> operators = Arrays.asList(Operator.CONTAINS, Operator.ENDS_WITH);
-//		List<String> values = Arrays.asList("w", "e");
+//		List<SingularAttribute<?, ?>> fields = Arrays.asList(Expert_.firstname);
+//		List<Operator> operators = Arrays.asList(Operator.CONTAINS);
+//		List<String> values = Arrays.asList("a");
 //
-//		expertService.searchExpert(fields,operators, values, "cle")
+//		expertService.searchExpert(fields,operators, values, null)
 //				.forEach(System.out::println);
 
-//		customerService.searchCustomer(fields, operators, values)
+//		expertService.searchExpert(fields, operators, values,null)
 //				.forEach(System.out::println);
 
 //		expertService.findOptionalExpertById(4L).get().getSubServices()
@@ -87,14 +119,15 @@ public class HomeServiceSystemApplication {
 //				.toList()
 //				.forEach(System.out::println);
 
-//		try{
-//			expertService.createExpert(new ExpertCreatDTO(
-//					"m",null,null,null,LocalDateTime.now(),
-//					null,null,null,null
-//			));
-//		}catch (Exception e){
-//			System.out.println(e.getMessage());
-//		}
+		try{
+			expertService.createExpert(new ExpertCreatDTO(
+					"mm","yy","a@gmail.com","a1234aSeffn",
+                    LocalDateTime.now(), UserStatus.PENDING_APPROVAL,
+                    null,null
+			));
+		}catch (Exception e){
+			System.out.println(e.getMessage());
+		}
 //		try{
 //			expertService.updateExpert(new ExpertUpdateDTO(
 //					4L, "aa",null,null,null, null,
@@ -119,8 +152,8 @@ public class HomeServiceSystemApplication {
 
 //		try {
 //			var res = customerService.createCustomer(new CustomerCreateDTO(
-//					"m", "y", null, "a12S@tt", LocalDateTime.now(),
-//					UserStatus.PENDING_APPROVAL, null
+//					"mm", "yy", "ffg@sff.com", "a12Sad@tt", LocalDateTime.now(),
+//					UserStatus.NEW, null
 //			));
 //			System.out.println(res);
 //		}catch (Exception e){

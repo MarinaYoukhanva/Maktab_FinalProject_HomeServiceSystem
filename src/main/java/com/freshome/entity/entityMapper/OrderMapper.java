@@ -3,6 +3,7 @@ package com.freshome.entity.entityMapper;
 import com.freshome.entity.Order;
 import com.freshome.dto.order.OrderCreateDTO;
 import com.freshome.dto.order.OrderResponseDTO;
+import com.freshome.entity.embeddable.Address;
 
 public class OrderMapper {
 
@@ -12,7 +13,9 @@ public class OrderMapper {
                 .description(orderCreateDTO.description())
                 .orderPlacementDateTime(orderCreateDTO.orderPlacementDateTime())
                 .orderExecutionDateTime(orderCreateDTO.orderExecutionDateTime())
-                .address(orderCreateDTO.address())
+                .address(new Address(
+                        orderCreateDTO.city(), orderCreateDTO.street(),
+                        orderCreateDTO.avenue(), orderCreateDTO.plaque()))
                 .status(orderCreateDTO.status())
                 .build();
     }

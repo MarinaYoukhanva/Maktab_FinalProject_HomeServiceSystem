@@ -16,11 +16,13 @@ import java.util.List;
 @Entity
 public class Expert extends User {
 
+    @Lob
     byte[] profileImage;
 
-    //    @Transient
-//    todo: in getter -> average based on ratings
-    Long score;
+    // in getter -> average based on ratings
+    @Transient
+    Double score;
+
 
     @ManyToMany
     @JoinTable(uniqueConstraints = @UniqueConstraint(

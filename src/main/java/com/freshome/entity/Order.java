@@ -21,13 +21,19 @@ import java.util.List;
 public class Order extends BaseEntity<Long> {
 
     Long suggestedPriceByCustomer;
+
+    @Column(nullable = false)
     String description;
+
+    @Column(nullable = false, updatable = false)
     LocalDateTime orderPlacementDateTime;
+
     LocalDateTime orderExecutionDateTime;
 
     @Embedded
     Address address;
 
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     OrderStatus status;
 
