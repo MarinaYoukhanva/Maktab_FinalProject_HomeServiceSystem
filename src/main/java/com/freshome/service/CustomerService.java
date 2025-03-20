@@ -27,7 +27,7 @@ public interface CustomerService {
 
     CustomerResponseDTO updateCustomer(@Valid CustomerUpdateDTO updateDTO);
 
-    List<Customer> searchCustomer(
+    List<CustomerResponseDTO> searchCustomer(
             List<SingularAttribute<?, ?>> fields, List<Operator> operators, List<String> values
     );
 

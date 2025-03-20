@@ -86,12 +86,14 @@ public class ExpertServiceImpl implements ExpertService {
     }
 
     @Override
-    public List<Expert> searchExpert(
+    public List<ExpertResponseDTO> searchExpert(
             List<SingularAttribute<?, ?>> fields, List<Operator> operators, List<String> values,
             String expertise
     ){
         return expertRepository.findAll(
-                ExpertSpecification.searchExpert(fields, operators, values, expertise));
+                ExpertSpecification.searchExpert(fields, operators, values, expertise))
+                .stream().map(ExpertMapper::dtoFromExpert)
+                .toList();
     }
 
     @Override
