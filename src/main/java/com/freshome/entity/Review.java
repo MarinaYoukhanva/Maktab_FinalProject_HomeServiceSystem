@@ -16,10 +16,11 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
+@Table(name = "review")
 public class Review extends BaseEntity<Long> {
 
     @Column(nullable = false)
-    Integer rating;
+    Double rating;
 
     String comment;
 

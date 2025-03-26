@@ -8,8 +8,6 @@ import com.freshome.dto.expert.ExpertCreatDTO;
 import com.freshome.dto.offer.OfferCreateDTO;
 import com.freshome.dto.order.OrderCreateDTO;
 import com.freshome.dto.order.OrderUpdateDTO;
-import com.freshome.entity.Customer_;
-import com.freshome.entity.Expert_;
 import com.freshome.entity.embeddable.Address;
 import com.freshome.entity.enumeration.OrderStatus;
 import com.freshome.entity.enumeration.UserStatus;
@@ -54,6 +52,8 @@ public class HomeServiceSystemApplication {
 
 
         System.out.println(expertService.findExpertById(1L));
+        expertService.findAllExperts()
+                .forEach(System.out::println);
 
 //        rrepo.findAll();
 
@@ -119,15 +119,15 @@ public class HomeServiceSystemApplication {
 //				.toList()
 //				.forEach(System.out::println);
 
-		try{
-			expertService.createExpert(new ExpertCreatDTO(
-					"mm","yy","a@gmail.com","a1234aSeffn",
-                    LocalDateTime.now(), UserStatus.PENDING_APPROVAL,
-                    null,null
-			));
-		}catch (Exception e){
-			System.out.println(e.getMessage());
-		}
+//		try{
+//			expertService.createExpert(new ExpertCreatDTO(
+//					"mm","yy","abb@gmail.com","a1234aSeffn",
+//                    LocalDateTime.now(), UserStatus.PENDING_APPROVAL,
+//                    null,null
+//			));
+//		}catch (Exception e){
+//			System.out.println(e.getMessage());
+//		}
 //		try{
 //			expertService.updateExpert(new ExpertUpdateDTO(
 //					4L, "aa",null,null,null, null,

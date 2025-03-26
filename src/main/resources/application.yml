@@ -15,8 +15,19 @@ spring:
       hibernate:
         show_sql: true
         default_schema: home
+        format_sql: true
 
 server:
   port: 8081
+
+logging:
+  level:
+    org:
+      hibernate:
+        SQL : debug
+        type:
+          descriptor:
+            sql:
+              BasicBinder : TRACE
 
 

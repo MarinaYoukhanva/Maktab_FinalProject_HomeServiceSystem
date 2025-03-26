@@ -9,7 +9,7 @@ public record ReviewUpdateDTO(
         @NotNull(message = "id can not be null for updating! ")
         @Positive
         Long id,
-        Integer rating,
+        Double rating,
         String comment
 ) {
 }

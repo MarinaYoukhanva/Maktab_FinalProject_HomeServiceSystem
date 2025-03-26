@@ -56,7 +56,8 @@ public class ExpertServiceImpl implements ExpertService {
         Expert expert = expertRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(Expert.class, id));
         Double score = reviewRepository.expertScoreFromRatingsAverage(id);
-        expert.setScore(score == null ? 0.0 : score);
+//        expert.setScore(score == null ? 0.0 : score);
+        expert.setScore(score);
         return ExpertMapper.dtoFromExpert(expert);
     }
 
@@ -65,15 +66,21 @@ public class ExpertServiceImpl implements ExpertService {
         return expertRepository.findById(id)
                 .map(expert -> {
                     Double score = reviewRepository.expertScoreFromRatingsAverage(id);
-                    expert.setScore(score == null ? 0.0 : score);
+//                    expert.setScore(score == null ? 0.0 : score);
+                    expert.setScore(score);
                     return expert;
                 });
     }
 
     @Override
     public List<ExpertResponseDTO> findAllExperts() {
-        return expertRepository.findAll()
-                .stream().map(ExpertMapper::dtoFromExpert)
+        List<Expert> experts = expertRepository.findAll();
+        experts.forEach(expert -> {
+            Double score = reviewRepository.expertScoreFromRatingsAverage(expert.getId());
+            expert.setScore(score);
+        });
+        return experts.stream()
+                .map(ExpertMapper::dtoFromExpert)
                 .toList();
     }
 
@@ -100,9 +107,14 @@ public class ExpertServiceImpl implements ExpertService {
             List<SingularAttribute<?, ?>> fields, List<Operator> operators, List<String> values,
             String expertise
     ) {
-        return expertRepository.findAll(
-                        ExpertSpecification.searchExpert(fields, operators, values, expertise))
-                .stream().map(ExpertMapper::dtoFromExpert)
+        List<Expert> experts = expertRepository.findAll(
+                ExpertSpecification.searchExpert(fields, operators, values, expertise));
+        experts.forEach(expert -> {
+            Double score = reviewRepository.expertScoreFromRatingsAverage(expert.getId());
+            expert.setScore(score);
+        });
+        return experts.stream()
+                .map(ExpertMapper::dtoFromExpert)
                 .toList();
     }
 
