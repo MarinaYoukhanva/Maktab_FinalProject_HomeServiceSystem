@@ -8,6 +8,7 @@ import com.freshome.dto.expert.ExpertResponseDTO;
 import com.freshome.dto.expert.ExpertUpdateDTO;
 import com.freshome.entity.entityMapper.ExpertMapper;
 import com.freshome.exception.ChangePasswordException;
+import com.freshome.exception.ExistenceException;
 import com.freshome.exception.NotFoundException;
 import com.freshome.repository.ExpertRepository;
 import com.freshome.repository.ReviewRepository;
@@ -40,6 +41,9 @@ public class ExpertServiceImpl implements ExpertService {
     @Override
     @Transactional
     public ExpertResponseDTO createExpert(ExpertCreatDTO expertCreatDTO) {
+
+        if (expertRepository.existsByEmail(expertCreatDTO.getEmail()))
+            throw new ExistenceException("email");
 
         Expert expert = ExpertMapper.expertFromDto(expertCreatDTO);
         Credit credit = creditService.createReturnCredit(new CreditCreateDTO(0L));
@@ -137,8 +141,11 @@ public class ExpertServiceImpl implements ExpertService {
         if (StringUtils.hasText(updateDTO.getLastname()))
             expert.setLastname(updateDTO.getLastname());
 
-        if (StringUtils.hasText(updateDTO.getEmail()))
+        if (StringUtils.hasText(updateDTO.getEmail())){
+            if (expertRepository.existsByEmail(updateDTO.getEmail()))
+                throw new ExistenceException("email");
             expert.setEmail(updateDTO.getEmail());
+        }
 
         if (updateDTO.getStatus() != null)
             expert.setStatus(updateDTO.getStatus());

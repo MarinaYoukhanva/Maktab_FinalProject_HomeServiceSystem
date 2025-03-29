@@ -51,9 +51,9 @@ public class HomeServiceSystemApplication {
         OfferService offerService = spring.getBean(OfferService.class);
 
 
-        System.out.println(expertService.findExpertById(1L));
-        expertService.findAllExperts()
-                .forEach(System.out::println);
+//        System.out.println(expertService.findExpertById(1L));
+//        expertService.findAllExperts()
+//                .forEach(System.out::println);
 
 //        rrepo.findAll();
 
@@ -119,15 +119,15 @@ public class HomeServiceSystemApplication {
 //				.toList()
 //				.forEach(System.out::println);
 
-//		try{
-//			expertService.createExpert(new ExpertCreatDTO(
-//					"mm","yy","abb@gmail.com","a1234aSeffn",
-//                    LocalDateTime.now(), UserStatus.PENDING_APPROVAL,
-//                    null,null
-//			));
-//		}catch (Exception e){
-//			System.out.println(e.getMessage());
-//		}
+		try{
+			expertService.createExpert(new ExpertCreatDTO(
+					"mm","yy","abb@gmail.coom","a1234aSeffn",
+                    LocalDateTime.now(), UserStatus.PENDING_APPROVAL,
+                    null,null
+			));
+		}catch (Exception e){
+			System.out.println(e.getMessage());
+		}
 //		try{
 //			expertService.updateExpert(new ExpertUpdateDTO(
 //					4L, "aa",null,null,null, null,

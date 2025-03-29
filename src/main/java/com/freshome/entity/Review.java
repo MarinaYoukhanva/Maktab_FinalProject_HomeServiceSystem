@@ -1,10 +1,7 @@
 package com.freshome.entity;
 
 import com.freshome.entity.base.BaseEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
@@ -27,7 +24,7 @@ public class Review extends BaseEntity<Long> {
     @ManyToOne
     Customer customer;
 
-    @ManyToOne(optional = false)
+    @OneToOne(optional = false)
     Order order;
 
     @ManyToOne(optional = false)

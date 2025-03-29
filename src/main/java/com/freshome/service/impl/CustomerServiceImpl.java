@@ -8,6 +8,7 @@ import com.freshome.dto.customer.CustomerResponseDTO;
 import com.freshome.dto.customer.CustomerUpdateDTO;
 import com.freshome.entity.entityMapper.CustomerMapper;
 import com.freshome.exception.ChangePasswordException;
+import com.freshome.exception.ExistenceException;
 import com.freshome.exception.NotFoundException;
 import com.freshome.repository.CustomerRepository;
 import com.freshome.service.CreditService;
@@ -37,6 +38,9 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     @Transactional
     public CustomerResponseDTO createCustomer(CustomerCreateDTO customerCreateDTO) {
+
+        if (customerRepository.existsByEmail(customerCreateDTO.getEmail()))
+            throw new ExistenceException("email");
 
         Customer customer = CustomerMapper.customerFromDto(customerCreateDTO);
         Credit credit = creditService.createReturnCredit(new CreditCreateDTO(0L));
@@ -116,8 +120,11 @@ public class CustomerServiceImpl implements CustomerService {
         if (StringUtils.hasText(updateDTO.getLastname()))
             customer.setLastname(updateDTO.getLastname());
 
-        if (StringUtils.hasText(updateDTO.getEmail()))
+        if (StringUtils.hasText(updateDTO.getEmail())){
+            if (customerRepository.existsByEmail(updateDTO.getEmail()))
+                throw new ExistenceException("email");
             customer.setEmail(updateDTO.getEmail());
+        }
 
         if (updateDTO.getStatus() != null)
             customer.setStatus(updateDTO.getStatus());
