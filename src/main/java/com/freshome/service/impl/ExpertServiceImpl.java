@@ -44,6 +44,8 @@ public class ExpertServiceImpl implements ExpertService {
 
         if (expertRepository.existsByEmail(expertCreatDTO.getEmail()))
             throw new ExistenceException("email");
+        if (expertRepository.existsByPhoneNumber(expertCreatDTO.getPhoneNumber()))
+            throw new ExistenceException("phoneNumber");
 
         Expert expert = ExpertMapper.expertFromDto(expertCreatDTO);
         Credit credit = creditService.createReturnCredit(new CreditCreateDTO(0L));

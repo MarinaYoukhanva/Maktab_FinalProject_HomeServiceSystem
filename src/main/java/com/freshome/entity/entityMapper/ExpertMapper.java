@@ -6,6 +6,8 @@ import com.freshome.dto.expert.ExpertResponseDTO;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.time.LocalDateTime;
+
 public class ExpertMapper {
 
     private static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -16,7 +18,8 @@ public class ExpertMapper {
                 .lastname(expertCreatDTO.getLastname())
                 .email(expertCreatDTO.getEmail())
                 .password(passwordEncoder.encode(expertCreatDTO.getPassword()))
-                .registerDateTime(expertCreatDTO.getRegisterDateTime())
+//                .password(expertCreatDTO.getPassword())
+                .registerDateTime(LocalDateTime.now())
                 .status(expertCreatDTO.getStatus())
                 .phoneNumber(expertCreatDTO.getPhoneNumber())
                 .profileImage(expertCreatDTO.getProfileImage())

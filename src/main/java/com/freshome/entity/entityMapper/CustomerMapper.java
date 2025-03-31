@@ -6,6 +6,8 @@ import com.freshome.dto.customer.CustomerResponseDTO;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.time.LocalDateTime;
+
 public class CustomerMapper {
 
     private static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -16,7 +18,8 @@ public class CustomerMapper {
                 .lastname(customerCreateDTO.getLastname())
                 .email(customerCreateDTO.getEmail())
                 .password(passwordEncoder.encode(customerCreateDTO.getPassword()))
-                .registerDateTime(customerCreateDTO.getRegisterDateTime())
+//                .password(customerCreateDTO.getPassword())
+                .registerDateTime(LocalDateTime.now())
                 .status(customerCreateDTO.getStatus())
                 .phoneNumber(customerCreateDTO.getPhoneNumber())
 //                .credit(customerCreateDTO.getCredit())

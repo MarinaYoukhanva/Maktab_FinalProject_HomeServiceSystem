@@ -41,6 +41,8 @@ public class CustomerServiceImpl implements CustomerService {
 
         if (customerRepository.existsByEmail(customerCreateDTO.getEmail()))
             throw new ExistenceException("email");
+        if (customerRepository.existsByPhoneNumber(customerCreateDTO.getPhoneNumber()))
+            throw new ExistenceException("phoneNumber");
 
         Customer customer = CustomerMapper.customerFromDto(customerCreateDTO);
         Credit credit = creditService.createReturnCredit(new CreditCreateDTO(0L));

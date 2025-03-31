@@ -42,16 +42,16 @@ public class HomeServiceSystemApplication {
 //		System.out.println(c2);
 //		System.out.println(c1.equals(c2));
 
-        CustomerService customerService = spring.getBean(CustomerService.class);
-        CreditService creditService = spring.getBean(CreditService.class);
-        ExpertService expertService = spring.getBean(ExpertService.class);
-        OrderService orderService = spring.getBean(OrderService.class);
-        ReviewService reviewService = spring.getBean(ReviewService.class);
-        ReviewRepository rrepo = spring.getBean(ReviewRepository.class);
-        OfferService offerService = spring.getBean(OfferService.class);
+//        CustomerService customerService = spring.getBean(CustomerService.class);
+//        CreditService creditService = spring.getBean(CreditService.class);
+//        ExpertService expertService = spring.getBean(ExpertService.class);
+//        OrderService orderService = spring.getBean(OrderService.class);
+//        ReviewService reviewService = spring.getBean(ReviewService.class);
+//        ReviewRepository rrepo = spring.getBean(ReviewRepository.class);
+//        OfferService offerService = spring.getBean(OfferService.class);
 
 
-//        System.out.println(expertService.findExpertById(1L));
+//        System.out.println(expertService.findExpertById(2L));
 //        expertService.findAllExperts()
 //                .forEach(System.out::println);
 
@@ -119,15 +119,16 @@ public class HomeServiceSystemApplication {
 //				.toList()
 //				.forEach(System.out::println);
 
-		try{
-			expertService.createExpert(new ExpertCreatDTO(
-					"mm","yy","abb@gmail.coom","a1234aSeffn",
-                    LocalDateTime.now(), UserStatus.PENDING_APPROVAL,
-                    null,null
-			));
-		}catch (Exception e){
-			System.out.println(e.getMessage());
-		}
+//		try{
+//			expertService.createExpert(new ExpertCreatDTO(
+//					null,"y","aabb@gmail.coom","a1234aSeffn"
+//                    , UserStatus.PENDING_APPROVAL,
+//                    "0936",null
+//			));
+//		}catch (Exception e){
+//            System.out.println(Arrays.toString(e.getStackTrace()));
+//			System.out.println(e.getMessage());
+//		}
 //		try{
 //			expertService.updateExpert(new ExpertUpdateDTO(
 //					4L, "aa",null,null,null, null,

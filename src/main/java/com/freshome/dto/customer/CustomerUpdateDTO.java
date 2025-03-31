@@ -4,11 +4,14 @@ import com.freshome.dto.UserUpdateDTO;
 import com.freshome.entity.enumeration.UserStatus;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 @Getter
 @SuperBuilder
+@NoArgsConstructor
 public class CustomerUpdateDTO extends UserUpdateDTO {
 
     @NotNull(message = "id can not be null for updating! ")

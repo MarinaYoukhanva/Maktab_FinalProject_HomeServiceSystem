@@ -12,10 +12,11 @@ import org.springframework.validation.annotation.Validated;
 import java.util.List;
 import java.util.Optional;
 
-@Validated
+//@Validated
 public interface CustomerService {
 
-    CustomerResponseDTO createCustomer(@Valid CustomerCreateDTO customerCreateDTO);
+//    CustomerResponseDTO createCustomer(@Valid CustomerCreateDTO customerCreateDTO);
+    CustomerResponseDTO createCustomer(CustomerCreateDTO customerCreateDTO);
 
     CustomerResponseDTO findCustomerById(Long id);
 
@@ -25,7 +26,8 @@ public interface CustomerService {
 
     void deleteCustomer(Long id);
 
-    CustomerResponseDTO updateCustomer(@Valid CustomerUpdateDTO updateDTO);
+//    CustomerResponseDTO updateCustomer(@Valid CustomerUpdateDTO updateDTO);
+    CustomerResponseDTO updateCustomer(CustomerUpdateDTO updateDTO);
 
     List<CustomerResponseDTO> searchCustomer(
             List<SingularAttribute<?, ?>> fields, List<Operator> operators, List<String> values

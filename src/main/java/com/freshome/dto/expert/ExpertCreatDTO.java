@@ -20,11 +20,11 @@ public class ExpertCreatDTO extends UserCreateDTO {
             String firstname,
             String lastname,
             String email, String password,
-            LocalDateTime registerDateTime,
+//            LocalDateTime registerDateTime,
             UserStatus status,
             String phoneNumber,
             byte[] profileImage) {
-        super(firstname, lastname, email, password, registerDateTime, status, phoneNumber);
+        super(firstname, lastname, email, password, status, phoneNumber);
         this.profileImage = profileImage;
 //        this.score = score;
 //        this.credit = credit;

@@ -33,12 +33,12 @@ public abstract class UserCreateDTO {
     String email;
 
     @NotBlank(message = "password can not be null or blank! ")
-    @Pattern(regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)[A-Za-z\\d@#$%&]{8,}$", message =
-            "password has to contain at least one uppercase letter, one lowercase letter and one digit")
+    @Pattern(regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@#$%&])[A-Za-z\\d@#$%&]{8,}$", message =
+            "password has to contain at least one uppercase letter, one lowercase letter, one digit and one character")
     String password;
 
-    @NotNull(message = "registerDateTime can not be null! ")
-    LocalDateTime registerDateTime;
+//    @NotNull(message = "registerDateTime can not be null! ")
+//    LocalDateTime registerDateTime;
 
     @NotNull(message = "status can not be null! ")
     UserStatus status;
