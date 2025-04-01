@@ -58,4 +58,14 @@ public class CustomerController {
                 customerService.updateCustomer(customerUpdateDTO)
         );
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<CustomerResponseDTO>> searchCustomer(
+            @RequestParam(required = false) List<String> fields,
+            @RequestParam(required = false) List<String> values
+    ){
+        return ResponseEntity.ok(
+                customerService.searchCustomer(fields, values)
+        );
+    }
 }

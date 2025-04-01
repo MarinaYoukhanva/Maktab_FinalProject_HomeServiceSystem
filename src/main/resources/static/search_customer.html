@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Search</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="flex justify-center items-center min-h-screen bg-gray-100">
+<div class="p-6 bg-white shadow-lg rounded-lg w-full max-w-4xl">
+    <h2 class="text-2xl font-semibold mb-4 text-center text-gray-800">Customer Search</h2>
+
+    <!-- Search Form -->
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-4">
+        <input id="firstname" type="text" placeholder="Firstname" class="w-full p-2 border rounded">
+        <input id="lastname" type="text" placeholder="Lastname" class="w-full p-2 border rounded">
+        <input id="email" type="text" placeholder="Email" class="w-full p-2 border rounded">
+        <input id="phoneNumber" type="text" placeholder="Phone Number" class="w-full p-2 border rounded">
+    </div>
+
+    <button onclick="handleSearch()" class="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600">
+        Search
+    </button>
+
+    <!-- Results Table -->
+    <div id="results" class="mt-6 overflow-x-auto"></div>
+</div>
+<script src="./script/search_customer.js"></script>
+</body>
+</html>

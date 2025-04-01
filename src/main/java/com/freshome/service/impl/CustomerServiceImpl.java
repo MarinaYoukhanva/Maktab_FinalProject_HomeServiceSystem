@@ -95,10 +95,10 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public List<CustomerResponseDTO> searchCustomer(
-            List<SingularAttribute<?, ?>> fields, List<Operator> operators, List<String> values
+            List<String> fields, List<String> values
     ) {
         return customerRepository.findAll(
-                CustomerSpecification.searchCustomer(fields, operators, values))
+                CustomerSpecification.searchCustomer(fields, values))
                 .stream().map(CustomerMapper::dtoFromCustomer)
                 .toList();
     }

@@ -20,4 +20,20 @@ public class CustomerSpecification {
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         }));
     }
+
+    public static Specification<Customer> searchCustomer(
+            List<String> fields, List<String> values
+    ){
+        List<Predicate> predicates = new ArrayList<>();
+        return (((root, query, criteriaBuilder) -> {
+            if (fields == null || fields.isEmpty()) {
+                return criteriaBuilder.conjunction();
+            }
+            for (int i = 0; i < fields.size(); i++) {
+                predicates.add(criteriaBuilder.like(
+                                root.get(fields.get(i)), "%" + values.get(i) + "%"));
+            }
+            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+        }));
+        }
 }

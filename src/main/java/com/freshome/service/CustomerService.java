@@ -30,7 +30,7 @@ public interface CustomerService {
     CustomerResponseDTO updateCustomer(CustomerUpdateDTO updateDTO);
 
     List<CustomerResponseDTO> searchCustomer(
-            List<SingularAttribute<?, ?>> fields, List<Operator> operators, List<String> values
+            List<String> fields, List<String> values
     );
 
     void changePassword(Long customerId, String oldPassword, String newPassword);
