@@ -17,8 +17,8 @@ spring:
         default_schema: home
   security:
     user:
-      name: user
-      password: pass
+      name: admin
+      password: admin
 #        format_sql: true
 
 server:

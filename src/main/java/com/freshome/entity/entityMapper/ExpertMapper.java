@@ -3,6 +3,7 @@ package com.freshome.entity.entityMapper;
 import com.freshome.entity.Expert;
 import com.freshome.dto.expert.ExpertCreatDTO;
 import com.freshome.dto.expert.ExpertResponseDTO;
+import com.freshome.entity.enumeration.UserStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -20,7 +21,7 @@ public class ExpertMapper {
                 .password(passwordEncoder.encode(expertCreatDTO.getPassword()))
 //                .password(expertCreatDTO.getPassword())
                 .registerDateTime(LocalDateTime.now())
-                .status(expertCreatDTO.getStatus())
+                .status(UserStatus.NEW)
                 .phoneNumber(expertCreatDTO.getPhoneNumber())
                 .profileImage(expertCreatDTO.getProfileImage())
 //                .score(expertCreatDTO.getScore())

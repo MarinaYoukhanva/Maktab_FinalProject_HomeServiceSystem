@@ -34,14 +34,18 @@ public abstract class UserCreateDTO {
 
     @NotBlank(message = "password can not be null or blank! ")
     @Pattern(regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@#$%&])[A-Za-z\\d@#$%&]{8,}$", message =
-            "password has to contain at least one uppercase letter, one lowercase letter, one digit and one character")
+            """
+                    password must be at least 8 characters long
+                    and include at least one uppercase letter, one lowercase letter, one digit,
+                    and one special character (@, #, $, %, &).
+                    """)
     String password;
 
 //    @NotNull(message = "registerDateTime can not be null! ")
 //    LocalDateTime registerDateTime;
 
-    @NotNull(message = "status can not be null! ")
-    UserStatus status;
+//    @NotNull(message = "status can not be null! ")
+//    UserStatus status;
 
     @Size(min = 13, max = 15, message = "short or long phone_number! ")
     @Pattern(regexp = "^((0098)0?9|\\+980?9)[01239]\\d{8}$", message = "invalid phone-number! ")

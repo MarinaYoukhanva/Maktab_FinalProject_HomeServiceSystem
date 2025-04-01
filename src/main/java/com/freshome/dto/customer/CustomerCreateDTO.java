@@ -17,9 +17,9 @@ public class CustomerCreateDTO extends UserCreateDTO {
             String email,
             String password,
 //            LocalDateTime registerDateTime,
-            UserStatus status,
+//            UserStatus status,
             String phoneNumber) {
-        super(firstname, lastname, email, password, status, phoneNumber);
+        super(firstname, lastname, email, password, phoneNumber);
 //        this.creditId = creditId;
     }
 }

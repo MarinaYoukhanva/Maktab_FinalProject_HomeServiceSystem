@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,20 +23,36 @@ import java.util.Map;
 public class GlobalExceptionHandler extends
         ResponseEntityExceptionHandler {
 
+    //    @Override
+//    protected ResponseEntity<Object> handleMethodArgumentNotValid(
+//            MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+//        log.info("validation exception triggered");
+//        List<String> errorMessages = ex.getBindingResult().getFieldErrors()
+//                .stream().map(
+//                fe -> fe.getField() + ": " + fe.getDefaultMessage()).toList();
+//        return ResponseEntity
+//                .badRequest()
+//                .body(Map.of("errorMessage", errorMessages));
+//    }
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
             MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
-        log.info("validation exception triggered");
-        List<String> errorMessages = ex.getBindingResult().getFieldErrors()
-                .stream().map(
-                fe -> fe.getField() + ": " + fe.getDefaultMessage()).toList();
+        log.info("Validation exception triggered");
+
+        Map<String, List<String>> errorMessages = new HashMap<>();
+//        for (FieldError fieldError : ex.getBindingResult().getFieldErrors())
+//            errorMessages.put(fieldError.getField(), fieldError.getDefaultMessage());
+        for (FieldError fieldError : ex.getBindingResult().getFieldErrors()) {
+            errorMessages.computeIfAbsent(fieldError.getField(), key -> new ArrayList<>())
+                    .add(fieldError.getDefaultMessage());
+        }
         return ResponseEntity
                 .badRequest()
-                .body(Map.of("errorMessage", errorMessages));
+                .body(Map.of("errors", errorMessages));
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<String> handleDatabaseException(DataIntegrityViolationException ex) {
+    public ResponseEntity<Map<String, String>> handleDatabaseException(DataIntegrityViolationException ex) {
 //        if (ex.getRootCause() !=null
 //                && ex.getRootCause().getMessage().contains("unique constraint")){
 //            return ResponseEntity
@@ -43,20 +61,26 @@ public class GlobalExceptionHandler extends
 //        }
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body("something went wrong! ");
+                .body(Map.of(
+                        "error", "Something went wrong!",
+                        "details", ex.getMostSpecificCause().getMessage()));
     }
 
     @ExceptionHandler(ExistenceException.class)
-    public ResponseEntity<String> handleExistenceException(ExistenceException ex) {
+    public ResponseEntity<Map<String, String>> handleExistenceException(ExistenceException ex) {
         return ResponseEntity
                 .status(HttpStatus.CONFLICT)
-                .body(ex.getMessage());
+                .body(Map.of(
+                        "error", "Conflict",
+                        "message", ex.getMessage()));
     }
 
     @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<String> handleNotFoundException(NotFoundException ex) {
+    public ResponseEntity<Map<String, String>> handleNotFoundException(NotFoundException ex) {
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
-                .body(ex.getMessage());
+                .body(Map.of(
+                        "error", "Not Found",
+                        "message", ex.getMessage()));
     }
 }

@@ -3,6 +3,7 @@ package com.freshome.entity.entityMapper;
 import com.freshome.entity.Customer;
 import com.freshome.dto.customer.CustomerCreateDTO;
 import com.freshome.dto.customer.CustomerResponseDTO;
+import com.freshome.entity.enumeration.UserStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -20,7 +21,7 @@ public class CustomerMapper {
                 .password(passwordEncoder.encode(customerCreateDTO.getPassword()))
 //                .password(customerCreateDTO.getPassword())
                 .registerDateTime(LocalDateTime.now())
-                .status(customerCreateDTO.getStatus())
+                .status(UserStatus.NEW)
                 .phoneNumber(customerCreateDTO.getPhoneNumber())
 //                .credit(customerCreateDTO.getCredit())
                 .build();

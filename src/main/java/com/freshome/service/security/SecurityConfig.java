@@ -22,12 +22,12 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable())  // Disable CSRF for Postman testing
+                .csrf(csrf -> csrf.disable()) // Disable CSRF (for development)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/v1/customer/**").permitAll()
-                        .anyRequest().authenticated()  // Secure other endpoints
+                        .anyRequest().permitAll() // Allow access to all endpoints
                 )
-                .formLogin(Customizer.withDefaults());  // Enables login form (for later use)
+                .formLogin(form -> form.disable()) // Disable login page
+                .httpBasic(httpBasic -> httpBasic.disable()); // Disable HTTP Basic Auth
 
         return http.build();
     }
