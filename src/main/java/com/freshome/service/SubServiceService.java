@@ -21,6 +21,8 @@ public interface SubServiceService {
 
     List<SubServiceResponseDTO> findAllSubServices();
 
+    List<SubServiceResponseDTO> findAllByCategoryId(Long id);
+
     SubServiceResponseDTO updateSubService(@Valid SubServiceUpdateDTO updateDTO);
 
     void deleteSubService(Long id);

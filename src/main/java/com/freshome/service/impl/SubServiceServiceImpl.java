@@ -1,5 +1,6 @@
 package com.freshome.service.impl;
 
+import com.freshome.entity.Expert;
 import com.freshome.entity.ServiceCategory;
 import com.freshome.entity.SubService;
 import com.freshome.dto.subService.SubServiceCreateDTO;
@@ -60,6 +61,13 @@ public class SubServiceServiceImpl implements SubServiceService {
     @Override
     public List<SubServiceResponseDTO> findAllSubServices() {
         return subServiceRepository.findAll()
+                .stream().map(SubServiceMapper::dtoFromSubService)
+                .toList();
+    }
+
+    @Override
+    public List<SubServiceResponseDTO> findAllByCategoryId(Long id) {
+        return subServiceRepository.findByCategory_Id(id)
                 .stream().map(SubServiceMapper::dtoFromSubService)
                 .toList();
     }

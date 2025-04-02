@@ -8,6 +8,8 @@ import com.freshome.dto.expert.ExpertCreatDTO;
 import com.freshome.dto.offer.OfferCreateDTO;
 import com.freshome.dto.order.OrderCreateDTO;
 import com.freshome.dto.order.OrderUpdateDTO;
+import com.freshome.entity.Expert;
+import com.freshome.entity.SubService;
 import com.freshome.entity.embeddable.Address;
 import com.freshome.entity.enumeration.OrderStatus;
 import com.freshome.entity.enumeration.UserStatus;
@@ -49,11 +51,20 @@ public class HomeServiceSystemApplication {
 //        ReviewService reviewService = spring.getBean(ReviewService.class);
 //        ReviewRepository rrepo = spring.getBean(ReviewRepository.class);
 //        OfferService offerService = spring.getBean(OfferService.class);
+        SubServiceService subServiceService = spring.getBean(SubServiceService.class);
+
+//        expertService.addSubServiceForExpert(2L, 2L);
+//        Expert expert = expertService.findOptionalExpertById(2L).get();
+//        List<SubService> subServices = expert.getSubServices();
+//        System.out.println();
+
+//        subServiceService.findAllByCategoryId(2L)
+//                .forEach(System.out::println);
 
 
-        System.out.println(expertService.findExpertById(2L));
-        expertService.findAllExperts()
-                .forEach(System.out::println);
+//        System.out.println(expertService.findExpertById(2L));
+//        expertService.findAllExperts()
+//                .forEach(System.out::println);
 
 //        rrepo.findAll();
 

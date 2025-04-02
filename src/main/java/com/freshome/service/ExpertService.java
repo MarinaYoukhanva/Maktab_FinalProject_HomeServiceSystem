@@ -35,4 +35,6 @@ public interface ExpertService {
     );
 
     void changePassword(Long expertId, String oldPassword, String newPassword);
+
+    void addSubServiceForExpert(Long expertId, Long subServiceId);
 }

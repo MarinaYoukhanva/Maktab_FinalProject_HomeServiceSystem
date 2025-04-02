@@ -5,6 +5,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -28,7 +29,7 @@ public class Expert extends User {
     @ManyToMany
     @JoinTable(uniqueConstraints = @UniqueConstraint(
             columnNames = {"sub_services_id", "expert_id"}))
-    List<SubService> subServices;
+    List<SubService> subServices = new ArrayList<>();
 
     @OneToOne(optional = false, orphanRemoval = true)
     Credit credit;

@@ -53,16 +53,17 @@ public class GlobalExceptionHandler extends
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<Map<String, String>> handleDatabaseException(DataIntegrityViolationException ex) {
-//        if (ex.getRootCause() !=null
-//                && ex.getRootCause().getMessage().contains("unique constraint")){
-//            return ResponseEntity
-//                    .status(HttpStatus.CONFLICT)
-//                    .body("Database constraint violation: " + ex.getMessage());
-//        }
+        if (ex.getRootCause() !=null
+                && ex.getRootCause().getMessage().contains("unique constraint")){
+            return ResponseEntity
+                    .status(HttpStatus.CONFLICT)
+                    .body(Map.of(
+                            "message","The value exists! Please try again with different value."));
+        }
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(Map.of(
-                        "error", "Something went wrong! Please try again."));
+                        "error", "Something went wrong! Please try again later."));
 //                        "error", ex.getMessage()));
     }
 

@@ -32,4 +32,13 @@ public class ExpertController {
                 expertService.createExpert(expertCreatDTO)
         );
     }
+
+    @PutMapping("/update/add_sub_service")
+    public ResponseEntity<Void> addSubServiceForExpert(
+            @RequestParam(name = "expertId") Long expertId,
+            @RequestParam(name = "subServiceId") Long subServiceId
+    ){
+        expertService.addSubServiceForExpert(expertId, subServiceId);
+        return ResponseEntity.noContent().build();
+    }
 }

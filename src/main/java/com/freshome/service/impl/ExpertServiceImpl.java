@@ -6,6 +6,7 @@ import com.freshome.dto.credit.CreditCreateDTO;
 import com.freshome.dto.expert.ExpertCreatDTO;
 import com.freshome.dto.expert.ExpertResponseDTO;
 import com.freshome.dto.expert.ExpertUpdateDTO;
+import com.freshome.entity.SubService;
 import com.freshome.entity.entityMapper.ExpertMapper;
 import com.freshome.exception.ChangePasswordException;
 import com.freshome.exception.ExistenceException;
@@ -14,7 +15,7 @@ import com.freshome.repository.ExpertRepository;
 import com.freshome.repository.ReviewRepository;
 import com.freshome.service.CreditService;
 import com.freshome.service.ExpertService;
-import com.freshome.service.ReviewService;
+import com.freshome.service.SubServiceService;
 import com.freshome.specification.ExpertSpecification;
 import com.freshome.specification.Operator;
 import jakarta.persistence.metamodel.SingularAttribute;
@@ -24,7 +25,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
@@ -41,6 +41,7 @@ public class ExpertServiceImpl implements ExpertService {
     private final CreditService creditService;
 //        private final ReviewService reviewService;
     private final ReviewRepository reviewRepository;
+    private final SubServiceService subServiceService;
 
     @Override
     @Transactional
@@ -140,6 +141,19 @@ public class ExpertServiceImpl implements ExpertService {
                 || !passwordEncoder.matches(oldPassword, expert.getPassword()))
             throw new ChangePasswordException();
         expert.setPassword(passwordEncoder.encode(newPassword));
+        expertRepository.save(expert);
+    }
+
+    @Override
+    @Transactional
+    public void addSubServiceForExpert(Long expertId, Long subServiceId){
+        Expert expert = expertRepository.findById(expertId)
+                .orElseThrow(() -> new NotFoundException(Expert.class, expertId));
+        SubService subService = subServiceService.findOptionalSubServiceById(subServiceId)
+                .orElseThrow(() -> new NotFoundException(SubService.class, subServiceId));
+//        if(expert.getSubServices().contains(subService))
+//            throw new ExistenceException("subService for expert");
+        expert.getSubServices().add(subService);
         expertRepository.save(expert);
     }
 

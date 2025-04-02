@@ -44,4 +44,13 @@ public class SubServiceController {
                 subServiceService.findAllSubServices()
         );
     }
+
+    @GetMapping("/find/all/{id}")
+    public ResponseEntity<List<SubServiceResponseDTO>> findAllSubServiceByCategoryId (
+            @PathVariable Long id
+    ){
+        return ResponseEntity.ok(
+                subServiceService.findAllByCategoryId(id)
+        );
+    }
 }
