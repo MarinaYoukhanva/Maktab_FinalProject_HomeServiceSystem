@@ -23,5 +23,7 @@ public interface OrderService {
 
     OrderResponseDTO updateOrder(@Valid OrderUpdateDTO updateDTO);
 
+    List<OrderResponseDTO> findAllByCustomerId(Long customerId);
+
     void deleteOrderById(Long id);
 }

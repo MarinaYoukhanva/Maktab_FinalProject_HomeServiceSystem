@@ -7,10 +7,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/v1/order")
@@ -27,4 +26,31 @@ public class OrderController {
         return ResponseEntity.ok(
                 orderService.createOrder(createDTO));
     }
+
+    @GetMapping("/find/{id}")
+    public ResponseEntity<OrderResponseDTO> findOrderById (
+            @PathVariable Long id
+    ){
+        return ResponseEntity.ok(
+                orderService.findOrderById(id)
+        );
+    }
+
+    @GetMapping("/find/all")
+    public ResponseEntity<List<OrderResponseDTO>> findAllOrders () {
+        return ResponseEntity.ok(
+                orderService.findAllOrders()
+        );
+    }
+
+    @GetMapping("/find/all/{customerId}")
+    public ResponseEntity<List<OrderResponseDTO>> findAllOrdersByCustomerId (
+            @PathVariable Long customerId
+    ){
+        return ResponseEntity.ok(
+                orderService.findAllByCustomerId(customerId)
+        );
+    }
+
+
 }

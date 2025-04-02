@@ -1,7 +1,6 @@
 package com.freshome.service.impl;
 
 import com.freshome.entity.Customer;
-import com.freshome.entity.Expert;
 import com.freshome.entity.Order;
 import com.freshome.entity.SubService;
 import com.freshome.dto.order.OrderCreateDTO;
@@ -78,6 +77,13 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<OrderResponseDTO> findAllOrders(){
         return orderRepository.findAll()
+                .stream().map(OrderMapper::dtoFromOrder)
+                .toList();
+    }
+
+    @Override
+    public List<OrderResponseDTO> findAllByCustomerId(Long customerId){
+        return orderRepository.findByCustomer_Id(customerId)
                 .stream().map(OrderMapper::dtoFromOrder)
                 .toList();
     }

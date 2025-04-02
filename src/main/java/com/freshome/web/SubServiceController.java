@@ -45,12 +45,12 @@ public class SubServiceController {
         );
     }
 
-    @GetMapping("/find/all/{id}")
+    @GetMapping("/find/all/{categoryId}")
     public ResponseEntity<List<SubServiceResponseDTO>> findAllSubServiceByCategoryId (
-            @PathVariable Long id
+            @PathVariable Long categoryId
     ){
         return ResponseEntity.ok(
-                subServiceService.findAllByCategoryId(id)
+                subServiceService.findAllByCategoryId(categoryId)
         );
     }
 }

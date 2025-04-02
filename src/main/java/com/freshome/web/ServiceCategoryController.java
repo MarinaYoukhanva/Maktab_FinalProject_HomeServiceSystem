@@ -30,7 +30,7 @@ public class ServiceCategoryController {
 
     @GetMapping("/find/{id}")
     public ResponseEntity<ServiceCategoryResponseDTO> findServiceCategoryById(
-            @PathVariable long id) {
+            @PathVariable Long id) {
         return ResponseEntity.ok(
                 serviceCategoryService.findServiceCategoryById(id)
         );
