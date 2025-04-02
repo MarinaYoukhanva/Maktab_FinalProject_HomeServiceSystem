@@ -1,6 +1,11 @@
 spring:
   application:
     name: Home Service System
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 300KB
+      max-request-size: 300KB
 
   datasource:
     url: jdbc:postgresql://localhost:5432/spring

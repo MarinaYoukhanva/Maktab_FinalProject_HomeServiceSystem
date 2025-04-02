@@ -19,16 +19,20 @@ import com.freshome.specification.ExpertSpecification;
 import com.freshome.specification.Operator;
 import jakarta.persistence.metamodel.SingularAttribute;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 //@Transactional
 public class ExpertServiceImpl implements ExpertService {
 
@@ -40,14 +44,15 @@ public class ExpertServiceImpl implements ExpertService {
 
     @Override
     @Transactional
-    public ExpertResponseDTO createExpert(ExpertCreatDTO expertCreatDTO) {
-
+    public ExpertResponseDTO createExpert(ExpertCreatDTO expertCreatDTO) throws IOException {
+        log.info("create expert in service triggered");
         if (expertRepository.existsByEmail(expertCreatDTO.getEmail()))
             throw new ExistenceException("email");
         if (expertRepository.existsByPhoneNumber(expertCreatDTO.getPhoneNumber()))
             throw new ExistenceException("phoneNumber");
 
         Expert expert = ExpertMapper.expertFromDto(expertCreatDTO);
+//        expert.setProfileImage(photo.getBytes());
         Credit credit = creditService.createReturnCredit(new CreditCreateDTO(0L));
         expert.setCredit(credit);
         expert.setScore(0.0);

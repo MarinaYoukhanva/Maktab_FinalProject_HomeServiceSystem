@@ -62,8 +62,8 @@ public class GlobalExceptionHandler extends
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(Map.of(
-                        "error", "Something went wrong!",
-                        "details", ex.getMostSpecificCause().getMessage()));
+                        "error", "Something went wrong! Please try again."));
+//                        "error", ex.getMessage()));
     }
 
     @ExceptionHandler(ExistenceException.class)
@@ -71,7 +71,7 @@ public class GlobalExceptionHandler extends
         return ResponseEntity
                 .status(HttpStatus.CONFLICT)
                 .body(Map.of(
-                        "error", "Conflict",
+                        "errorType", "ExistenceException",
                         "message", ex.getMessage()));
     }
 
@@ -80,7 +80,7 @@ public class GlobalExceptionHandler extends
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
                 .body(Map.of(
-                        "error", "Not Found",
+                        "errorType", "NotFound",
                         "message", ex.getMessage()));
     }
 }

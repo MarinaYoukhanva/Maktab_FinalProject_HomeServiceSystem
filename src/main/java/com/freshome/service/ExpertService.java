@@ -8,14 +8,16 @@ import com.freshome.specification.Operator;
 import jakarta.persistence.metamodel.SingularAttribute;
 import jakarta.validation.Valid;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
 @Validated
 public interface ExpertService {
 
-    ExpertResponseDTO createExpert(@Valid ExpertCreatDTO expertCreatDTO);
+    ExpertResponseDTO createExpert(@Valid ExpertCreatDTO expertCreatDTO) throws IOException;
 
     ExpertResponseDTO findExpertById(Long id);
 

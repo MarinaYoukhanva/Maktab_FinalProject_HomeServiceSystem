@@ -7,13 +7,14 @@ import com.freshome.entity.enumeration.UserStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 
 public class ExpertMapper {
 
     private static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    public static Expert expertFromDto(ExpertCreatDTO expertCreatDTO) {
+    public static Expert expertFromDto(ExpertCreatDTO expertCreatDTO) throws IOException {
         return Expert.builder()
                 .firstname(expertCreatDTO.getFirstname())
                 .lastname(expertCreatDTO.getLastname())
@@ -23,7 +24,7 @@ public class ExpertMapper {
                 .registerDateTime(LocalDateTime.now())
                 .status(UserStatus.NEW)
                 .phoneNumber(expertCreatDTO.getPhoneNumber())
-                .profileImage(expertCreatDTO.getProfileImage())
+                .profileImage(expertCreatDTO.getProfileImage() != null ? expertCreatDTO.getProfileImage().getBytes() : null)
 //                .score(expertCreatDTO.getScore())
 //                .credit(expertCreatDTO.getCredit())
                 .build();
