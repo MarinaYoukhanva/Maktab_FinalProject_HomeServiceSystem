@@ -5,6 +5,7 @@ import com.freshome.dto.serviceCategory.ServiceCategoryCreateDTO;
 import com.freshome.dto.serviceCategory.ServiceCategoryResponseDTO;
 import com.freshome.dto.serviceCategory.ServiceCategoryUpdateDTO;
 import com.freshome.entity.entityMapper.ServiceCategoryMapper;
+import com.freshome.exception.ExistenceException;
 import com.freshome.exception.NotFoundException;
 import com.freshome.repository.ServiceCategoryRepository;
 import com.freshome.service.ServiceCategoryService;
@@ -24,10 +25,12 @@ public class ServiceCategoryServiceImpl implements ServiceCategoryService {
 
     @Override
     @Transactional
-    public ServiceCategoryResponseDTO createServiceCategory(ServiceCategoryCreateDTO serviceCategoryCreateDTO) {
+    public ServiceCategoryResponseDTO createServiceCategory(ServiceCategoryCreateDTO createDTO) {
+        if (serviceCategoryRepository.existsByName(createDTO.name()))
+            throw new ExistenceException("ServiceCategoryName");
         return ServiceCategoryMapper.dtoFromServiceCategory(
                 serviceCategoryRepository.save(
-                        ServiceCategoryMapper.serviceCategoryFromDto(serviceCategoryCreateDTO))
+                        ServiceCategoryMapper.serviceCategoryFromDto(createDTO))
         );
     }
 
@@ -72,8 +75,11 @@ public class ServiceCategoryServiceImpl implements ServiceCategoryService {
 
     private void updateFields(ServiceCategory serviceCategory,
                               ServiceCategoryUpdateDTO updateDTO) {
-        if (StringUtils.hasText(updateDTO.name()))
+        if (StringUtils.hasText(updateDTO.name())) {
+            if (serviceCategoryRepository.existsByName(updateDTO.name()))
+                throw new ExistenceException("ServiceCategoryName");
             serviceCategory.setName(updateDTO.name());
+        }
 
         if (StringUtils.hasText(updateDTO.description()))
             serviceCategory.setDescription(updateDTO.description());

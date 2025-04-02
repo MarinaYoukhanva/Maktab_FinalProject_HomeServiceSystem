@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Service Category</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="flex justify-center items-center h-screen bg-gray-100">
+<div class="w-full max-w-md p-6 bg-white rounded-lg shadow-md">
+    <h3 class="text-2xl font-bold text-center mb-6">Create new Service Category</h3>
+    <form id="categoryForm">
+
+        <div>
+            <label for="name" class="block font-medium">Name</label>
+            <input type="text" id="name" name="name" class="border p-2 w-full">
+            <span id="nameError" class="text-red-500 text-sm error-message"></span>
+        </div>
+
+        <div>
+            <label for="description" class="block font-medium">Description</label>
+            <input type="text" id="description" name="description" class="border p-2 w-full">
+            <span id="descriptionError" class="text-red-500 text-sm error-message"></span>
+        </div>
+
+        <button type="submit" class="mt-4 bg-blue-500 text-white p-2 rounded-lg">Submit</button>
+    </form>
+
+    <div id="formError" class="text-red-600 mt-4"></div>
+</div>
+
+<script src="./script/service_category_create.js"></script>
+</body>
+</html>

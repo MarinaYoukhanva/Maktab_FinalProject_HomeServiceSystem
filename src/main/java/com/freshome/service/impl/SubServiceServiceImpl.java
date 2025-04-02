@@ -6,6 +6,7 @@ import com.freshome.dto.subService.SubServiceCreateDTO;
 import com.freshome.dto.subService.SubServiceResponseDTO;
 import com.freshome.dto.subService.SubServiceUpdateDTO;
 import com.freshome.entity.entityMapper.SubServiceMapper;
+import com.freshome.exception.ExistenceException;
 import com.freshome.exception.NotFoundException;
 import com.freshome.repository.SubServiceRepository;
 import com.freshome.service.ServiceCategoryService;
@@ -28,6 +29,9 @@ public class SubServiceServiceImpl implements SubServiceService {
     @Override
     @Transactional
     public SubServiceResponseDTO createSubService(SubServiceCreateDTO subServiceCreateDTO) {
+
+        if (subServiceRepository.existsByName(subServiceCreateDTO.name()))
+            throw new ExistenceException("SubServiceName");
 
         SubService subService = SubServiceMapper.subServiceFromDto(subServiceCreateDTO);
         ServiceCategory serviceCategory = serviceCategoryService
@@ -80,8 +84,11 @@ public class SubServiceServiceImpl implements SubServiceService {
     }
 
     private void updateFields(SubService subService, SubServiceUpdateDTO updateDTO) {
-        if (StringUtils.hasText(updateDTO.name()))
+        if (StringUtils.hasText(updateDTO.name())){
+            if (subServiceRepository.existsByName(updateDTO.name()))
+                throw new ExistenceException("SubServiceName");
             subService.setName(updateDTO.name());
+        }
 
         if (updateDTO.basePrice() != null)
             subService.setBasePrice(updateDTO.basePrice());
