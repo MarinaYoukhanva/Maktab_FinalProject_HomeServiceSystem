@@ -17,7 +17,7 @@ import java.util.List;
 public class Expert extends User {
 
     @Lob
-//    @Column(columnDefinition = "LONGBLOB")
+//    @Column(columnDefinition = "BYTEA")
     byte[] profileImage;
 
     // in getter -> average based on ratings

@@ -10,16 +10,16 @@ public record ReviewCreateDTO(
 
         String comment,
 
-        @NotNull(message = "customerId can not be null! ")
-        @Positive
-        Long customerId,
-
         @NotNull(message = "orderId can not be null! ")
         @Positive
-        Long orderId,
+        Long orderId
 
-        @NotNull(message = "expertId can not be null! ")
-        @Positive
-        Long expertId
+//        @NotNull(message = "customerId can not be null! ")
+//        @Positive
+//        Long customerId,
+//
+//        @NotNull(message = "expertId can not be null! ")
+//        @Positive
+//        Long expertId
 ) {
 }

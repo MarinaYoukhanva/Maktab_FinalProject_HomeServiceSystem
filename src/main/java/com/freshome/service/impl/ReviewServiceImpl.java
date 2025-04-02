@@ -27,24 +27,24 @@ import java.util.Optional;
 public class ReviewServiceImpl implements ReviewService {
 
     private final ReviewRepository reviewRepository;
-    private final CustomerService customerService;
     private final OrderService orderService;
-    private final ExpertService expertService;
+//    private final CustomerService customerService;
+//    private final ExpertService expertService;
 
     @Override
     @Transactional
     public ReviewResponseDTO createReview(ReviewCreateDTO reviewCreateDTO) {
 
         Review review = ReviewMapper.reviewFromDto(reviewCreateDTO);
-        Customer customer = customerService.findOptionalCustomerById(reviewCreateDTO.customerId())
-                .orElseThrow(()-> new NotFoundException(Customer.class, reviewCreateDTO.customerId()));
         Order order = orderService.findOptionalOrderById(reviewCreateDTO.orderId())
                 .orElseThrow(()-> new NotFoundException(Order.class, reviewCreateDTO.orderId()));
-        Expert expert = expertService.findOptionalExpertById(reviewCreateDTO.expertId())
-                .orElseThrow(()-> new NotFoundException(Expert.class, reviewCreateDTO.expertId()));
-        review.setCustomer(customer);
+//        Customer customer = customerService.findOptionalCustomerById(reviewCreateDTO.customerId())
+//                .orElseThrow(()-> new NotFoundException(Customer.class, reviewCreateDTO.customerId()));
+//        Expert expert = expertService.findOptionalExpertById(reviewCreateDTO.expertId())
+//                .orElseThrow(()-> new NotFoundException(Expert.class, reviewCreateDTO.expertId()));
         review.setOrder(order);
-        review.setExpert(expert);
+//        review.setCustomer(customer);
+//        review.setExpert(expert);
 
         return ReviewMapper.dtoFromReview(
                 reviewRepository.save(review));

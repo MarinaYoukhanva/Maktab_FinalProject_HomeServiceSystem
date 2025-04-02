@@ -21,12 +21,12 @@ public class Review extends BaseEntity<Long> {
 
     String comment;
 
-    @ManyToOne
-    Customer customer;
-
     @OneToOne(optional = false)
     Order order;
 
-    @ManyToOne(optional = false)
-    Expert expert;
+//    @ManyToOne
+//    Customer customer;
+//
+//    @ManyToOne(optional = false)
+//    Expert expert;
 }

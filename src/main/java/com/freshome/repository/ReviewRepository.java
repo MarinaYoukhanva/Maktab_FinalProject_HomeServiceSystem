@@ -14,10 +14,11 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 //            "WHERE e.id = :expertId AND e.deleted = false AND r.deleted = false",
 //            nativeQuery = true)
     @Query(value = """
-            SELECT COALESCE(AVG(r.rating), 0.0) FROM home.review r
-            JOIN home.expert e ON r.expert_id = e.id
+            SELECT AVG(r.rating) FROM home.review r
+            JOIN home."order" o ON r.order_id = o.id
+            JOIN home.expert e ON o.expert_id = e.id
             JOIN home."user" u ON e.id = u.id
-            WHERE e.id = :expertId AND u.deleted = false AND r.deleted = false
+            WHERE e.id = :expertId AND u.deleted = false AND r.deleted = false AND o.deleted = false
             """,
             nativeQuery = true)
 Double expertScoreFromRatingsAverage(@Param("expertId") Long expertId);

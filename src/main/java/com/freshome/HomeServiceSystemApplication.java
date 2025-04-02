@@ -44,16 +44,16 @@ public class HomeServiceSystemApplication {
 
 //        CustomerService customerService = spring.getBean(CustomerService.class);
 //        CreditService creditService = spring.getBean(CreditService.class);
-//        ExpertService expertService = spring.getBean(ExpertService.class);
+        ExpertService expertService = spring.getBean(ExpertService.class);
 //        OrderService orderService = spring.getBean(OrderService.class);
 //        ReviewService reviewService = spring.getBean(ReviewService.class);
 //        ReviewRepository rrepo = spring.getBean(ReviewRepository.class);
 //        OfferService offerService = spring.getBean(OfferService.class);
 
 
-//        System.out.println(expertService.findExpertById(2L));
-//        expertService.findAllExperts()
-//                .forEach(System.out::println);
+        System.out.println(expertService.findExpertById(2L));
+        expertService.findAllExperts()
+                .forEach(System.out::println);
 
 //        rrepo.findAll();
 

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="flex justify-center items-center h-screen bg-gray-100">
+<div class="w-full max-w-md p-6 bg-white rounded-lg shadow-md">
+    <h2 class="text-2xl font-bold text-center mb-6">Sign Up</h2>
+    <form id="signupForm">
+
+<!--        <label for="role" class="block font-medium">Sign Up as:</label>-->
+<!--        <select id="role" name="role" class="border p-2 w-full mb-2">-->
+<!--            <option value="customer">Customer</option>-->
+<!--            <option value="expert">Expert</option>-->
+<!--        </select>-->
+
+        <div>
+            <label for="firstname" class="block font-medium">First Name</label>
+            <input type="text" id="firstname" name="firstname" class="border p-2 w-full">
+            <span id="firstnameError" class="text-red-500 text-sm error-message"></span>
+        </div>
+
+        <div>
+            <label for="lastname" class="block font-medium">Last Name</label>
+            <input type="text" id="lastname" name="lastname" class="border p-2 w-full">
+            <span id="lastnameError" class="text-red-500 text-sm error-message"></span>
+        </div>
+
+        <div>
+            <label for="email" class="block font-medium">Email</label>
+            <input type="email" id="email" name="email" class="border p-2 w-full">
+            <span id="emailError" class="text-red-500 text-sm error-message"></span>
+        </div>
+
+        <div>
+            <label for="password" class="block font-medium">Password</label>
+            <input type="password" id="password" name="password" class="border p-2 w-full">
+            <span id="passwordError" class="text-red-500 text-sm error-message"></span>
+        </div>
+
+        <div>
+            <label for="phoneNumber" class="block font-medium">Phone Number</label>
+            <input type="text" id="phoneNumber" name="phoneNumber" class="border p-2 w-full">
+            <span id="phoneNumberError" class="text-red-500 text-sm error-message"></span>
+        </div>
+
+        <div id="photoSection">
+            <label for="profileImage" class="block font-medium">Upload Photo:</label>
+            <input type="file" id="profileImage" name="photo" class="border p-2 w-full mb-2">
+        </div>
+
+        <button type="submit" class="mt-4 bg-blue-500 text-white p-2 rounded-lg">Sign Up</button>
+    </form>
+
+    <div id="formError" class="text-red-600 mt-4"></div>
+</div>
+
+<script src="./script/expert_signup.js"></script>
+</body>
+</html>

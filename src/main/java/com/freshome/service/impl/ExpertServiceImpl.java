@@ -39,7 +39,7 @@ public class ExpertServiceImpl implements ExpertService {
     private final ExpertRepository expertRepository;
     private final PasswordEncoder passwordEncoder;
     private final CreditService creditService;
-    //    private final ReviewService reviewService;
+//        private final ReviewService reviewService;
     private final ReviewRepository reviewRepository;
 
     @Override
@@ -67,8 +67,8 @@ public class ExpertServiceImpl implements ExpertService {
         Expert expert = expertRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(Expert.class, id));
         Double score = reviewRepository.expertScoreFromRatingsAverage(id);
-//        expert.setScore(score == null ? 0.0 : score);
-        expert.setScore(score);
+        expert.setScore(score == null ? 0.0 : score);
+//        expert.setScore(score);
         return ExpertMapper.dtoFromExpert(expert);
     }
 
@@ -77,8 +77,8 @@ public class ExpertServiceImpl implements ExpertService {
         return expertRepository.findById(id)
                 .map(expert -> {
                     Double score = reviewRepository.expertScoreFromRatingsAverage(id);
-//                    expert.setScore(score == null ? 0.0 : score);
-                    expert.setScore(score);
+                    expert.setScore(score == null ? 0.0 : score);
+//                    expert.setScore(score);
                     return expert;
                 });
     }
@@ -88,7 +88,8 @@ public class ExpertServiceImpl implements ExpertService {
         List<Expert> experts = expertRepository.findAll();
         experts.forEach(expert -> {
             Double score = reviewRepository.expertScoreFromRatingsAverage(expert.getId());
-            expert.setScore(score);
+            expert.setScore(score == null ? 0.0 : score);
+//            expert.setScore(score);
         });
         return experts.stream()
                 .map(ExpertMapper::dtoFromExpert)
@@ -122,7 +123,8 @@ public class ExpertServiceImpl implements ExpertService {
                 ExpertSpecification.searchExpert(fields, operators, values, expertise));
         experts.forEach(expert -> {
             Double score = reviewRepository.expertScoreFromRatingsAverage(expert.getId());
-            expert.setScore(score);
+            expert.setScore(score == null ? 0.0 : score);
+//            expert.setScore(score);
         });
         return experts.stream()
                 .map(ExpertMapper::dtoFromExpert)

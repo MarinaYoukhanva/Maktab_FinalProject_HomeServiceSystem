@@ -37,14 +37,18 @@ public class Order extends BaseEntity<Long> {
     @Enumerated(EnumType.STRING)
     OrderStatus status;
 
-    @ManyToOne(optional = false)
+    @ManyToOne
+//            (optional = false)
     Customer customer;
 
-    @ManyToOne(optional = false)
+    @ManyToOne
     Expert expert;
 
-    @ManyToOne(optional = false)
+    @ManyToOne
     SubService subService;
+
+//    @OneToOne
+//    Review review;
 
     @OneToMany(mappedBy = "order")
     List<Offer> offers;
