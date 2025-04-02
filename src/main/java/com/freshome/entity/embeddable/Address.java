@@ -19,10 +19,10 @@ public class Address {
    @Column(nullable = false)
    String street;
 
-   @Column(nullable = false)
-   String avenue;
+//   @Column(nullable = false)
+//   String avenue;
 
    @Column(nullable = false)
-   Integer plaque;
+   String plaque;
 
 }

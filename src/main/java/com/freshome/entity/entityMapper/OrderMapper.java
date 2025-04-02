@@ -4,6 +4,9 @@ import com.freshome.entity.Order;
 import com.freshome.dto.order.OrderCreateDTO;
 import com.freshome.dto.order.OrderResponseDTO;
 import com.freshome.entity.embeddable.Address;
+import com.freshome.entity.enumeration.OrderStatus;
+
+import java.time.LocalDateTime;
 
 public class OrderMapper {
 
@@ -11,12 +14,12 @@ public class OrderMapper {
         return Order.builder()
                 .suggestedPriceByCustomer(orderCreateDTO.suggestedPriceByCustomer())
                 .description(orderCreateDTO.description())
-                .orderPlacementDateTime(orderCreateDTO.orderPlacementDateTime())
-                .orderExecutionDateTime(orderCreateDTO.orderExecutionDateTime())
+                .orderPlacementDateTime(LocalDateTime.now())
+//                .orderExecutionDateTime(orderCreateDTO.orderExecutionDateTime())
                 .address(new Address(
                         orderCreateDTO.city(), orderCreateDTO.street(),
-                        orderCreateDTO.avenue(), orderCreateDTO.plaque()))
-                .status(orderCreateDTO.status())
+                        orderCreateDTO.plaque()))
+                .status(OrderStatus.WAITING_FOR_EXPERT_OFFERS)
                 .build();
     }
 

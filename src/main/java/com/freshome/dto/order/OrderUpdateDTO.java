@@ -17,7 +17,7 @@ public record OrderUpdateDTO(
         LocalDateTime orderExecutionDateTime,
         String street,
         String avenue,
-        Integer plaque,
+        String plaque,
         OrderStatus status
 ) {
 }

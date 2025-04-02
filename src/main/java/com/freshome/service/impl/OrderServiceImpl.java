@@ -38,12 +38,12 @@ public class OrderServiceImpl implements OrderService {
         Order order = OrderMapper.orderFromDto(orderCreateDTO);
         Customer customer = customerService.findOptionalCustomerById(orderCreateDTO.customerId())
                 .orElseThrow(() -> new NotFoundException(Customer.class, orderCreateDTO.customerId()));
-        Expert expert = expertService.findOptionalExpertById(orderCreateDTO.expertId())
-                .orElseThrow(() -> new NotFoundException(Expert.class, orderCreateDTO.expertId()));
+//        Expert expert = expertService.findOptionalExpertById(orderCreateDTO.expertId())
+//                .orElseThrow(() -> new NotFoundException(Expert.class, orderCreateDTO.expertId()));
         SubService subService = subServiceService.findOptionalSubServiceById(orderCreateDTO.subServiceId())
                 .orElseThrow(() -> new NotFoundException(SubService.class, orderCreateDTO.subServiceId()));
         order.setCustomer(customer);
-        order.setExpert(expert);
+//        order.setExpert(expert);
         order.setSubService(subService);
 
         return OrderMapper.dtoFromOrder(
@@ -103,10 +103,10 @@ public class OrderServiceImpl implements OrderService {
         if (StringUtils.hasText(updateDTO.street()))
             order.getAddress().setStreet(updateDTO.street());
 
-        if (StringUtils.hasText(updateDTO.avenue()))
-            order.getAddress().setAvenue(updateDTO.avenue());
+//        if (StringUtils.hasText(updateDTO.avenue()))
+//            order.getAddress().setAvenue(updateDTO.avenue());
 
-        if (updateDTO.plaque() != null)
+        if (StringUtils.hasText(updateDTO.street()))
             order.getAddress().setPlaque(updateDTO.plaque());
 
         if (updateDTO.status() != null)

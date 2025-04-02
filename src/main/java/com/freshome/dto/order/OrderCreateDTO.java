@@ -15,10 +15,10 @@ public record OrderCreateDTO(
         @NotBlank(message = "description can not be null or blank! ")
         String description,
 
-        @NotNull(message = "description can not be null! ")
-        LocalDateTime orderPlacementDateTime,
+//        @NotNull(message = "orderPlacementDateTime can not be null! ")
+//        LocalDateTime orderPlacementDateTime,
 
-        LocalDateTime orderExecutionDateTime,
+//        LocalDateTime orderExecutionDateTime,
 
         @NotBlank(message = "city can not be null or blank! ")
         String city,
@@ -26,22 +26,22 @@ public record OrderCreateDTO(
         @NotBlank(message = "street can not be null or blank! ")
         String street,
 
-        @NotBlank(message = "avenue can not be null or blank! ")
-        String avenue,
+//        @NotBlank(message = "avenue can not be null or blank! ")
+//        String avenue,
 
-        @NotNull(message = "plaque can not be null! ")
-        Integer plaque,
+        @NotBlank(message = "plaque can not be null or blank! ")
+        String plaque,
 
-        @NotNull(message = "status can not be null! ")
-        OrderStatus status,
+//        @NotNull(message = "status can not be null! ")
+//        OrderStatus status,
 
         @NotNull(message = "customerId can not be null! ")
         @Positive
         Long customerId,
 
-        @NotNull(message = "expertId can not be null! ")
-        @Positive
-        Long expertId,
+//        @NotNull(message = "expertId can not be null! ")
+//        @Positive
+//        Long expertId,
 
         @NotNull(message = "subServiceId can not be null! ")
         @Positive

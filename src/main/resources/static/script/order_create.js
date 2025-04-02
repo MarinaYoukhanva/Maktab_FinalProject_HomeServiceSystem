@@ -1,15 +1,18 @@
-document.getElementById("subServiceForm").addEventListener("submit", async function(event) {
+document.getElementById("orderForm").addEventListener("submit", async function(event) {
     event.preventDefault(); // Prevent the default form submission
 
     const requestBody = {
-        name: document.getElementById("name").value,
-        basePrice : document.getElementById("basePrice").value,
-        description: document.getElementById("description").value,
-        categoryId: document.getElementById("categoryId").value
+        suggestedPriceByCustomer: document.getElementById("suggestedPriceByCustomer").value,
+        description : document.getElementById("description").value,
+        city: document.getElementById("city").value,
+        street: document.getElementById("street").value,
+        plaque: document.getElementById("plaque").value,
+        customerId: document.getElementById("customerId").value,
+        subServiceId: document.getElementById("subServiceId").value
     };
 
     try {
-        const response = await fetch("http://localhost:8081/v1/sub_service/create", {
+        const response = await fetch("http://localhost:8081/v1/order/create", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
