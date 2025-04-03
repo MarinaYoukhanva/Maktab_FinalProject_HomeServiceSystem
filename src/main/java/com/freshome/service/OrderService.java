@@ -5,6 +5,7 @@ import com.freshome.dto.order.OrderCreateDTO;
 import com.freshome.dto.order.OrderResponseDTO;
 import com.freshome.dto.order.OrderUpdateDTO;
 import jakarta.validation.Valid;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
@@ -24,6 +25,8 @@ public interface OrderService {
     OrderResponseDTO updateOrder(@Valid OrderUpdateDTO updateDTO);
 
     List<OrderResponseDTO> findAllByCustomerId(Long customerId);
+
+    List<OrderResponseDTO> findAllByExpertId(Long expertId);
 
     List<Order> findAllOrdersBySubServiceIds(List<Long> subServiceIds);
 

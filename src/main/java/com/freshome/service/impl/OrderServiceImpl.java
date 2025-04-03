@@ -84,8 +84,17 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public List<OrderResponseDTO> findAllByCustomerId(Long customerId){
         return orderRepository.findByCustomer_Id(customerId)
+                .stream().map(OrderMapper::dtoFromOrder)
+                .toList();
+    }
+
+    @Override
+    @Transactional
+    public List<OrderResponseDTO> findAllByExpertId(Long expertId){
+        return orderRepository.findByExpert_Id(expertId)
                 .stream().map(OrderMapper::dtoFromOrder)
                 .toList();
     }

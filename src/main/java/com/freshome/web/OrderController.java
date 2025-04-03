@@ -43,12 +43,21 @@ public class OrderController {
         );
     }
 
-    @GetMapping("/find/all/{customerId}")
+    @GetMapping("/find/all/by_customer/{customerId}")
     public ResponseEntity<List<OrderResponseDTO>> findAllOrdersByCustomerId (
             @PathVariable Long customerId
     ){
         return ResponseEntity.ok(
                 orderService.findAllByCustomerId(customerId)
+        );
+    }
+
+    @GetMapping("/find/all/by_expert/{expertId}")
+    public ResponseEntity<List<OrderResponseDTO>> findAllOrdersByExpertId (
+            @PathVariable Long expertId
+    ){
+        return ResponseEntity.ok(
+                orderService.findAllByExpertId(expertId)
         );
     }
 
