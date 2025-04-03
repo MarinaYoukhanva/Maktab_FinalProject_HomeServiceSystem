@@ -29,5 +29,7 @@ public interface OrderService {
 
     List<OrderResponseDTO> findAllBySubServiceIds(List<Long> subServiceIds);
 
+    OrderResponseDTO chooseExpertForOrder(Long orderId, Long expertId);
+
     void deleteOrderById(Long id);
 }

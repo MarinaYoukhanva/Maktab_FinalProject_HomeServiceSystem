@@ -39,7 +39,7 @@ public class ExpertMapper {
                 expert.getRegisterDateTime(),
                 expert.getStatus(),
                 expert.getPhoneNumber(),
-                expert.getProfileImage(),
+//                expert.getProfileImage(),
                 expert.getScore()
 //                expert.getCredit().getId()
         );

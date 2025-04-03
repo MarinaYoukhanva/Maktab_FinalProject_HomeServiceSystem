@@ -35,7 +35,7 @@ public interface ExpertService {
     ExpertResponseDTO updateExpert(@Valid ExpertUpdateDTO updateDTO);
 
     List<ExpertResponseDTO> searchExpert(
-            List<SingularAttribute<?, ?>> fields, List<Operator> operators, List<String> values,
+            List<String> fields, List<String> values,
             String expertise
     );
 

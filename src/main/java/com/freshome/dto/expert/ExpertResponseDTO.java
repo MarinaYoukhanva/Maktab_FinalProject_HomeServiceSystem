@@ -14,7 +14,7 @@ public record ExpertResponseDTO(
         LocalDateTime registerDateTime,
         UserStatus status,
         String phoneNumber,
-        byte[] profileImage,
+//        byte[] profileImage,
         Double score
 //        Long creditId
 ) {

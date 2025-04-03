@@ -1,10 +1,8 @@
 package com.freshome.specification;
 
-import com.freshome.entity.Expert;
-import com.freshome.entity.ServiceCategory;
-import com.freshome.entity.ServiceCategory_;
-import com.freshome.entity.SubService;
+import com.freshome.entity.*;
 import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.metamodel.SingularAttribute;
 import org.springframework.data.jpa.domain.Specification;
@@ -30,6 +28,30 @@ public class ExpertSpecification {
                         subServiceExpertCategory.get(ServiceCategory_.name), "%" + expertise + "%"));
             }
             PredicatesCreator.create(fields, operators, values, root, criteriaBuilder, predicates);
+            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+        }));
+    }
+
+    public static Specification<Expert> searchExpert(
+            List<String> fields, List<String> values,
+            String expertise
+//            , Double minScore, Double maxScore
+    ) {
+        List<Predicate> predicates = new ArrayList<>();
+        return (((root, query, criteriaBuilder) -> {
+            if (fields != null && !fields.isEmpty()) {
+                for (int i = 0; i < fields.size(); i++) {
+                    predicates.add(criteriaBuilder.like(
+                            root.get(fields.get(i)), "%" + values.get(i) + "%"
+                    ));
+                }
+            }
+            if (expertise != null && !expertise.isEmpty()) {
+                Join<Expert, SubService> subServiceExpert = root.join("subServices", JoinType.LEFT);
+//
+                predicates.add(criteriaBuilder.like(
+                        subServiceExpert.get(SubService_.name), "%" + expertise + "%"));
+            }
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         }));
     }

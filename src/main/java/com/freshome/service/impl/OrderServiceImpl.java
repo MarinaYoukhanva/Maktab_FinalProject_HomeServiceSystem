@@ -1,12 +1,14 @@
 package com.freshome.service.impl;
 
 import com.freshome.entity.Customer;
+import com.freshome.entity.Expert;
 import com.freshome.entity.Order;
 import com.freshome.entity.SubService;
 import com.freshome.dto.order.OrderCreateDTO;
 import com.freshome.dto.order.OrderResponseDTO;
 import com.freshome.dto.order.OrderUpdateDTO;
 import com.freshome.entity.entityMapper.OrderMapper;
+import com.freshome.entity.enumeration.OrderStatus;
 import com.freshome.exception.NotFoundException;
 import com.freshome.repository.OrderRepository;
 import com.freshome.service.CustomerService;
@@ -100,6 +102,19 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.findBySubService_IdIn(subServiceIds)
                 .stream().map(OrderMapper::dtoFromOrder)
                 .toList();
+    }
+
+    @Override
+    @Transactional
+    public OrderResponseDTO chooseExpertForOrder(Long orderId, Long expertId){
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new NotFoundException(Order.class, orderId));
+        Expert expert = expertService.findOptionalExpertById(expertId)
+                .orElseThrow(()-> new NotFoundException(Expert.class, expertId));
+        order.setStatus(OrderStatus.WAITING_FOR_EXPERT_ARRIVAL);
+        order.setExpert(expert);
+        return OrderMapper.dtoFromOrder(
+                orderRepository.save(order));
     }
 
     @Transactional

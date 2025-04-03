@@ -61,4 +61,14 @@ public class OrderController {
                 orderService.findAllBySubServiceIds(subServiceIds)
         );
     }
+
+    @PutMapping("/update/choose_expert")
+    public ResponseEntity<OrderResponseDTO> updateChooseExpert (
+            @RequestParam Long orderId,
+            @RequestParam Long expertId
+    ){
+        return ResponseEntity.ok(
+                orderService.chooseExpertForOrder(orderId, expertId)
+        );
+    }
 }

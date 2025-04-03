@@ -62,4 +62,15 @@ public class ExpertController {
         expertService.changePassword(expertId, passwordDto);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<ExpertResponseDTO>> search(
+            @RequestParam(required = false) List<String> fields,
+            @RequestParam(required = false) List<String> values,
+            @RequestParam(required = false) String expertise
+    ){
+        return ResponseEntity.ok(
+                expertService.searchExpert(fields, values, expertise)
+        );
+    }
 }
