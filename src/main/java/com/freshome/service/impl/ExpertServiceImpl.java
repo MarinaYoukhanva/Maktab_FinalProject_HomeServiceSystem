@@ -127,10 +127,10 @@ public class ExpertServiceImpl implements ExpertService {
     @Override
     public List<ExpertResponseDTO> searchExpert(
             List<String> fields, List<String> values,
-            String expertise
+            String expertise, Double minScore, Double maxScore
     ) {
         List<Expert> experts = expertRepository.findAll(
-                ExpertSpecification.searchExpert(fields, values, expertise));
+                ExpertSpecification.searchExpert(fields, values, expertise,  minScore,  maxScore));
         experts.forEach(expert -> {
             Double score = reviewRepository.expertScoreFromRatingsAverage(expert.getId());
             expert.setScore(score == null ? 0.0 : score);

@@ -37,7 +37,7 @@ public interface ExpertService {
 
     List<ExpertResponseDTO> searchExpert(
             List<String> fields, List<String> values,
-            String expertise
+            String expertise, Double minScore, Double maxScore
     );
 
     void changePassword(Long expertId, ChangePasswordDTO dto);

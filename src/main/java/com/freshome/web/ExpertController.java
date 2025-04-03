@@ -84,10 +84,12 @@ public class ExpertController {
     public ResponseEntity<List<ExpertResponseDTO>> search(
             @RequestParam(required = false) List<String> fields,
             @RequestParam(required = false) List<String> values,
-            @RequestParam(required = false) String expertise
+            @RequestParam(required = false) String expertise,
+            @RequestParam(required = false) Double minScore,
+            @RequestParam(required = false) Double maxScore
     ){
         return ResponseEntity.ok(
-                expertService.searchExpert(fields, values, expertise)
+                expertService.searchExpert(fields, values, expertise,  minScore,  maxScore)
         );
     }
 

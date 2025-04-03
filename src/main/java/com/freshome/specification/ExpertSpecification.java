@@ -1,9 +1,8 @@
 package com.freshome.specification;
 
 import com.freshome.entity.*;
-import jakarta.persistence.criteria.Join;
-import jakarta.persistence.criteria.JoinType;
-import jakarta.persistence.criteria.Predicate;
+import com.freshome.entity.Order;
+import jakarta.persistence.criteria.*;
 import jakarta.persistence.metamodel.SingularAttribute;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -35,7 +34,7 @@ public class ExpertSpecification {
     public static Specification<Expert> searchExpert(
             List<String> fields, List<String> values,
             String expertise
-//            , Double minScore, Double maxScore
+            , Double minScore, Double maxScore
     ) {
         List<Predicate> predicates = new ArrayList<>();
         return (((root, query, criteriaBuilder) -> {
@@ -48,9 +47,26 @@ public class ExpertSpecification {
             }
             if (expertise != null && !expertise.isEmpty()) {
                 Join<Expert, SubService> subServiceExpert = root.join("subServices", JoinType.LEFT);
-//
+
                 predicates.add(criteriaBuilder.like(
                         subServiceExpert.get(SubService_.name), "%" + expertise + "%"));
+            }
+            if (minScore != null || maxScore != null) {
+                Subquery<Double> subquery = query.subquery(Double.class);
+                Root<Review> reviewRoot = subquery.from(Review.class);
+                Join<Review, Order> orderJoin = reviewRoot.join("order", JoinType.LEFT);
+
+                subquery.select(criteriaBuilder.avg(reviewRoot.get(Review_.RATING)))
+                        .where(criteriaBuilder.equal(orderJoin.get("expert"), root));
+
+                Expression<Double> avgScore = criteriaBuilder.coalesce(subquery, 0.0);
+
+                if (minScore != null) {
+                    predicates.add(criteriaBuilder.greaterThanOrEqualTo(avgScore, minScore));
+                }
+                if (maxScore != null) {
+                    predicates.add(criteriaBuilder.lessThanOrEqualTo(avgScore, maxScore));
+                }
             }
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         }));
