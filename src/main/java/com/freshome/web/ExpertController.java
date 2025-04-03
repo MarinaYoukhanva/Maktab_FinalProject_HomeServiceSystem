@@ -45,6 +45,22 @@ public class ExpertController {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping("/find/{expertId}")
+    public ResponseEntity<ExpertResponseDTO> findExpert(
+            @PathVariable Long expertId
+    ){
+        return ResponseEntity.ok(
+                expertService.findExpertById(expertId)
+        );
+    }
+
+    @GetMapping("/find/all")
+    public ResponseEntity<List<ExpertResponseDTO>> findAllExperts() {
+        return ResponseEntity.ok(
+                expertService.findAllExperts()
+        );
+    }
+
     @GetMapping("/find/sub_services/{expertId}")
     public ResponseEntity<List<SubServiceResponseDTO>> findSubServicesOfExpert(
             @PathVariable Long expertId
