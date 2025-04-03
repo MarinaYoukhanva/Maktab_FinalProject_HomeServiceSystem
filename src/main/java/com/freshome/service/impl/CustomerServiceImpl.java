@@ -1,12 +1,14 @@
 package com.freshome.service.impl;
 
 import com.freshome.dto.ChangePasswordDTO;
+import com.freshome.dto.credit.CreditResponseDTO;
 import com.freshome.entity.Credit;
 import com.freshome.entity.Customer;
 import com.freshome.dto.credit.CreditCreateDTO;
 import com.freshome.dto.customer.CustomerCreateDTO;
 import com.freshome.dto.customer.CustomerResponseDTO;
 import com.freshome.dto.customer.CustomerUpdateDTO;
+import com.freshome.entity.entityMapper.CreditMapper;
 import com.freshome.entity.entityMapper.CustomerMapper;
 import com.freshome.exception.ChangePasswordException;
 import com.freshome.exception.ExistenceException;
@@ -15,8 +17,6 @@ import com.freshome.repository.CustomerRepository;
 import com.freshome.service.CreditService;
 import com.freshome.service.CustomerService;
 import com.freshome.specification.CustomerSpecification;
-import com.freshome.specification.Operator;
-import jakarta.persistence.metamodel.SingularAttribute;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -114,6 +114,15 @@ public class CustomerServiceImpl implements CustomerService {
             throw new ChangePasswordException();
         customer.setPassword(passwordEncoder.encode(dto.newPassword()));
         customerRepository.save(customer);
+    }
+
+    @Override
+    public CreditResponseDTO findCreditForCustomer(Long customerId){
+        Customer customer = customerRepository.findById(customerId)
+                .orElseThrow(() -> new NotFoundException(Customer.class, customerId));
+        return CreditMapper.dtoFromCredit(
+                customer.getCredit()
+        );
     }
 
     private void updateFields (Customer customer, CustomerUpdateDTO updateDTO){

@@ -1,14 +1,11 @@
 package com.freshome.service;
 
 import com.freshome.dto.ChangePasswordDTO;
+import com.freshome.dto.credit.CreditResponseDTO;
 import com.freshome.entity.Customer;
 import com.freshome.dto.customer.CustomerCreateDTO;
 import com.freshome.dto.customer.CustomerResponseDTO;
 import com.freshome.dto.customer.CustomerUpdateDTO;
-import com.freshome.specification.Operator;
-import jakarta.persistence.metamodel.SingularAttribute;
-import jakarta.validation.Valid;
-import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
 import java.util.Optional;
@@ -35,4 +32,6 @@ public interface CustomerService {
     );
 
     void changePassword(Long customerId, ChangePasswordDTO dto);
+
+    CreditResponseDTO findCreditForCustomer(Long customerId);
 }

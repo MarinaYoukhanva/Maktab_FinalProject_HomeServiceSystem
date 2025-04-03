@@ -1,6 +1,7 @@
 package com.freshome.service.impl;
 
 import com.freshome.dto.ChangePasswordDTO;
+import com.freshome.dto.credit.CreditResponseDTO;
 import com.freshome.dto.subService.SubServiceResponseDTO;
 import com.freshome.entity.Credit;
 import com.freshome.entity.Expert;
@@ -9,6 +10,7 @@ import com.freshome.dto.expert.ExpertCreatDTO;
 import com.freshome.dto.expert.ExpertResponseDTO;
 import com.freshome.dto.expert.ExpertUpdateDTO;
 import com.freshome.entity.SubService;
+import com.freshome.entity.entityMapper.CreditMapper;
 import com.freshome.entity.entityMapper.ExpertMapper;
 import com.freshome.entity.entityMapper.SubServiceMapper;
 import com.freshome.exception.ChangePasswordException;
@@ -20,8 +22,6 @@ import com.freshome.service.CreditService;
 import com.freshome.service.ExpertService;
 import com.freshome.service.SubServiceService;
 import com.freshome.specification.ExpertSpecification;
-import com.freshome.specification.Operator;
-import jakarta.persistence.metamodel.SingularAttribute;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -151,6 +151,15 @@ public class ExpertServiceImpl implements ExpertService {
             throw new ChangePasswordException();
         expert.setPassword(passwordEncoder.encode(dto.newPassword()));
         expertRepository.save(expert);
+    }
+
+    @Override
+    public CreditResponseDTO findCreditForExpert(Long expertId) {
+        Expert expert = expertRepository.findById(expertId)
+                .orElseThrow(() -> new NotFoundException(Expert.class, expertId));
+        return CreditMapper.dtoFromCredit(
+                expert.getCredit()
+        );
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.freshome.web;
 
 import com.freshome.dto.ChangePasswordDTO;
+import com.freshome.dto.credit.CreditResponseDTO;
 import com.freshome.dto.customer.CustomerCreateDTO;
 import com.freshome.dto.customer.CustomerResponseDTO;
 import com.freshome.dto.customer.CustomerUpdateDTO;
@@ -77,5 +78,14 @@ public class CustomerController {
     ) {
         customerService.changePassword(customerId, passwordDto);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/find_credit/{customerId}")
+    public ResponseEntity<CreditResponseDTO> findCredit(
+            @PathVariable Long customerId
+    ){
+        return ResponseEntity.ok(
+                customerService.findCreditForCustomer(customerId)
+        );
     }
 }

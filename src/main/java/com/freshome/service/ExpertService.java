@@ -1,6 +1,7 @@
 package com.freshome.service;
 
 import com.freshome.dto.ChangePasswordDTO;
+import com.freshome.dto.credit.CreditResponseDTO;
 import com.freshome.dto.subService.SubServiceResponseDTO;
 import com.freshome.entity.Expert;
 import com.freshome.dto.expert.ExpertCreatDTO;
@@ -40,6 +41,8 @@ public interface ExpertService {
     );
 
     void changePassword(Long expertId, ChangePasswordDTO dto);
+
+    CreditResponseDTO findCreditForExpert(Long expertId);
 
     void addSubServiceForExpert(Long expertId, Long subServiceId);
 

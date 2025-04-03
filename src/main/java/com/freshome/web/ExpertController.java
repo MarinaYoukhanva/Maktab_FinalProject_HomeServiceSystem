@@ -1,6 +1,7 @@
 package com.freshome.web;
 
 import com.freshome.dto.ChangePasswordDTO;
+import com.freshome.dto.credit.CreditResponseDTO;
 import com.freshome.dto.expert.ExpertCreatDTO;
 import com.freshome.dto.expert.ExpertResponseDTO;
 import com.freshome.dto.subService.SubServiceResponseDTO;
@@ -87,6 +88,15 @@ public class ExpertController {
     ){
         return ResponseEntity.ok(
                 expertService.searchExpert(fields, values, expertise)
+        );
+    }
+
+    @GetMapping("/find_credit/{expertId}")
+    public ResponseEntity<CreditResponseDTO> findCredit(
+            @PathVariable Long expertId
+    ){
+        return ResponseEntity.ok(
+                expertService.findCreditForExpert(expertId)
         );
     }
 }
