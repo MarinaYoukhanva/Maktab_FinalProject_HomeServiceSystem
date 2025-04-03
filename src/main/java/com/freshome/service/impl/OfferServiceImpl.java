@@ -7,6 +7,7 @@ import com.freshome.dto.offer.OfferCreateDTO;
 import com.freshome.dto.offer.OfferResponseDTO;
 import com.freshome.dto.offer.OfferUpdateDTO;
 import com.freshome.entity.entityMapper.OfferMapper;
+import com.freshome.entity.enumeration.OrderStatus;
 import com.freshome.exception.NotFoundException;
 import com.freshome.repository.OfferRepository;
 import com.freshome.service.ExpertService;
@@ -36,6 +37,7 @@ public class OfferServiceImpl implements OfferService {
                 .orElseThrow(()-> new NotFoundException(Expert.class, offerCreateDTO.expertId()));
         Order order = orderService.findOptionalOrderById(offerCreateDTO.orderId())
                 .orElseThrow(()-> new NotFoundException(Order.class, offerCreateDTO.orderId()));
+        order.setStatus(OrderStatus.WAITING_FOR_EXPERT_SELECTION);
         offer.setExpert(expert);
         offer.setOrder(order);
 
@@ -77,6 +79,8 @@ public class OfferServiceImpl implements OfferService {
             throw new NotFoundException(Offer.class, id);
         offerRepository.deleteById(id);
     }
+
+
 
     private void updateFields (Offer offer, OfferUpdateDTO updateDTO) {
         if (updateDTO.suggestedPriceByExpert() != null)

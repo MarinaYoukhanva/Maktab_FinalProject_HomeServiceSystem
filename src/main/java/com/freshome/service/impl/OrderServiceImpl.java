@@ -89,6 +89,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public List<Order> findAllOrdersBySubServiceIds(List<Long> subServiceIds){
+        return orderRepository.findBySubService_IdIn(subServiceIds);
+    }
+
+    @Override
     public List<OrderResponseDTO> findAllBySubServiceIds(List<Long> subServiceIds){
 //        if (subServiceIds == null || subServiceIds.isEmpty())
 //            throw new NotFoundException(" ");

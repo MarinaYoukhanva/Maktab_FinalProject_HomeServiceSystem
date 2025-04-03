@@ -4,11 +4,13 @@ import com.freshome.entity.Offer;
 import com.freshome.dto.offer.OfferCreateDTO;
 import com.freshome.dto.offer.OfferResponseDTO;
 
+import java.time.LocalDateTime;
+
 public class OfferMapper {
 
     public static Offer offerFromDto(OfferCreateDTO offerCreateDTO) {
         return Offer.builder()
-                .offerRegisterDateTime(offerCreateDTO.offerRegisterDateTime())
+                .offerRegisterDateTime(LocalDateTime.now())
                 .suggestedPriceByExpert(offerCreateDTO.suggestedPriceByExpert())
                 .durationInHours(offerCreateDTO.durationInHours())
                 .startDateTime(offerCreateDTO.startDateTime())

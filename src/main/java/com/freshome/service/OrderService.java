@@ -25,6 +25,8 @@ public interface OrderService {
 
     List<OrderResponseDTO> findAllByCustomerId(Long customerId);
 
+    List<Order> findAllOrdersBySubServiceIds(List<Long> subServiceIds);
+
     List<OrderResponseDTO> findAllBySubServiceIds(List<Long> subServiceIds);
 
     void deleteOrderById(Long id);
