@@ -1,5 +1,6 @@
 package com.freshome.service.impl;
 
+import com.freshome.dto.ChangePasswordDTO;
 import com.freshome.entity.Credit;
 import com.freshome.entity.Customer;
 import com.freshome.dto.credit.CreditCreateDTO;
@@ -105,13 +106,13 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     @Transactional
-    public void changePassword(Long customerId, String oldPassword, String newPassword) {
+    public void changePassword(Long customerId, ChangePasswordDTO dto) {
         Customer customer = customerRepository.findById(customerId)
                 .orElseThrow(() -> new NotFoundException(Customer.class, customerId));
-        if (oldPassword.equals(newPassword)
-                || !passwordEncoder.matches(oldPassword, customer.getPassword()))
+        if (dto.oldPassword().equals(dto.newPassword())
+                || !passwordEncoder.matches(dto.oldPassword(), customer.getPassword()))
             throw new ChangePasswordException();
-        customer.setPassword(passwordEncoder.encode(newPassword));
+        customer.setPassword(passwordEncoder.encode(dto.newPassword()));
         customerRepository.save(customer);
     }
 

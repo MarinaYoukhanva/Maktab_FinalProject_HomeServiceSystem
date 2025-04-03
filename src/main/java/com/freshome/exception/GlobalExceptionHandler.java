@@ -84,4 +84,12 @@ public class GlobalExceptionHandler extends
                         "errorType", "NotFound",
                         "message", ex.getMessage()));
     }
+
+    @ExceptionHandler(ChangePasswordException.class)
+    public ResponseEntity<Map<String, String>> handleChangePasswordException(ChangePasswordException ex) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(Map.of(
+                        "message", ex.getMessage()));
+    }
 }

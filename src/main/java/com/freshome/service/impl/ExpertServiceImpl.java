@@ -1,5 +1,6 @@
 package com.freshome.service.impl;
 
+import com.freshome.dto.ChangePasswordDTO;
 import com.freshome.dto.subService.SubServiceResponseDTO;
 import com.freshome.entity.Credit;
 import com.freshome.entity.Expert;
@@ -136,13 +137,13 @@ public class ExpertServiceImpl implements ExpertService {
 
     @Override
     @Transactional
-    public void changePassword(Long expertId, String oldPassword, String newPassword) {
+    public void changePassword(Long expertId, ChangePasswordDTO dto) {
         Expert expert = expertRepository.findById(expertId)
                 .orElseThrow(() -> new NotFoundException(Expert.class, expertId));
-        if (oldPassword.equals(newPassword)
-                || !passwordEncoder.matches(oldPassword, expert.getPassword()))
+        if (dto.oldPassword().equals(dto.newPassword())
+                || !passwordEncoder.matches(dto.oldPassword(), expert.getPassword()))
             throw new ChangePasswordException();
-        expert.setPassword(passwordEncoder.encode(newPassword));
+        expert.setPassword(passwordEncoder.encode(dto.newPassword()));
         expertRepository.save(expert);
     }
 

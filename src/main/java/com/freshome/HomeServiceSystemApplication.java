@@ -54,8 +54,8 @@ public class HomeServiceSystemApplication {
 //        SubServiceService subServiceService = spring.getBean(SubServiceService.class);
 
 
-        orderService.findAllBySubServiceIds(List.of(2L,4L))
-                .forEach(System.out::println);
+//        orderService.findAllBySubServiceIds(List.of(2L,4L))
+//                .forEach(System.out::println);
 
 //        expertService.addSubServiceForExpert(3L, 3L);
 //        Expert expert = expertService.findOptionalExpertById(3L).get();

@@ -1,5 +1,6 @@
 package com.freshome.service;
 
+import com.freshome.dto.ChangePasswordDTO;
 import com.freshome.dto.subService.SubServiceResponseDTO;
 import com.freshome.entity.Expert;
 import com.freshome.dto.expert.ExpertCreatDTO;
@@ -36,7 +37,7 @@ public interface ExpertService {
             String expertise
     );
 
-    void changePassword(Long expertId, String oldPassword, String newPassword);
+    void changePassword(Long expertId, ChangePasswordDTO dto);
 
     void addSubServiceForExpert(Long expertId, Long subServiceId);
 

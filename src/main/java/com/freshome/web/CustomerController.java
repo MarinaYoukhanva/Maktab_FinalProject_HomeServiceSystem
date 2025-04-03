@@ -1,5 +1,6 @@
 package com.freshome.web;
 
+import com.freshome.dto.ChangePasswordDTO;
 import com.freshome.dto.customer.CustomerCreateDTO;
 import com.freshome.dto.customer.CustomerResponseDTO;
 import com.freshome.dto.customer.CustomerUpdateDTO;
@@ -52,8 +53,8 @@ public class CustomerController {
 
     @PutMapping("/update")
     public ResponseEntity<CustomerResponseDTO> updateCustomer(
-        @Valid @RequestBody CustomerUpdateDTO customerUpdateDTO
-    ){
+            @Valid @RequestBody CustomerUpdateDTO customerUpdateDTO
+    ) {
         return ResponseEntity.ok(
                 customerService.updateCustomer(customerUpdateDTO)
         );
@@ -63,9 +64,18 @@ public class CustomerController {
     public ResponseEntity<List<CustomerResponseDTO>> searchCustomer(
             @RequestParam(required = false) List<String> fields,
             @RequestParam(required = false) List<String> values
-    ){
+    ) {
         return ResponseEntity.ok(
                 customerService.searchCustomer(fields, values)
         );
+    }
+
+    @PutMapping("/update/change_password/{customerId}")
+    public ResponseEntity<Void> changePassword(
+            @PathVariable Long customerId,
+            @RequestBody @Valid ChangePasswordDTO passwordDto
+    ) {
+        customerService.changePassword(customerId, passwordDto);
+        return ResponseEntity.noContent().build();
     }
 }

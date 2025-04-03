@@ -1,5 +1,6 @@
 package com.freshome.web;
 
+import com.freshome.dto.ChangePasswordDTO;
 import com.freshome.dto.expert.ExpertCreatDTO;
 import com.freshome.dto.expert.ExpertResponseDTO;
 import com.freshome.dto.subService.SubServiceResponseDTO;
@@ -51,5 +52,14 @@ public class ExpertController {
         return ResponseEntity.ok(
                 expertService.findAllSubServicesOfExpert(expertId)
         );
+    }
+
+    @PutMapping("/update/change_password/{expertId}")
+    public ResponseEntity<Void> changePassword(
+            @PathVariable Long expertId,
+            @RequestBody @Valid ChangePasswordDTO passwordDto
+    ) {
+        expertService.changePassword(expertId, passwordDto);
+        return ResponseEntity.noContent().build();
     }
 }

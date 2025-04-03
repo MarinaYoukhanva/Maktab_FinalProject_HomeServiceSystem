@@ -1,5 +1,6 @@
 package com.freshome.service;
 
+import com.freshome.dto.ChangePasswordDTO;
 import com.freshome.entity.Customer;
 import com.freshome.dto.customer.CustomerCreateDTO;
 import com.freshome.dto.customer.CustomerResponseDTO;
@@ -33,5 +34,5 @@ public interface CustomerService {
             List<String> fields, List<String> values
     );
 
-    void changePassword(Long customerId, String oldPassword, String newPassword);
+    void changePassword(Long customerId, ChangePasswordDTO dto);
 }
