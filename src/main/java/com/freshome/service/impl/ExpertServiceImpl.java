@@ -67,6 +67,12 @@ public class ExpertServiceImpl implements ExpertService {
     }
 
     @Override
+    public void calculateScore(Expert expert) {
+        Double score = reviewRepository.expertScoreFromRatingsAverage(expert.getId());
+        expert.setScore(score == null ? 0.0 : score);
+    }
+
+    @Override
     public ExpertResponseDTO findExpertById(Long id) {
         Expert expert = expertRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(Expert.class, id));

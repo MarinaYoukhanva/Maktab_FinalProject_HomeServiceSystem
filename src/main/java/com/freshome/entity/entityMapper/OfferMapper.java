@@ -1,5 +1,6 @@
 package com.freshome.entity.entityMapper;
 
+import com.freshome.dto.offer.OfferResponseWithExpertDTO;
 import com.freshome.entity.Offer;
 import com.freshome.dto.offer.OfferCreateDTO;
 import com.freshome.dto.offer.OfferResponseDTO;
@@ -27,7 +28,21 @@ public class OfferMapper {
                 offer.getDurationInHours(),
                 offer.getStartDateTime()
 //                offer.getOrder().getId(),
-//                offer.getExpert().getId()
+//                offer.getExpert().getId(),
+        );
+    }
+
+    public static OfferResponseWithExpertDTO dtoWithExpertFromOffer(Offer offer){
+        return new OfferResponseWithExpertDTO(
+                offer.getId(),
+                offer.getOfferRegisterDateTime(),
+                offer.getSuggestedPriceByExpert(),
+                offer.getDurationInHours(),
+                offer.getStartDateTime(),
+                offer.getExpert().getId(),
+                offer.getExpert().getFirstname(),
+                offer.getExpert().getLastname(),
+                offer.getExpert().getScore()
         );
     }
 }

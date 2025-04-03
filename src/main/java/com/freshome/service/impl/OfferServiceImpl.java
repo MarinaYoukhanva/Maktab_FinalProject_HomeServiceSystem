@@ -1,5 +1,6 @@
 package com.freshome.service.impl;
 
+import com.freshome.dto.offer.OfferResponseWithExpertDTO;
 import com.freshome.entity.Expert;
 import com.freshome.entity.Offer;
 import com.freshome.entity.Order;
@@ -14,6 +15,7 @@ import com.freshome.service.ExpertService;
 import com.freshome.service.OfferService;
 import com.freshome.service.OrderService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -55,10 +57,40 @@ public class OfferServiceImpl implements OfferService {
     }
 
     @Override
+    public OfferResponseWithExpertDTO findOfferWithExpertById(Long id){
+        Offer offer = offerRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(Offer.class, id));
+        expertService.calculateScore(offer.getExpert());
+        return OfferMapper.dtoWithExpertFromOffer(offer);
+    }
+
+    @Override
     public List<OfferResponseDTO> findAllOffers() {
         return offerRepository.findAll()
                 .stream().map(OfferMapper::dtoFromOffer)
                 .toList();
+    }
+
+    @Override
+    public List<OfferResponseWithExpertDTO> findAllOffersWithExpert(){
+        List<Offer> offers = offerRepository.findAll();
+        offers.forEach(
+                offer-> expertService.calculateScore(offer.getExpert()));
+        return offers.stream().map(
+                OfferMapper::dtoWithExpertFromOffer).toList();
+    }
+
+    @Override
+    @Transactional
+    public List<OfferResponseWithExpertDTO> findOffersForOrder(Long id, String sortDirection){
+        Sort.Direction direction = sortDirection
+                .equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
+        Sort sort = Sort.by(direction, "suggestedPriceByExpert");
+        List<Offer> offers = offerRepository.findByOrder_Id(id, sort);
+        offers.forEach(
+                offer-> expertService.calculateScore(offer.getExpert()));
+        return offers.stream().map(
+                        OfferMapper::dtoWithExpertFromOffer).toList();
     }
 
     @Override

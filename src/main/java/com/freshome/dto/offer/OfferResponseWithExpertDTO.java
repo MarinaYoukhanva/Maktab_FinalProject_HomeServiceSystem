@@ -1,17 +1,17 @@
 package com.freshome.dto.offer;
 
-import com.freshome.entity.Expert;
-import com.freshome.entity.Order;
-
 import java.time.LocalDateTime;
 
-public record OfferResponseDTO(
+public record OfferResponseWithExpertDTO(
         Long id,
         LocalDateTime offerRegisterDateTime,
         Long suggestedPriceByExpert,
         Integer durationInHours,
-        LocalDateTime startDateTime
-//        Long orderId,
-//        Long expertId,
+        LocalDateTime startDateTime,
+
+        Long expertId,
+        String firstname,
+        String lastname,
+        Double score
 ) {
 }
