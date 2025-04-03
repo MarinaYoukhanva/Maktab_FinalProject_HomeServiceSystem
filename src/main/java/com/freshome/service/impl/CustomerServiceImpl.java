@@ -18,6 +18,7 @@ import com.freshome.service.CreditService;
 import com.freshome.service.CustomerService;
 import com.freshome.specification.CustomerSpecification;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +29,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 //@Transactional
 //@Validated
 public class CustomerServiceImpl implements CustomerService {
@@ -40,6 +42,8 @@ public class CustomerServiceImpl implements CustomerService {
     @Transactional
     public CustomerResponseDTO createCustomer(CustomerCreateDTO customerCreateDTO) {
 
+        log.info("attempt to create customer");
+
         if (customerRepository.existsByEmail(customerCreateDTO.getEmail()))
             throw new ExistenceException("email");
         if (customerRepository.existsByPhoneNumber(customerCreateDTO.getPhoneNumber()))
@@ -49,9 +53,10 @@ public class CustomerServiceImpl implements CustomerService {
         Credit credit = creditService.createReturnCredit(new CreditCreateDTO(0L));
         customer.setCredit(credit);
 
-        return CustomerMapper.dtoFromCustomer(
-                customerRepository.save(customer)
-        );
+        Customer savedCustomer = customerRepository.save(customer);
+        log.info("customer with id {} saved successfully", savedCustomer.getId());
+
+        return CustomerMapper.dtoFromCustomer(savedCustomer);
     }
 
     @Override
@@ -78,20 +83,28 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     @Transactional
     public void deleteCustomer(Long id) {
+        log.info("attempt to delete customer with id: {}", id);
+
         if (!customerRepository.existsById(id))
             throw new NotFoundException(Customer.class, id);
+
         customerRepository.deleteById(id);
+        log.info("customer with id {} deleted successfully", id);
     }
 
     @Override
     @Transactional
     public CustomerResponseDTO updateCustomer(CustomerUpdateDTO updateDTO) {
+        log.info("attempt to update customer with id: {} ", updateDTO.getId());
+
         Customer customer = customerRepository.findById(updateDTO.getId())
                 .orElseThrow(() -> new NotFoundException(Customer.class, updateDTO.getId()));
+
         updateFields(customer, updateDTO);
-        return CustomerMapper.dtoFromCustomer(
-                customerRepository.save(customer)
-        );
+        Customer updatedCustomer = customerRepository.save(customer);
+        log.info("customer with id {} updated successfully", updatedCustomer.getId());
+
+        return CustomerMapper.dtoFromCustomer(updatedCustomer);
     }
 
     @Override
@@ -107,13 +120,17 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     @Transactional
     public void changePassword(Long customerId, ChangePasswordDTO dto) {
+        log.info("attempt to change password with id: {} ", customerId);
+
         Customer customer = customerRepository.findById(customerId)
                 .orElseThrow(() -> new NotFoundException(Customer.class, customerId));
         if (dto.oldPassword().equals(dto.newPassword())
                 || !passwordEncoder.matches(dto.oldPassword(), customer.getPassword()))
             throw new ChangePasswordException();
+
         customer.setPassword(passwordEncoder.encode(dto.newPassword()));
         customerRepository.save(customer);
+        log.info("password changed successfully for customer with id{}", customerId);
     }
 
     @Override

@@ -38,6 +38,7 @@ public class GlobalExceptionHandler extends
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
             MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
         log.info("Validation exception triggered");
+        log.error(ex.getMessage());
 
         Map<String, List<String>> errorMessages = new HashMap<>();
 //        for (FieldError fieldError : ex.getBindingResult().getFieldErrors())
@@ -53,6 +54,8 @@ public class GlobalExceptionHandler extends
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<Map<String, String>> handleDatabaseException(DataIntegrityViolationException ex) {
+        log.error(ex.getMessage());
+
         if (ex.getRootCause() !=null
                 && ex.getRootCause().getMessage().contains("unique constraint")){
             return ResponseEntity
@@ -69,6 +72,8 @@ public class GlobalExceptionHandler extends
 
     @ExceptionHandler(ExistenceException.class)
     public ResponseEntity<Map<String, String>> handleExistenceException(ExistenceException ex) {
+        log.error(ex.getMessage());
+
         return ResponseEntity
                 .status(HttpStatus.CONFLICT)
                 .body(Map.of(
@@ -78,6 +83,8 @@ public class GlobalExceptionHandler extends
 
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<Map<String, String>> handleNotFoundException(NotFoundException ex) {
+        log.error(ex.getMessage());
+
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
                 .body(Map.of(
@@ -87,6 +94,8 @@ public class GlobalExceptionHandler extends
 
     @ExceptionHandler(ChangePasswordException.class)
     public ResponseEntity<Map<String, String>> handleChangePasswordException(ChangePasswordException ex) {
+        log.error(ex.getMessage());
+
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(Map.of(
