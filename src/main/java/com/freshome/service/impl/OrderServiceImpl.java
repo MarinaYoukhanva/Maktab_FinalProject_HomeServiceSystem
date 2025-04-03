@@ -88,6 +88,15 @@ public class OrderServiceImpl implements OrderService {
                 .toList();
     }
 
+    @Override
+    public List<OrderResponseDTO> findAllBySubServiceIds(List<Long> subServiceIds){
+//        if (subServiceIds == null || subServiceIds.isEmpty())
+//            throw new NotFoundException(" ");
+        return orderRepository.findBySubService_IdIn(subServiceIds)
+                .stream().map(OrderMapper::dtoFromOrder)
+                .toList();
+    }
+
     @Transactional
     @Override
     public void deleteOrderById(Long id){

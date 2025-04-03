@@ -19,7 +19,8 @@ import org.hibernate.annotations.WhereJoinTable;
 @Entity
 //@Where(clause = "deleted = false")
 //@WhereJoinTable(clause = "deleted = false")
-@SecondaryTable(name = "user", pkJoinColumns = @PrimaryKeyJoinColumn(name = "id"))
+//@SecondaryTable(name = "user", pkJoinColumns = @PrimaryKeyJoinColumn(name = "id"))
+//@SecondaryRow
 public class Customer extends User {
 
     @OneToOne(optional = false, orphanRemoval = true)

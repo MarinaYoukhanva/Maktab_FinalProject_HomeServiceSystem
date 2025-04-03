@@ -11,5 +11,13 @@ import java.util.List;
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long> {
 
-    List<Order> findByCustomer_Id(Long id);
+    @Query(value = """
+            SELECT o.* FROM home.order o
+            JOIN home.customer c ON o.customer_id = c.id
+            JOIN home."user" u ON c.id = u.id
+            WHERE o.customer_id = :customerId AND u.deleted = false AND o.deleted = false
+            """, nativeQuery = true)
+    List<Order> findByCustomer_Id(@Param("customerId") Long id);
+
+    List<Order> findBySubService_IdIn(List<Long> ids);
 }

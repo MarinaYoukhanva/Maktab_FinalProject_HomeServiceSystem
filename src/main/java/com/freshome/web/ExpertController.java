@@ -2,6 +2,7 @@ package com.freshome.web;
 
 import com.freshome.dto.expert.ExpertCreatDTO;
 import com.freshome.dto.expert.ExpertResponseDTO;
+import com.freshome.dto.subService.SubServiceResponseDTO;
 import com.freshome.service.ExpertService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/v1/expert")
@@ -40,5 +42,14 @@ public class ExpertController {
     ){
         expertService.addSubServiceForExpert(expertId, subServiceId);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/find/sub_services/{expertId}")
+    public ResponseEntity<List<SubServiceResponseDTO>> findSubServicesOfExpert(
+            @PathVariable Long expertId
+    ){
+        return ResponseEntity.ok(
+                expertService.findAllSubServicesOfExpert(expertId)
+        );
     }
 }

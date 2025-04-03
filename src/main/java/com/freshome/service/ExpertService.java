@@ -1,9 +1,11 @@
 package com.freshome.service;
 
+import com.freshome.dto.subService.SubServiceResponseDTO;
 import com.freshome.entity.Expert;
 import com.freshome.dto.expert.ExpertCreatDTO;
 import com.freshome.dto.expert.ExpertResponseDTO;
 import com.freshome.dto.expert.ExpertUpdateDTO;
+import com.freshome.entity.SubService;
 import com.freshome.specification.Operator;
 import jakarta.persistence.metamodel.SingularAttribute;
 import jakarta.validation.Valid;
@@ -37,4 +39,6 @@ public interface ExpertService {
     void changePassword(Long expertId, String oldPassword, String newPassword);
 
     void addSubServiceForExpert(Long expertId, Long subServiceId);
+
+    List<SubServiceResponseDTO> findAllSubServicesOfExpert(Long expertId);
 }

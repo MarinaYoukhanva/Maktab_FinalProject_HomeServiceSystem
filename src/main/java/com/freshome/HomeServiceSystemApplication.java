@@ -47,16 +47,23 @@ public class HomeServiceSystemApplication {
 //        CustomerService customerService = spring.getBean(CustomerService.class);
 //        CreditService creditService = spring.getBean(CreditService.class);
         ExpertService expertService = spring.getBean(ExpertService.class);
-//        OrderService orderService = spring.getBean(OrderService.class);
+        OrderService orderService = spring.getBean(OrderService.class);
 //        ReviewService reviewService = spring.getBean(ReviewService.class);
 //        ReviewRepository rrepo = spring.getBean(ReviewRepository.class);
 //        OfferService offerService = spring.getBean(OfferService.class);
-        SubServiceService subServiceService = spring.getBean(SubServiceService.class);
+//        SubServiceService subServiceService = spring.getBean(SubServiceService.class);
 
-//        expertService.addSubServiceForExpert(2L, 2L);
-//        Expert expert = expertService.findOptionalExpertById(2L).get();
+
+        orderService.findAllBySubServiceIds(List.of(2L,4L))
+                .forEach(System.out::println);
+
+//        expertService.addSubServiceForExpert(3L, 3L);
+//        Expert expert = expertService.findOptionalExpertById(3L).get();
 //        List<SubService> subServices = expert.getSubServices();
+//        subServices.forEach(System.out::println);
 //        System.out.println();
+//        expertService.findAllSubServicesOfExpert(4L)
+//                .forEach(System.out::println);
 
 //        subServiceService.findAllByCategoryId(2L)
 //                .forEach(System.out::println);

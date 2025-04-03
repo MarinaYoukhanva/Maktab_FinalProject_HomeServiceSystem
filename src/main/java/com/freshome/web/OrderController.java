@@ -52,5 +52,13 @@ public class OrderController {
         );
     }
 
-
+    @GetMapping("/find/all/by_sub_services")
+    public ResponseEntity<List<OrderResponseDTO>> findAllOrdersBySubServices (
+//            @RequestParam(required = false) List<Long> subServiceIds
+            @RequestParam List<Long> subServiceIds
+    ) {
+        return ResponseEntity.ok(
+                orderService.findAllBySubServiceIds(subServiceIds)
+        );
+    }
 }
