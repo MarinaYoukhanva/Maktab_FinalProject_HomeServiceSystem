@@ -36,9 +36,9 @@ public class OfferServiceImpl implements OfferService {
 
         Offer offer = OfferMapper.offerFromDto(offerCreateDTO);
         Expert expert = expertService.findOptionalExpertById(offerCreateDTO.expertId())
-                .orElseThrow(()-> new NotFoundException(Expert.class, offerCreateDTO.expertId()));
+                .orElseThrow(() -> new NotFoundException(Expert.class, offerCreateDTO.expertId()));
         Order order = orderService.findOptionalOrderById(offerCreateDTO.orderId())
-                .orElseThrow(()-> new NotFoundException(Order.class, offerCreateDTO.orderId()));
+                .orElseThrow(() -> new NotFoundException(Order.class, offerCreateDTO.orderId()));
         order.setStatus(OrderStatus.WAITING_FOR_EXPERT_SELECTION);
         offer.setExpert(expert);
         offer.setOrder(order);
@@ -57,11 +57,10 @@ public class OfferServiceImpl implements OfferService {
     }
 
     @Override
-    public OfferResponseWithExpertDTO findOfferWithExpertById(Long id){
-        Offer offer = offerRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException(Offer.class, id));
-        expertService.calculateScore(offer.getExpert());
-        return OfferMapper.dtoWithExpertFromOffer(offer);
+    public OfferResponseWithExpertDTO findOfferWithExpertById(Long id) {
+        return OfferMapper.dtoWithExpertFromOffer(
+                offerRepository.findById(id)
+                        .orElseThrow(() -> new NotFoundException(Offer.class, id)));
     }
 
     @Override
@@ -72,32 +71,28 @@ public class OfferServiceImpl implements OfferService {
     }
 
     @Override
-    public List<OfferResponseWithExpertDTO> findAllOffersWithExpert(){
-        List<Offer> offers = offerRepository.findAll();
-        offers.forEach(
-                offer-> expertService.calculateScore(offer.getExpert()));
+    public List<OfferResponseWithExpertDTO> findAllOffersWithExpert() {
+        return offerRepository.findAll()
+                .stream().map(
+                OfferMapper::dtoWithExpertFromOffer).toList();
+    }
+
+    @Override
+    @Transactional
+    public List<OfferResponseWithExpertDTO> findOffersForOrder(Long id, String sortDirection) {
+        Sort.Direction direction = sortDirection
+                .equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
+        Sort sort = Sort.by(direction, "suggestedPriceByExpert");
+        List<Offer> offers = offerRepository.findByOrder_Id(id, sort);
         return offers.stream().map(
                 OfferMapper::dtoWithExpertFromOffer).toList();
     }
 
     @Override
     @Transactional
-    public List<OfferResponseWithExpertDTO> findOffersForOrder(Long id, String sortDirection){
-        Sort.Direction direction = sortDirection
-                .equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
-        Sort sort = Sort.by(direction, "suggestedPriceByExpert");
-        List<Offer> offers = offerRepository.findByOrder_Id(id, sort);
-        offers.forEach(
-                offer-> expertService.calculateScore(offer.getExpert()));
-        return offers.stream().map(
-                        OfferMapper::dtoWithExpertFromOffer).toList();
-    }
-
-    @Override
-    @Transactional
     public OfferResponseDTO updateOffer(OfferUpdateDTO updateDTO) {
         Offer offer = offerRepository.findById(updateDTO.id())
-                .orElseThrow(()-> new NotFoundException(Offer.class, updateDTO.id()));
+                .orElseThrow(() -> new NotFoundException(Offer.class, updateDTO.id()));
         updateFields(offer, updateDTO);
         return OfferMapper.dtoFromOffer(
                 offerRepository.save(offer)
@@ -106,22 +101,21 @@ public class OfferServiceImpl implements OfferService {
 
     @Override
     @Transactional
-    public void deleteOffer(Long id){
+    public void deleteOffer(Long id) {
         if (!offerRepository.existsById(id))
             throw new NotFoundException(Offer.class, id);
         offerRepository.deleteById(id);
     }
 
 
-
-    private void updateFields (Offer offer, OfferUpdateDTO updateDTO) {
+    private void updateFields(Offer offer, OfferUpdateDTO updateDTO) {
         if (updateDTO.suggestedPriceByExpert() != null)
             offer.setSuggestedPriceByExpert(updateDTO.suggestedPriceByExpert());
 
         if (updateDTO.durationInHours() != null)
             offer.setDurationInHours(updateDTO.durationInHours());
 
-        if(updateDTO.startDateTime() != null)
+        if (updateDTO.startDateTime() != null)
             offer.setStartDateTime(updateDTO.startDateTime());
     }
 }

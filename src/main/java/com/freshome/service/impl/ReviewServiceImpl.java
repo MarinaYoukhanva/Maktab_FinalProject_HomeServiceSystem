@@ -1,6 +1,5 @@
 package com.freshome.service.impl;
 
-import com.freshome.entity.Customer;
 import com.freshome.entity.Expert;
 import com.freshome.entity.Order;
 import com.freshome.entity.Review;
@@ -10,8 +9,6 @@ import com.freshome.dto.review.ReviewUpdateDTO;
 import com.freshome.entity.entityMapper.ReviewMapper;
 import com.freshome.exception.NotFoundException;
 import com.freshome.repository.ReviewRepository;
-import com.freshome.service.CustomerService;
-import com.freshome.service.ExpertService;
 import com.freshome.service.OrderService;
 import com.freshome.service.ReviewService;
 import lombok.RequiredArgsConstructor;
@@ -28,26 +25,25 @@ public class ReviewServiceImpl implements ReviewService {
 
     private final ReviewRepository reviewRepository;
     private final OrderService orderService;
-//    private final CustomerService customerService;
-//    private final ExpertService expertService;
 
     @Override
     @Transactional
     public ReviewResponseDTO createReview(ReviewCreateDTO reviewCreateDTO) {
 
-        Review review = ReviewMapper.reviewFromDto(reviewCreateDTO);
         Order order = orderService.findOptionalOrderById(reviewCreateDTO.orderId())
                 .orElseThrow(()-> new NotFoundException(Order.class, reviewCreateDTO.orderId()));
-//        Customer customer = customerService.findOptionalCustomerById(reviewCreateDTO.customerId())
-//                .orElseThrow(()-> new NotFoundException(Customer.class, reviewCreateDTO.customerId()));
-//        Expert expert = expertService.findOptionalExpertById(reviewCreateDTO.expertId())
-//                .orElseThrow(()-> new NotFoundException(Expert.class, reviewCreateDTO.expertId()));
+        Review review = ReviewMapper.reviewFromDto(reviewCreateDTO);
         review.setOrder(order);
-//        review.setCustomer(customer);
-//        review.setExpert(expert);
+        reviewRepository.save(review);
+        updateExpertScore(order.getExpert());
 
-        return ReviewMapper.dtoFromReview(
-                reviewRepository.save(review));
+        return ReviewMapper.dtoFromReview(review);
+    }
+
+    @Override
+    public void updateExpertScore(Expert expert) {
+        Double score = reviewRepository.expertScoreFromRatingsAverage(expert.getId());
+        expert.setScore(score == null ? 0.0 : score);
     }
 
     @Override

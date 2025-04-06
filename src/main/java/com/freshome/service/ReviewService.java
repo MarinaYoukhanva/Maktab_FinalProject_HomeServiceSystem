@@ -1,5 +1,6 @@
 package com.freshome.service;
 
+import com.freshome.entity.Expert;
 import com.freshome.entity.Review;
 import com.freshome.dto.review.ReviewCreateDTO;
 import com.freshome.dto.review.ReviewResponseDTO;
@@ -14,6 +15,8 @@ import java.util.Optional;
 public interface ReviewService {
 
     ReviewResponseDTO createReview (@Valid ReviewCreateDTO reviewCreateDTO);
+
+    void updateExpertScore(Expert expert);
 
     ReviewResponseDTO findReviewById(Long id);
 

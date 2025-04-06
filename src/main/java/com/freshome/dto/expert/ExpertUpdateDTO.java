@@ -15,7 +15,7 @@ public class ExpertUpdateDTO extends UserUpdateDTO {
     @Positive
     Long id;
     byte[] profileImage;
-//    Long score;
+    Double score;
 
     public ExpertUpdateDTO(
             Long id,
@@ -24,10 +24,11 @@ public class ExpertUpdateDTO extends UserUpdateDTO {
             String email,
             UserStatus status,
             String phoneNumber,
-            byte[] profileImage) {
+            byte[] profileImage,
+            Double score) {
         super(firstname, lastname, email, status, phoneNumber);
         this.id = id;
         this.profileImage = profileImage;
-//        this.score = score;
+        this.score = score;
     }
 }

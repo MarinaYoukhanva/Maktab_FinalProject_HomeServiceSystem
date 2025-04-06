@@ -51,22 +51,11 @@ public class ExpertSpecification {
                 predicates.add(criteriaBuilder.like(
                         subServiceExpert.get(SubService_.name), "%" + expertise + "%"));
             }
-            if (minScore != null || maxScore != null) {
-                Subquery<Double> subquery = query.subquery(Double.class);
-                Root<Review> reviewRoot = subquery.from(Review.class);
-                Join<Review, Order> orderJoin = reviewRoot.join("order", JoinType.LEFT);
-
-                subquery.select(criteriaBuilder.avg(reviewRoot.get(Review_.RATING)))
-                        .where(criteriaBuilder.equal(orderJoin.get("expert"), root));
-
-                Expression<Double> avgScore = criteriaBuilder.coalesce(subquery, 0.0);
-
-                if (minScore != null) {
-                    predicates.add(criteriaBuilder.greaterThanOrEqualTo(avgScore, minScore));
-                }
-                if (maxScore != null) {
-                    predicates.add(criteriaBuilder.lessThanOrEqualTo(avgScore, maxScore));
-                }
+            if (minScore != null) {
+                predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get(Expert_.score), minScore));
+            }
+            if (maxScore != null) {
+                predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get(Expert_.score), maxScore));
             }
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         }));

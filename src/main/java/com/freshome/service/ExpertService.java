@@ -23,7 +23,7 @@ public interface ExpertService {
 
     ExpertResponseDTO createExpert(@Valid ExpertCreatDTO expertCreatDTO) throws IOException;
 
-    void calculateScore(Expert expert);
+//    void calculateScore(Expert expert);
 
     ExpertResponseDTO findExpertById(Long id);
 

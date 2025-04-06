@@ -23,7 +23,7 @@ public class Expert extends User {
     byte[] profileImage;
 
     // in getter -> average based on ratings
-    @Transient
+//    @Transient
     Double score;
 
 
