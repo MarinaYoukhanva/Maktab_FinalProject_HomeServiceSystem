@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -100,5 +101,16 @@ public class GlobalExceptionHandler extends
                 .status(HttpStatus.BAD_REQUEST)
                 .body(Map.of(
                         "message", ex.getMessage()));
+    }
+
+    @ExceptionHandler(NotCompletedOrderException.class)
+    public ResponseEntity<Map<String, String>> handleNotCompletedOrderException(NotCompletedOrderException ex) {
+        log.error(ex.getMessage());
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(Map.of(
+                        "message", ex.getMessage(),
+                        "timestamp", LocalDateTime.now().toString()));
     }
 }

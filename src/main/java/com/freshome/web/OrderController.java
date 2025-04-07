@@ -7,6 +7,7 @@ import com.freshome.service.OrderService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.method.P;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -82,12 +83,30 @@ public class OrderController {
     }
 
     @PutMapping("/update/choose_expert")
-    public ResponseEntity<OrderResponseDTO> updateChooseExpert (
+    public ResponseEntity<OrderResponseDTO> chooseExpert (
             @RequestParam Long orderId,
             @RequestParam Long expertId
     ){
         return ResponseEntity.ok(
                 orderService.chooseExpertForOrder(orderId, expertId)
+        );
+    }
+
+    @PutMapping("/update/start/{orderId}")
+    public ResponseEntity<OrderResponseDTO> startOrder (
+            @PathVariable Long orderId
+    ){
+        return ResponseEntity.ok(
+                orderService.startOrder(orderId)
+        );
+    }
+
+    @PutMapping("/update/execute/{orderId}")
+    public ResponseEntity<OrderResponseDTO> executeOrder (
+            @PathVariable Long orderId
+    ){
+        return ResponseEntity.ok(
+                orderService.executeOrder(orderId)
         );
     }
 }

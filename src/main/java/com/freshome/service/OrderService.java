@@ -39,5 +39,9 @@ public interface OrderService {
 
     OrderResponseDTO chooseExpertForOrder(Long orderId, Long expertId);
 
+    OrderResponseDTO startOrder(Long orderId);
+
+    OrderResponseDTO executeOrder(Long orderId);
+
     void deleteOrderById(Long id);
 }

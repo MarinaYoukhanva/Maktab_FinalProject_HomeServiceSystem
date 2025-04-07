@@ -7,6 +7,8 @@ import com.freshome.dto.review.ReviewCreateDTO;
 import com.freshome.dto.review.ReviewResponseDTO;
 import com.freshome.dto.review.ReviewUpdateDTO;
 import com.freshome.entity.entityMapper.ReviewMapper;
+import com.freshome.entity.enumeration.OrderStatus;
+import com.freshome.exception.NotCompletedOrderException;
 import com.freshome.exception.NotFoundException;
 import com.freshome.repository.ReviewRepository;
 import com.freshome.service.OrderService;
@@ -32,6 +34,8 @@ public class ReviewServiceImpl implements ReviewService {
 
         Order order = orderService.findOptionalOrderById(reviewCreateDTO.orderId())
                 .orElseThrow(()-> new NotFoundException(Order.class, reviewCreateDTO.orderId()));
+        if (order.getStatus() != OrderStatus.COMPLETED && order.getStatus() != OrderStatus.PAID )
+            throw new NotCompletedOrderException();
         Review review = ReviewMapper.reviewFromDto(reviewCreateDTO);
         review.setOrder(order);
         reviewRepository.save(review);

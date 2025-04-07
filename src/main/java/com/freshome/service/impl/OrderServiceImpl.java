@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -142,6 +143,29 @@ public class OrderServiceImpl implements OrderService {
         order.setExpert(expert);
         return OrderMapper.dtoFromOrder(
                 orderRepository.save(order));
+    }
+
+    @Override
+    @Transactional
+    public OrderResponseDTO startOrder(Long orderId){
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new NotFoundException(Order.class, orderId));
+        order.setStatus(OrderStatus.STARTED);
+        return OrderMapper.dtoFromOrder(
+                orderRepository.save(order)
+        );
+    }
+
+    @Override
+    @Transactional
+    public OrderResponseDTO executeOrder(Long orderId) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new NotFoundException(Order.class, orderId));
+        order.setStatus(OrderStatus.COMPLETED);
+        order.setOrderExecutionDateTime(LocalDateTime.now());
+        return OrderMapper.dtoFromOrder(
+                orderRepository.save(order)
+        );
     }
 
     @Transactional
