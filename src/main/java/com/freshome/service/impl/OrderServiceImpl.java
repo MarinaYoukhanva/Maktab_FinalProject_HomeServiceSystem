@@ -1,5 +1,6 @@
 package com.freshome.service.impl;
 
+import com.freshome.dto.order.OrderSearchDTO;
 import com.freshome.entity.Customer;
 import com.freshome.entity.Expert;
 import com.freshome.entity.Order;
@@ -15,6 +16,7 @@ import com.freshome.service.CustomerService;
 import com.freshome.service.ExpertService;
 import com.freshome.service.OrderService;
 import com.freshome.service.SubServiceService;
+import com.freshome.specification.OrderSpecification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,7 +36,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Transactional
     @Override
-    public OrderResponseDTO createOrder(OrderCreateDTO orderCreateDTO){
+    public OrderResponseDTO createOrder(OrderCreateDTO orderCreateDTO) {
 
         Order order = OrderMapper.orderFromDto(orderCreateDTO);
         Customer customer = customerService.findOptionalCustomerById(orderCreateDTO.customerId())
@@ -53,7 +55,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderResponseDTO findOrderById(Long id){
+    public OrderResponseDTO findOrderById(Long id) {
         return OrderMapper.dtoFromOrder(
                 orderRepository.findById(id)
                         .orElseThrow(() -> new NotFoundException(Order.class, id))
@@ -67,7 +69,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public OrderResponseDTO updateOrder(OrderUpdateDTO updateDTO){
+    public OrderResponseDTO updateOrder(OrderUpdateDTO updateDTO) {
         Order order = orderRepository.findById(updateDTO.id())
                 .orElseThrow(() -> new NotFoundException(Order.class, updateDTO.id()));
         updateFields(order, updateDTO);
@@ -77,7 +79,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<OrderResponseDTO> findAllOrders(){
+    public List<OrderResponseDTO> findAllOrders() {
         return orderRepository.findAll()
                 .stream().map(OrderMapper::dtoFromOrder)
                 .toList();
@@ -85,7 +87,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public List<OrderResponseDTO> findAllByCustomerId(Long customerId){
+    public List<OrderResponseDTO> findAllByCustomerId(Long customerId) {
         return orderRepository.findByCustomer_Id(customerId)
                 .stream().map(OrderMapper::dtoFromOrder)
                 .toList();
@@ -93,19 +95,20 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public List<OrderResponseDTO> findAllByExpertId(Long expertId){
+    public List<OrderResponseDTO> findAllByExpertId(Long expertId) {
         return orderRepository.findByExpert_Id(expertId)
                 .stream().map(OrderMapper::dtoFromOrder)
                 .toList();
     }
 
     @Override
-    public List<Order> findAllOrdersBySubServiceIds(List<Long> subServiceIds){
+    public List<Order> findAllOrdersBySubServiceIds(List<Long> subServiceIds) {
         return orderRepository.findBySubService_IdIn(subServiceIds);
     }
 
     @Override
-    public List<OrderResponseDTO> findAllBySubServiceIds(List<Long> subServiceIds){
+    @Transactional
+    public List<OrderResponseDTO> findAllBySubServiceIds(List<Long> subServiceIds) {
 //        if (subServiceIds == null || subServiceIds.isEmpty())
 //            throw new NotFoundException(" ");
         return orderRepository.findBySubService_IdIn(subServiceIds)
@@ -114,12 +117,27 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public List<OrderResponseDTO> searchOrder(
+            OrderSearchDTO searchDTO
+    ) {
+        return orderRepository.findAll(
+                        OrderSpecification.searchOrder(
+                                searchDTO.fromDate(),
+                                searchDTO.toDate(),
+                                searchDTO.orderStatus(),
+                                searchDTO.serviceCategory(),
+                                searchDTO.subService())
+                ).stream().map(OrderMapper::dtoFromOrder)
+                .toList();
+    }
+
+    @Override
     @Transactional
-    public OrderResponseDTO chooseExpertForOrder(Long orderId, Long expertId){
+    public OrderResponseDTO chooseExpertForOrder(Long orderId, Long expertId) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new NotFoundException(Order.class, orderId));
         Expert expert = expertService.findOptionalExpertById(expertId)
-                .orElseThrow(()-> new NotFoundException(Expert.class, expertId));
+                .orElseThrow(() -> new NotFoundException(Expert.class, expertId));
         order.setStatus(OrderStatus.WAITING_FOR_EXPERT_ARRIVAL);
         order.setExpert(expert);
         return OrderMapper.dtoFromOrder(
@@ -128,17 +146,17 @@ public class OrderServiceImpl implements OrderService {
 
     @Transactional
     @Override
-    public void deleteOrderById(Long id){
+    public void deleteOrderById(Long id) {
         if (!orderRepository.existsById(id))
             throw new NotFoundException(Order.class, id);
         orderRepository.deleteById(id);
     }
 
-    private void updateFields (Order order, OrderUpdateDTO updateDTO){
+    private void updateFields(Order order, OrderUpdateDTO updateDTO) {
         if (updateDTO.suggestedPriceByCustomer() != null)
             order.setSuggestedPriceByCustomer(updateDTO.suggestedPriceByCustomer());
 
-        if(StringUtils.hasText(updateDTO.description()))
+        if (StringUtils.hasText(updateDTO.description()))
             order.setDescription(updateDTO.description());
 
         if (updateDTO.orderExecutionDateTime() != null)

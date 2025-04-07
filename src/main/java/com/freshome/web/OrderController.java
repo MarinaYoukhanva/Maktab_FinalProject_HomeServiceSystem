@@ -2,6 +2,7 @@ package com.freshome.web;
 
 import com.freshome.dto.order.OrderCreateDTO;
 import com.freshome.dto.order.OrderResponseDTO;
+import com.freshome.dto.order.OrderSearchDTO;
 import com.freshome.service.OrderService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -68,6 +69,15 @@ public class OrderController {
     ) {
         return ResponseEntity.ok(
                 orderService.findAllBySubServiceIds(subServiceIds)
+        );
+    }
+
+    @PostMapping("/search")
+    public ResponseEntity<List<OrderResponseDTO>> searchOrders (
+            @RequestBody OrderSearchDTO searchDTO
+    ){
+        return ResponseEntity.ok(
+                orderService.searchOrder(searchDTO)
         );
     }
 

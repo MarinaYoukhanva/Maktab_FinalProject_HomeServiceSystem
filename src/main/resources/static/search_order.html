@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Search</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-blue-50 min-h-screen p-6">
+<div class="max-w-6xl mx-auto">
+    <h2 class="text-3xl font-bold text-blue-700 mb-6">Search Orders</h2>
+
+    <!-- 🔍 Search Form -->
+    <form id="orderSearchForm" class="bg-white p-6 rounded-lg shadow-md space-y-4 mb-8">
+        <div class="grid md:grid-cols-2 gap-4">
+            <div>
+                <label class="block text-sm font-medium text-blue-700">Service Category</label>
+                <select id="categorySelect" class="mt-1 block w-full p-2 border border-gray-300 rounded-md">
+                    <option value="">-- Select Category --</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-blue-700">Sub Service</label>
+                <select id="subServiceSelect" class="mt-1 block w-full p-2 border border-gray-300 rounded-md">
+                    <option value="">-- Select Sub-Service --</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-blue-700">Status</label>
+                <select id="statusSelect" class="mt-1 block w-full p-2 border border-gray-300 rounded-md">
+                    <option value="">-- Select Status --</option>
+                    <option value="WAITING_FOR_EXPERT_OFFERS">Waiting For Expert Offers</option>
+                    <option value="WAITING_FOR_EXPERT_SELECTION">Waiting For Expert Selection</option>
+                    <option value="WAITING_FOR_EXPERT_ARRIVAL">Waiting For Expert Arrival</option>
+                    <option value="STARTED">Started</option>
+                    <option value="COMPLETED">Completed</option>
+                    <option value="PAID">Paid</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-blue-700">From Date</label>
+                <input type="date" id="fromDate" class="mt-1 block w-full p-2 border border-gray-300 rounded-md" />
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-blue-700">To Date</label>
+                <input type="date" id="toDate" class="mt-1 block w-full p-2 border border-gray-300 rounded-md" />
+            </div>
+        </div>
+
+        <div>
+            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">Search</button>
+        </div>
+    </form>
+
+    <!-- 📋 Results Table -->
+    <div id="resultsContainer" class="overflow-x-auto hidden">
+        <table class="min-w-full bg-white rounded-lg shadow-md overflow-hidden">
+            <thead class="bg-blue-600 text-white">
+            <tr>
+                <th class="text-left px-4 py-2">ID</th>
+                <th class="text-left px-4 py-2">Suggested Price</th>
+                <th class="text-left px-4 py-2">Description</th>
+                <th class="text-left px-4 py-2">Placement Date</th>
+                <th class="text-left px-4 py-2">Execution Date</th>
+                <th class="text-left px-4 py-2">Address</th>
+                <th class="text-left px-4 py-2">Status</th>
+            </tr>
+            </thead>
+            <tbody id="resultsBody" class="divide-y divide-gray-200">
+            </tbody>
+        </table>
+    </div>
+</div>
+<script src="./script/search_order.js"></script>
+</body>
+</html>

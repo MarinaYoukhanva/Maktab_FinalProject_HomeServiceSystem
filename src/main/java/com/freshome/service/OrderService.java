@@ -1,5 +1,6 @@
 package com.freshome.service;
 
+import com.freshome.dto.order.OrderSearchDTO;
 import com.freshome.entity.Order;
 import com.freshome.dto.order.OrderCreateDTO;
 import com.freshome.dto.order.OrderResponseDTO;
@@ -31,6 +32,10 @@ public interface OrderService {
     List<Order> findAllOrdersBySubServiceIds(List<Long> subServiceIds);
 
     List<OrderResponseDTO> findAllBySubServiceIds(List<Long> subServiceIds);
+
+    List<OrderResponseDTO> searchOrder(
+            OrderSearchDTO searchDTO
+    );
 
     OrderResponseDTO chooseExpertForOrder(Long orderId, Long expertId);
 
