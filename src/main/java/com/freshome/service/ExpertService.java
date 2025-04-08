@@ -46,5 +46,7 @@ public interface ExpertService {
 
     void addSubServiceForExpert(Long expertId, Long subServiceId);
 
+    void removeSubServiceForExpert(Long expertId, Long subServiceId);
+
     List<SubServiceResponseDTO> findAllSubServicesOfExpert(Long expertId);
 }

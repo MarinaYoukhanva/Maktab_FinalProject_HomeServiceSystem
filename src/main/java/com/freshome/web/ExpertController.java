@@ -4,6 +4,7 @@ import com.freshome.dto.ChangePasswordDTO;
 import com.freshome.dto.credit.CreditResponseDTO;
 import com.freshome.dto.expert.ExpertCreatDTO;
 import com.freshome.dto.expert.ExpertResponseDTO;
+import com.freshome.dto.expert.ExpertUpdateDTO;
 import com.freshome.dto.subService.SubServiceResponseDTO;
 import com.freshome.service.ExpertService;
 import jakarta.validation.Valid;
@@ -37,12 +38,31 @@ public class ExpertController {
         );
     }
 
+    @PutMapping("/update")
+    public ResponseEntity<ExpertResponseDTO> update(
+            @Valid @RequestBody ExpertUpdateDTO expertUpdateDTO
+    ){
+        log.info("expert update triggered ");
+        return ResponseEntity.ok(
+                expertService.updateExpert(expertUpdateDTO)
+        );
+    }
+
     @PutMapping("/update/add_sub_service")
     public ResponseEntity<Void> addSubServiceForExpert(
             @RequestParam(name = "expertId") Long expertId,
             @RequestParam(name = "subServiceId") Long subServiceId
     ){
         expertService.addSubServiceForExpert(expertId, subServiceId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/update/remove_sub_service")
+    public ResponseEntity<Void> removeSubServiceForExpert(
+            @RequestParam(name = "expertId") Long expertId,
+            @RequestParam(name = "subServiceId") Long subServiceId
+    ){
+        expertService.removeSubServiceForExpert(expertId, subServiceId);
         return ResponseEntity.noContent().build();
     }
 

@@ -155,6 +155,17 @@ public class ExpertServiceImpl implements ExpertService {
 
     @Override
     @Transactional
+    public void removeSubServiceForExpert(Long expertId, Long subServiceId) {
+        Expert expert = expertRepository.findById(expertId)
+                .orElseThrow(() -> new NotFoundException(Expert.class, expertId));
+        SubService subService = subServiceService.findOptionalSubServiceById(subServiceId)
+                .orElseThrow(() -> new NotFoundException(SubService.class, subServiceId));
+        expert.getSubServices().remove(subService);
+        expertRepository.save(expert);
+    }
+
+    @Override
+    @Transactional
     public List<SubServiceResponseDTO> findAllSubServicesOfExpert(Long expertId) {
         Expert expert = expertRepository.findById(expertId)
                 .orElseThrow(() -> new NotFoundException(Expert.class, expertId));
@@ -182,7 +193,7 @@ public class ExpertServiceImpl implements ExpertService {
         if (StringUtils.hasText(updateDTO.getPhoneNumber()))
             expert.setPhoneNumber(updateDTO.getPhoneNumber());
 
-        if (updateDTO.getProfileImage() != null)
-            expert.setProfileImage(updateDTO.getProfileImage());
+//        if (updateDTO.getProfileImage() != null)
+//            expert.setProfileImage(updateDTO.getProfileImage());
     }
 }
