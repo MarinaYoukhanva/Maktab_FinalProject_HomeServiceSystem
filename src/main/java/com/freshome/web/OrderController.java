@@ -1,5 +1,6 @@
 package com.freshome.web;
 
+import com.freshome.dto.customer.CustomerWithOrdersReportDTO;
 import com.freshome.dto.order.*;
 import com.freshome.service.OrderService;
 import jakarta.validation.Valid;
@@ -122,6 +123,22 @@ public class OrderController {
     ){
         return ResponseEntity.ok(
                 orderService.showOrderHistoryForCustomer(customerId)
+        );
+    }
+
+    @GetMapping("/find/report_for_customer/{customerId}")
+    public ResponseEntity<CustomerWithOrdersReportDTO> getCustomerOrdersReport(
+            @PathVariable Long customerId
+    ){
+        return ResponseEntity.ok(
+                orderService.getCustomerOrdersReport(customerId)
+        );
+    }
+
+    @GetMapping("/find/all/reports")
+    public ResponseEntity<List<CustomerWithOrdersReportDTO>> getAllCustomerOrdersReports () {
+        return ResponseEntity.ok(
+                orderService.getAllCustomersOrdersReports()
         );
     }
 }

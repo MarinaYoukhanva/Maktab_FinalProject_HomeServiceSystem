@@ -1,5 +1,6 @@
 package com.freshome.entity.entityMapper;
 
+import com.freshome.dto.customer.CustomerWithOrdersReportDTO;
 import com.freshome.entity.Customer;
 import com.freshome.dto.customer.CustomerCreateDTO;
 import com.freshome.dto.customer.CustomerResponseDTO;
@@ -38,6 +39,23 @@ public class CustomerMapper {
                 customer.getPhoneNumber()
 //                customer.getCredit() != null ? customer.getCredit().getId() : null
 //                customer.getCredit().getId()
+        );
+    }
+
+    public static CustomerWithOrdersReportDTO reportDtoFromCustomer(
+            Customer customer,
+            int countPlacedOrders,
+            int countDoneOrders) {
+        return new CustomerWithOrdersReportDTO(
+                customer.getId(),
+                customer.getFirstname(),
+                customer.getLastname(),
+                customer.getEmail(),
+                customer.getStatus(),
+                customer.getPhoneNumber(),
+                customer.getRegisterDateTime(),
+                countPlacedOrders,
+                countDoneOrders
         );
     }
 }

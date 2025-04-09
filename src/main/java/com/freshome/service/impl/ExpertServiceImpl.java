@@ -82,6 +82,11 @@ public class ExpertServiceImpl implements ExpertService {
     }
 
     @Override
+    public List<Expert> findAll() {
+        return expertRepository.findAll();
+    }
+
+    @Override
     public List<ExpertResponseDTO> findAllExperts() {
         return expertRepository.findAll().stream()
                 .map(ExpertMapper::dtoFromExpert)

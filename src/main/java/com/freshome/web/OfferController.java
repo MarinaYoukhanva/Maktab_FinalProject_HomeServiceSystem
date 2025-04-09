@@ -1,5 +1,6 @@
 package com.freshome.web;
 
+import com.freshome.dto.expert.ExpertWithOrdersReportDTO;
 import com.freshome.dto.offer.OfferCreateDTO;
 import com.freshome.dto.offer.OfferResponseDTO;
 import com.freshome.dto.offer.OfferResponseWithExpertDTO;
@@ -67,6 +68,22 @@ public class OfferController {
     ){
         return ResponseEntity.ok(
                 offerService.findOffersForOrder(orderId,  sortDirection)
+        );
+    }
+
+    @GetMapping("/find/report_for_expert/{expertId}")
+    public ResponseEntity<ExpertWithOrdersReportDTO> getExpertOrdersReport(
+            @PathVariable Long expertId
+    ){
+        return ResponseEntity.ok(
+                offerService.getExpertOrdersReport(expertId)
+        );
+    }
+
+    @GetMapping("/find/all/reports")
+    public ResponseEntity<List<ExpertWithOrdersReportDTO>> getAllExpertsOrdersReports(){
+        return ResponseEntity.ok(
+                offerService.getAllExpertsOrdersReports()
         );
     }
 }

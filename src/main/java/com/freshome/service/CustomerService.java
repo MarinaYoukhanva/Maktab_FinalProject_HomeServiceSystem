@@ -20,6 +20,8 @@ public interface CustomerService {
 
     Optional<Customer> findOptionalCustomerById(Long id);
 
+    List<Customer> findAll();
+
     List<CustomerResponseDTO> findAllCustomers();
 
     void deleteCustomer(Long id);
@@ -34,4 +36,5 @@ public interface CustomerService {
     void changePassword(Long customerId, ChangePasswordDTO dto);
 
     CreditResponseDTO findCreditForCustomer(Long customerId);
+
 }

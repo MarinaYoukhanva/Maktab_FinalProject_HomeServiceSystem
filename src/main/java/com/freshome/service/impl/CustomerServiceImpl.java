@@ -74,6 +74,11 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
+    public List<Customer> findAll(){
+        return customerRepository.findAll();
+    }
+
+    @Override
     public List<CustomerResponseDTO> findAllCustomers() {
         return customerRepository.findAll()
                 .stream().map(CustomerMapper::dtoFromCustomer)
@@ -141,6 +146,7 @@ public class CustomerServiceImpl implements CustomerService {
                 customer.getCredit()
         );
     }
+
 
     private void updateFields (Customer customer, CustomerUpdateDTO updateDTO){
         if (StringUtils.hasText(updateDTO.getFirstname()))

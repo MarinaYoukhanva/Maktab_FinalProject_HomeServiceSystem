@@ -1,5 +1,6 @@
 package com.freshome.service;
 
+import com.freshome.dto.expert.ExpertWithOrdersReportDTO;
 import com.freshome.dto.offer.OfferCreateDTO;
 import com.freshome.dto.offer.OfferResponseDTO;
 import com.freshome.dto.offer.OfferResponseWithExpertDTO;
@@ -25,6 +26,10 @@ public interface OfferService {
     List<OfferResponseWithExpertDTO> findOffersForOrder(Long id, String sortDirection);
 
     OfferResponseDTO updateOffer(@Valid OfferUpdateDTO updateDTO);
+
+    ExpertWithOrdersReportDTO getExpertOrdersReport(Long expertId);
+
+    List<ExpertWithOrdersReportDTO> getAllExpertsOrdersReports();
 
     void deleteOffer(Long id);
 }

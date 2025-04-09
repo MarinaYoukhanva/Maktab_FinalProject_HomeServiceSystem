@@ -5,7 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -29,7 +28,24 @@ public interface OrderRepository extends JpaRepository<Order, Long>,
             WHERE o.customer_id = :customerId AND u.deleted = false AND o.deleted = false
             AND o.status IN ('COMPLETED', 'PAID')
             """, nativeQuery = true)
-    List<Order> findDoneOrdersByCustomer_Id(@Param("customerId") Long id);
+    List<Order> findDoneOrdersByCustomerId(@Param("customerId") Long id);
+
+    @Query(value = """
+            SELECT count(o.id) FROM home.order o
+            JOIN home.customer c ON o.customer_id = c.id
+            JOIN home."user" u ON c.id = u.id
+            WHERE o.customer_id = :customerId AND u.deleted = false AND o.deleted = false
+            """, nativeQuery = true)
+    int countOrderByCustomer_Id(@Param("customerId") Long id);
+
+    @Query(value = """
+            SELECT count(o.id) FROM home.order o
+            JOIN home.customer c ON o.customer_id = c.id
+            JOIN home."user" u ON c.id = u.id
+            WHERE o.customer_id = :customerId AND u.deleted = false AND o.deleted = false
+            AND o.status IN ('COMPLETED', 'PAID')
+            """, nativeQuery = true)
+    int countDoneOrderByCustomerId (@Param("customerId") Long id);
 
     @Query(value = """
             SELECT o.* FROM home.order o
@@ -46,7 +62,24 @@ public interface OrderRepository extends JpaRepository<Order, Long>,
             WHERE o.expert_id = :expertId AND u.deleted = false AND o.deleted = false
             AND o.status IN ('COMPLETED', 'PAID')
             """, nativeQuery = true)
-    List<Order> findDoneOrdersByExpert_Id(@Param("expertId") Long id);
+    List<Order> findDoneOrdersByExpertId(@Param("expertId") Long id);
+
+    @Query(value = """
+            SELECT count(o.id) FROM home.order o
+            JOIN home.expert e ON o.expert_id = e.id
+            JOIN home."user" u ON e.id = u.id
+            WHERE o.expert_id = :expertId AND u.deleted = false AND o.deleted = false
+            """, nativeQuery = true)
+    int countOrderByExpert_Id(@Param("expertId") Long id);
+
+    @Query(value = """
+            SELECT count(o.id) FROM home.order o
+            JOIN home.expert e ON o.expert_id = e.id
+            JOIN home."user" u ON e.id = u.id
+            WHERE o.expert_id = :expertId AND u.deleted = false AND o.deleted = false
+            AND o.status IN ('COMPLETED', 'PAID')
+            """, nativeQuery = true)
+    int countDoneOrderByExpertId (@Param("expertId") Long id);
 
     List<Order> findBySubService_IdIn(List<Long> ids);
 }

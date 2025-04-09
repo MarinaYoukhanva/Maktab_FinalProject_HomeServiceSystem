@@ -1,10 +1,12 @@
 package com.freshome.service.impl;
 
+import com.freshome.dto.customer.CustomerWithOrdersReportDTO;
 import com.freshome.dto.order.*;
 import com.freshome.entity.Customer;
 import com.freshome.entity.Expert;
 import com.freshome.entity.Order;
 import com.freshome.entity.SubService;
+import com.freshome.entity.entityMapper.CustomerMapper;
 import com.freshome.entity.entityMapper.OrderMapper;
 import com.freshome.entity.enumeration.OrderStatus;
 import com.freshome.exception.InvalidPriceException;
@@ -87,7 +89,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    @Transactional (readOnly = true)
+    @Transactional(readOnly = true)
     public List<OrderResponseDTO> findAllByCustomerId(Long customerId) {
         return orderRepository.findByCustomer_Id(customerId)
                 .stream().map(OrderMapper::dtoFromOrder)
@@ -95,7 +97,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    @Transactional (readOnly = true)
+    @Transactional(readOnly = true)
     public List<OrderResponseDTO> findAllByExpertId(Long expertId) {
         return orderRepository.findByExpert_Id(expertId)
                 .stream().map(OrderMapper::dtoFromOrder)
@@ -108,7 +110,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    @Transactional (readOnly = true)
+    @Transactional(readOnly = true)
     public List<OrderResponseDTO> findAllBySubServiceIds(List<Long> subServiceIds) {
 //        if (subServiceIds == null || subServiceIds.isEmpty())
 //            throw new NotFoundException(" ");
@@ -147,7 +149,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public OrderResponseDTO startOrder(Long orderId){
+    public OrderResponseDTO startOrder(Long orderId) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new NotFoundException(Order.class, orderId));
         order.setStatus(OrderStatus.STARTED);
@@ -169,20 +171,54 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    @Transactional (readOnly = true)
-    public List<OrderHistoryDTO> showOrderHistoryForExpert(Long expertId){
-        List<Order> orders = orderRepository.findDoneOrdersByExpert_Id(expertId);
+    @Transactional(readOnly = true)
+    public List<OrderHistoryDTO> showOrderHistoryForExpert(Long expertId) {
+        List<Order> orders = orderRepository.findDoneOrdersByExpertId(expertId);
         return orders
                 .stream().map(OrderMapper::historyFromOrder)
                 .toList();
     }
 
     @Override
-    @Transactional (readOnly = true)
-    public List<OrderHistoryDTO> showOrderHistoryForCustomer(Long customerId){
-        return orderRepository.findDoneOrdersByCustomer_Id(customerId)
+    @Transactional(readOnly = true)
+    public List<OrderHistoryDTO> showOrderHistoryForCustomer(Long customerId) {
+        return orderRepository.findDoneOrdersByCustomerId(customerId)
                 .stream().map(OrderMapper::historyFromOrder)
-                .toList();    }
+                .toList();
+    }
+
+
+    @Override
+    public int countOrdersByExpertId(Long expertId){
+        return orderRepository.countOrderByExpert_Id(expertId);
+    }
+
+    @Override
+    public int countDoneOrdersByExpertId(Long expertId){
+        return orderRepository.countDoneOrderByExpertId(expertId);
+    }
+
+    @Override
+    public CustomerWithOrdersReportDTO getCustomerOrdersReport(Long customerId){
+        Customer customer = customerService.findOptionalCustomerById(customerId)
+                .orElseThrow(() -> new NotFoundException(Customer.class, customerId));
+        return CustomerMapper.reportDtoFromCustomer(
+                customer,
+                orderRepository.countOrderByCustomer_Id(customerId),
+                orderRepository.countDoneOrderByCustomerId(customerId)
+        );
+    }
+
+    @Override
+    public List<CustomerWithOrdersReportDTO> getAllCustomersOrdersReports(){
+        return customerService.findAll()
+                .stream().map(
+                        customer -> CustomerMapper.reportDtoFromCustomer(
+                        customer,
+                        orderRepository.countOrderByCustomer_Id(customer.getId()),
+                        orderRepository.countDoneOrderByCustomerId(customer.getId())
+                )).toList();
+    }
 
     @Transactional
     @Override

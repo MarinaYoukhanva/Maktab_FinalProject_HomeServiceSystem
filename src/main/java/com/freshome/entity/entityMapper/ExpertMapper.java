@@ -1,5 +1,6 @@
 package com.freshome.entity.entityMapper;
 
+import com.freshome.dto.expert.ExpertWithOrdersReportDTO;
 import com.freshome.entity.Expert;
 import com.freshome.dto.expert.ExpertCreatDTO;
 import com.freshome.dto.expert.ExpertResponseDTO;
@@ -42,6 +43,26 @@ public class ExpertMapper {
 //                expert.getProfileImage(),
                 expert.getScore()
 //                expert.getCredit().getId()
+        );
+    }
+
+    public static ExpertWithOrdersReportDTO reportDtoFromExpert (
+            Expert expert,
+            int countAllOrders,
+            int countDoneOrders,
+            int countOffers) {
+        return new ExpertWithOrdersReportDTO(
+                expert.getId(),
+                expert.getFirstname(),
+                expert.getLastname(),
+                expert.getEmail(),
+                expert.getStatus(),
+                expert.getPhoneNumber(),
+                expert.getScore(),
+                expert.getRegisterDateTime(),
+                countAllOrders,
+                countDoneOrders,
+                countOffers
         );
     }
 }

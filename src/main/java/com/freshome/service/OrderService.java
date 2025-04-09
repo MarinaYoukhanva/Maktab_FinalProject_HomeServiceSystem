@@ -1,5 +1,6 @@
 package com.freshome.service;
 
+import com.freshome.dto.customer.CustomerWithOrdersReportDTO;
 import com.freshome.dto.order.*;
 import com.freshome.entity.Order;
 import jakarta.validation.Valid;
@@ -42,6 +43,15 @@ public interface OrderService {
     List<OrderHistoryDTO> showOrderHistoryForExpert(Long expertId);
 
     List<OrderHistoryDTO> showOrderHistoryForCustomer(Long customerId);
+
+
+    int countOrdersByExpertId(Long expertId);
+
+    int countDoneOrdersByExpertId(Long expertId);
+
+    CustomerWithOrdersReportDTO getCustomerOrdersReport(Long customerId);
+
+    List<CustomerWithOrdersReportDTO> getAllCustomersOrdersReports();
 
     void deleteOrderById(Long id);
 }

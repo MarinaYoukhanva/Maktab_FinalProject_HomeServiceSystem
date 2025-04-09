@@ -1,5 +1,6 @@
 package com.freshome.service.impl;
 
+import com.freshome.dto.expert.ExpertWithOrdersReportDTO;
 import com.freshome.dto.offer.OfferResponseWithExpertDTO;
 import com.freshome.entity.Expert;
 import com.freshome.entity.Offer;
@@ -7,6 +8,7 @@ import com.freshome.entity.Order;
 import com.freshome.dto.offer.OfferCreateDTO;
 import com.freshome.dto.offer.OfferResponseDTO;
 import com.freshome.dto.offer.OfferUpdateDTO;
+import com.freshome.entity.entityMapper.ExpertMapper;
 import com.freshome.entity.entityMapper.OfferMapper;
 import com.freshome.entity.enumeration.OrderStatus;
 import com.freshome.exception.NotFoundException;
@@ -74,7 +76,7 @@ public class OfferServiceImpl implements OfferService {
     public List<OfferResponseWithExpertDTO> findAllOffersWithExpert() {
         return offerRepository.findAll()
                 .stream().map(
-                OfferMapper::dtoWithExpertFromOffer).toList();
+                        OfferMapper::dtoWithExpertFromOffer).toList();
     }
 
     @Override
@@ -97,6 +99,30 @@ public class OfferServiceImpl implements OfferService {
         return OfferMapper.dtoFromOffer(
                 offerRepository.save(offer)
         );
+    }
+
+    @Override
+    public ExpertWithOrdersReportDTO getExpertOrdersReport(Long expertId) {
+        Expert expert = expertService.findOptionalExpertById(expertId)
+                .orElseThrow(() -> new NotFoundException(Expert.class, expertId));
+        return ExpertMapper.reportDtoFromExpert(
+                expert,
+                orderService.countOrdersByExpertId(expertId),
+                orderService.countDoneOrdersByExpertId(expertId),
+                offerRepository.countByExpert_Id(expertId)
+        );
+    }
+
+    @Override
+    public List<ExpertWithOrdersReportDTO> getAllExpertsOrdersReports() {
+        return expertService.findAll()
+                .stream().map(
+                        expert -> ExpertMapper.reportDtoFromExpert(
+                                expert,
+                                orderService.countOrdersByExpertId(expert.getId()),
+                                orderService.countDoneOrdersByExpertId(expert.getId()),
+                                offerRepository.countByExpert_Id(expert.getId()))
+                ).toList();
     }
 
     @Override

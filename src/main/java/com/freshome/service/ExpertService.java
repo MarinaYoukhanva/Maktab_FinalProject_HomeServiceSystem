@@ -29,6 +29,8 @@ public interface ExpertService {
 
     Optional<Expert> findOptionalExpertById(Long id);
 
+    List<Expert> findAll();
+
     List<ExpertResponseDTO> findAllExperts();
 
     void deleteExpertById(Long id);
