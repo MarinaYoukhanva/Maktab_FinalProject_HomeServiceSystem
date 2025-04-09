@@ -29,7 +29,7 @@ public interface OrderService {
 
     List<OrderResponseDTO> findAllBySubServiceIds(List<Long> subServiceIds);
 
-    List<OrderResponseDTO> searchOrder(
+    List<OrderResponseWithServiceDTO> searchOrder(
             OrderSearchDTO searchDTO
     );
 

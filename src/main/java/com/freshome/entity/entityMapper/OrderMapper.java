@@ -1,6 +1,7 @@
 package com.freshome.entity.entityMapper;
 
 import com.freshome.dto.order.OrderHistoryDTO;
+import com.freshome.dto.order.OrderResponseWithServiceDTO;
 import com.freshome.entity.Offer;
 import com.freshome.entity.Order;
 import com.freshome.dto.order.OrderCreateDTO;
@@ -37,6 +38,22 @@ public class OrderMapper {
 //                order.getCustomer().getId(),
 //                order.getExpert().getId(),
 //                order.getSubService().getId()
+        );
+    }
+
+    public static OrderResponseWithServiceDTO dtoWithServiceFromOrder(Order order) {
+        return new OrderResponseWithServiceDTO(
+                order.getId(),
+                order.getSuggestedPriceByCustomer(),
+                order.getDescription(),
+                order.getOrderPlacementDateTime(),
+                order.getOrderExecutionDateTime(),
+                order.getAddress(),
+                order.getStatus(),
+                order.getSubService().getId(),
+                order.getSubService().getName(),
+                order.getSubService().getCategory().getId(),
+                order.getSubService().getCategory().getName()
         );
     }
 

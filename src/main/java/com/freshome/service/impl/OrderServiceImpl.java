@@ -118,7 +118,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<OrderResponseDTO> searchOrder(
+    public List<OrderResponseWithServiceDTO> searchOrder(
             OrderSearchDTO searchDTO
     ) {
         return orderRepository.findAll(
@@ -128,7 +128,7 @@ public class OrderServiceImpl implements OrderService {
                                 searchDTO.orderStatus(),
                                 searchDTO.serviceCategory(),
                                 searchDTO.subService())
-                ).stream().map(OrderMapper::dtoFromOrder)
+                ).stream().map(OrderMapper::dtoWithServiceFromOrder)
                 .toList();
     }
 

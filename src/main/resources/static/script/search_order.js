@@ -87,6 +87,8 @@ document.addEventListener("DOMContentLoaded", function () {
                         : "N/A"}
                     </td>
                     <td class="px-4 py-2">${order.status}</td>
+                    <td class="px-4 py-2">${order.serviceCategoryName}</td>
+                    <td class="px-4 py-2">${order.subServiceName}</td>
                 `;
                     tbody.appendChild(tr);
                 });

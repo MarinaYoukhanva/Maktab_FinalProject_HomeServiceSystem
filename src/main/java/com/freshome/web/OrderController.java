@@ -1,9 +1,6 @@
 package com.freshome.web;
 
-import com.freshome.dto.order.OrderHistoryDTO;
-import com.freshome.dto.order.OrderCreateDTO;
-import com.freshome.dto.order.OrderResponseDTO;
-import com.freshome.dto.order.OrderSearchDTO;
+import com.freshome.dto.order.*;
 import com.freshome.service.OrderService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -74,7 +71,7 @@ public class OrderController {
     }
 
     @PostMapping("/search")
-    public ResponseEntity<List<OrderResponseDTO>> searchOrders (
+    public ResponseEntity<List<OrderResponseWithServiceDTO>> searchOrders (
             @RequestBody OrderSearchDTO searchDTO
     ){
         return ResponseEntity.ok(
