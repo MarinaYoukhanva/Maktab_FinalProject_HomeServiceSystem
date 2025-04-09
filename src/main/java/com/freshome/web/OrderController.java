@@ -1,5 +1,6 @@
 package com.freshome.web;
 
+import com.freshome.dto.order.OrderHistoryDTO;
 import com.freshome.dto.order.OrderCreateDTO;
 import com.freshome.dto.order.OrderResponseDTO;
 import com.freshome.dto.order.OrderSearchDTO;
@@ -7,7 +8,6 @@ import com.freshome.service.OrderService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.method.P;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -107,6 +107,24 @@ public class OrderController {
     ){
         return ResponseEntity.ok(
                 orderService.executeOrder(orderId)
+        );
+    }
+
+    @GetMapping("/find/all/history_for_expert/{expertId}")
+    public ResponseEntity<List<OrderHistoryDTO>> showOrderHistoryForExpert(
+            @PathVariable Long expertId
+    ){
+        return ResponseEntity.ok(
+                orderService.showOrderHistoryForExpert(expertId)
+        );
+    }
+
+    @GetMapping("/find/all/history_for_customer/{customerId}")
+    public ResponseEntity<List<OrderHistoryDTO>> showOrderHistoryForCustomer(
+            @PathVariable Long customerId
+    ){
+        return ResponseEntity.ok(
+                orderService.showOrderHistoryForCustomer(customerId)
         );
     }
 }

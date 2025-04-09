@@ -1,12 +1,8 @@
 package com.freshome.service;
 
-import com.freshome.dto.order.OrderSearchDTO;
+import com.freshome.dto.order.*;
 import com.freshome.entity.Order;
-import com.freshome.dto.order.OrderCreateDTO;
-import com.freshome.dto.order.OrderResponseDTO;
-import com.freshome.dto.order.OrderUpdateDTO;
 import jakarta.validation.Valid;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
@@ -42,6 +38,10 @@ public interface OrderService {
     OrderResponseDTO startOrder(Long orderId);
 
     OrderResponseDTO executeOrder(Long orderId);
+
+    List<OrderHistoryDTO> showOrderHistoryForExpert(Long expertId);
+
+    List<OrderHistoryDTO> showOrderHistoryForCustomer(Long customerId);
 
     void deleteOrderById(Long id);
 }

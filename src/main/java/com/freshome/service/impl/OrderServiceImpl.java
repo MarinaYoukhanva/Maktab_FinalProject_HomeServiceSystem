@@ -1,15 +1,13 @@
 package com.freshome.service.impl;
 
-import com.freshome.dto.order.OrderSearchDTO;
+import com.freshome.dto.order.*;
 import com.freshome.entity.Customer;
 import com.freshome.entity.Expert;
 import com.freshome.entity.Order;
 import com.freshome.entity.SubService;
-import com.freshome.dto.order.OrderCreateDTO;
-import com.freshome.dto.order.OrderResponseDTO;
-import com.freshome.dto.order.OrderUpdateDTO;
 import com.freshome.entity.entityMapper.OrderMapper;
 import com.freshome.entity.enumeration.OrderStatus;
+import com.freshome.exception.InvalidPriceException;
 import com.freshome.exception.NotFoundException;
 import com.freshome.repository.OrderRepository;
 import com.freshome.service.CustomerService;
@@ -46,6 +44,8 @@ public class OrderServiceImpl implements OrderService {
 //                .orElseThrow(() -> new NotFoundException(Expert.class, orderCreateDTO.expertId()));
         SubService subService = subServiceService.findOptionalSubServiceById(orderCreateDTO.subServiceId())
                 .orElseThrow(() -> new NotFoundException(SubService.class, orderCreateDTO.subServiceId()));
+        if (orderCreateDTO.suggestedPriceByCustomer() < subService.getBasePrice())
+            throw new InvalidPriceException();
         order.setCustomer(customer);
 //        order.setExpert(expert);
         order.setSubService(subService);
@@ -87,7 +87,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    @Transactional
+    @Transactional (readOnly = true)
     public List<OrderResponseDTO> findAllByCustomerId(Long customerId) {
         return orderRepository.findByCustomer_Id(customerId)
                 .stream().map(OrderMapper::dtoFromOrder)
@@ -95,7 +95,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    @Transactional
+    @Transactional (readOnly = true)
     public List<OrderResponseDTO> findAllByExpertId(Long expertId) {
         return orderRepository.findByExpert_Id(expertId)
                 .stream().map(OrderMapper::dtoFromOrder)
@@ -108,7 +108,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    @Transactional
+    @Transactional (readOnly = true)
     public List<OrderResponseDTO> findAllBySubServiceIds(List<Long> subServiceIds) {
 //        if (subServiceIds == null || subServiceIds.isEmpty())
 //            throw new NotFoundException(" ");
@@ -167,6 +167,22 @@ public class OrderServiceImpl implements OrderService {
                 orderRepository.save(order)
         );
     }
+
+    @Override
+    @Transactional (readOnly = true)
+    public List<OrderHistoryDTO> showOrderHistoryForExpert(Long expertId){
+        List<Order> orders = orderRepository.findDoneOrdersByExpert_Id(expertId);
+        return orders
+                .stream().map(OrderMapper::historyFromOrder)
+                .toList();
+    }
+
+    @Override
+    @Transactional (readOnly = true)
+    public List<OrderHistoryDTO> showOrderHistoryForCustomer(Long customerId){
+        return orderRepository.findDoneOrdersByCustomer_Id(customerId)
+                .stream().map(OrderMapper::historyFromOrder)
+                .toList();    }
 
     @Transactional
     @Override

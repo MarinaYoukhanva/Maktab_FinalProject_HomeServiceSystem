@@ -1,5 +1,7 @@
 package com.freshome.entity.entityMapper;
 
+import com.freshome.dto.order.OrderHistoryDTO;
+import com.freshome.entity.Offer;
 import com.freshome.entity.Order;
 import com.freshome.dto.order.OrderCreateDTO;
 import com.freshome.dto.order.OrderResponseDTO;
@@ -35,6 +37,39 @@ public class OrderMapper {
 //                order.getCustomer().getId(),
 //                order.getExpert().getId(),
 //                order.getSubService().getId()
+        );
+    }
+
+    public static OrderHistoryDTO historyFromOrder(Order order) {
+        Offer selectedOffer = order.getOffers().stream().filter(
+                o -> o.getExpert().getId().equals(order.getExpert().getId())
+        ).findFirst().orElse(null);
+        return new OrderHistoryDTO(
+                order.getId(),
+                order.getSuggestedPriceByCustomer(),
+                order.getDescription(),
+                order.getOrderPlacementDateTime(),
+                order.getOrderExecutionDateTime(),
+                order.getAddress(),
+                order.getStatus(),
+
+                selectedOffer != null ? selectedOffer.getId() : null,
+                selectedOffer != null ? selectedOffer.getOfferRegisterDateTime() : null,
+                selectedOffer != null ? selectedOffer.getSuggestedPriceByExpert() : null,
+                selectedOffer != null ? selectedOffer.getDurationInHours() : null,
+                selectedOffer != null ? selectedOffer.getStartDateTime() : null,
+
+                order.getSubService().getId(),
+                order.getSubService().getName(),
+
+                order.getCustomer().getId(),
+                order.getCustomer().getFirstname(),
+                order.getCustomer().getLastname(),
+
+                order.getExpert().getId(),
+                order.getExpert().getFirstname(),
+                order.getExpert().getLastname(),
+                order.getExpert().getScore()
         );
     }
 }

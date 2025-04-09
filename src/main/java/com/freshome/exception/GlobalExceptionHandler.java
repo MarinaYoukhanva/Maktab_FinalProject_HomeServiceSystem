@@ -113,4 +113,15 @@ public class GlobalExceptionHandler extends
                         "message", ex.getMessage(),
                         "timestamp", LocalDateTime.now().toString()));
     }
+
+    @ExceptionHandler(InvalidPriceException.class)
+    public ResponseEntity<Map<String, String>> handleInvalidPriceException(InvalidPriceException ex) {
+        log.error(ex.getMessage());
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(Map.of(
+                        "message", ex.getMessage(),
+                        "timestamp", LocalDateTime.now().toString()));
+    }
 }
