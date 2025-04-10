@@ -2,6 +2,7 @@ package com.freshome.web;
 
 import com.freshome.dto.CardInfoDTO;
 import com.freshome.exception.InvalidCaptchaException;
+import com.freshome.exception.PaymentSessionExpiredException;
 import com.freshome.service.PaymentService;
 import com.wf.captcha.SpecCaptcha;
 import com.wf.captcha.base.Captcha;
@@ -10,12 +11,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.BadRequestException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.io.IOException;
 
@@ -29,12 +28,12 @@ public class PaymentController {
 
     @GetMapping("/order_price/{orderId}")
     public ResponseEntity<Double> getOrderPaymentAmount(
-            @PathVariable Long orderId
+            @PathVariable Long orderId,
+            HttpSession session
     ){
+        session.setAttribute("paymentStartTime", System.currentTimeMillis());
         return ResponseEntity.ok(
-                paymentService.getOrderPaymentInfo(orderId)
-                        .paymentAmount()
-        );
+                paymentService.getOrderPaymentInfo(orderId).paymentAmount());
     }
 
     @PostMapping("/pay_with_card/{orderId}")
@@ -44,10 +43,17 @@ public class PaymentController {
             @RequestParam String captchaInput,
             HttpSession session
     ) {
+        Long paymentStartTime = (Long) session.getAttribute("paymentStartTime");
+        if (paymentStartTime == null || System.currentTimeMillis() - paymentStartTime >  10 * 60 * 1000) {
+            throw new PaymentSessionExpiredException();
+        }
         String storedCaptcha = (String) session.getAttribute("captcha");
         paymentService.validateCaptcha(storedCaptcha, captchaInput);
-        return ResponseEntity.ok(
-                paymentService.payFromCard(orderId));
+
+        Double result = paymentService.payFromCard(orderId);
+        session.removeAttribute("paymentStartTime");
+
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping("/pay_with_credit/{orderId}")
