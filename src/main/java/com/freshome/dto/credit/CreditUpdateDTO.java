@@ -13,6 +13,6 @@ public record CreditUpdateDTO(
         Long id,
 
         @PositiveOrZero
-        Long balance
+        Double balance
 ) {
 }

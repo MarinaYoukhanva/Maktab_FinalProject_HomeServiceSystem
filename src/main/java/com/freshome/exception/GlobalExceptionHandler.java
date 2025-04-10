@@ -93,29 +93,10 @@ public class GlobalExceptionHandler extends
                         "message", ex.getMessage()));
     }
 
-    @ExceptionHandler(ChangePasswordException.class)
-    public ResponseEntity<Map<String, String>> handleChangePasswordException(ChangePasswordException ex) {
-        log.error(ex.getMessage());
 
-        return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body(Map.of(
-                        "message", ex.getMessage()));
-    }
-
-    @ExceptionHandler(NotCompletedOrderException.class)
-    public ResponseEntity<Map<String, String>> handleNotCompletedOrderException(NotCompletedOrderException ex) {
-        log.error(ex.getMessage());
-
-        return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body(Map.of(
-                        "message", ex.getMessage(),
-                        "timestamp", LocalDateTime.now().toString()));
-    }
-
-    @ExceptionHandler(InvalidPriceException.class)
-    public ResponseEntity<Map<String, String>> handleInvalidPriceException(InvalidPriceException ex) {
+    @ExceptionHandler(BusinessBadRequestException.class)
+    public ResponseEntity<Map<String, String>> handleBusinessBadRequestException(
+            BusinessBadRequestException ex) {
         log.error(ex.getMessage());
 
         return ResponseEntity

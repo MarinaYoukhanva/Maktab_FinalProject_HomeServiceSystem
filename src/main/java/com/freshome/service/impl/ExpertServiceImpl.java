@@ -54,7 +54,7 @@ public class ExpertServiceImpl implements ExpertService {
 
         Expert expert = ExpertMapper.expertFromDto(expertCreatDTO);
 //        expert.setProfileImage(photo.getBytes());
-        Credit credit = creditService.createReturnCredit(new CreditCreateDTO(0L));
+        Credit credit = creditService.createReturnCredit(new CreditCreateDTO(0.0));
         expert.setCredit(credit);
 //        expert.setScore(0.0);
 

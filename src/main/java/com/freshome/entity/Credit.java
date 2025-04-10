@@ -17,5 +17,5 @@ import lombok.experimental.SuperBuilder;
 public class Credit extends BaseEntity<Long> {
 
     @Column(nullable = false)
-    Long balance;
+    Double balance;
 }

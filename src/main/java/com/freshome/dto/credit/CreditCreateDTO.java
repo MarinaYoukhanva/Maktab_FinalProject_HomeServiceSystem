@@ -8,6 +8,6 @@ public record CreditCreateDTO(
 
         @NotNull(message = "balance can not be null! ")
         @PositiveOrZero
-        Long balance
+        Double balance
 ) {
 }

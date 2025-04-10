@@ -50,7 +50,7 @@ public class CustomerServiceImpl implements CustomerService {
             throw new ExistenceException("phoneNumber");
 
         Customer customer = CustomerMapper.customerFromDto(customerCreateDTO);
-        Credit credit = creditService.createReturnCredit(new CreditCreateDTO(0L));
+        Credit credit = creditService.createReturnCredit(new CreditCreateDTO(0.0));
         customer.setCredit(credit);
 
         Customer savedCustomer = customerRepository.save(customer);
