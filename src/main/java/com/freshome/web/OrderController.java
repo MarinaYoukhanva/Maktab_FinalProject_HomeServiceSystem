@@ -141,4 +141,13 @@ public class OrderController {
                 orderService.getAllCustomersOrdersReports()
         );
     }
+
+    @GetMapping("/find/all/filter_reports")
+    public ResponseEntity<List<CustomerWithOrdersReportDTO>> filterAllCustomerOrdersReports (
+            @RequestBody ReportSearchDTO searchDTO
+    ){
+        return ResponseEntity.ok(
+                orderService.filterAllCustomersOrdersReports(searchDTO)
+        );
+    }
 }

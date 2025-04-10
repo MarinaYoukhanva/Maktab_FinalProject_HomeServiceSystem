@@ -53,5 +53,9 @@ public interface OrderService {
 
     List<CustomerWithOrdersReportDTO> getAllCustomersOrdersReports();
 
+    List<CustomerWithOrdersReportDTO> filterAllCustomersOrdersReports(
+            ReportSearchDTO searchDTO
+    );
+
     void deleteOrderById(Long id);
 }

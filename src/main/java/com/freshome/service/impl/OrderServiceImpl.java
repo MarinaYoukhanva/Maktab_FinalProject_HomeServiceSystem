@@ -189,17 +189,17 @@ public class OrderServiceImpl implements OrderService {
 
 
     @Override
-    public int countOrdersByExpertId(Long expertId){
+    public int countOrdersByExpertId(Long expertId) {
         return orderRepository.countOrderByExpert_Id(expertId);
     }
 
     @Override
-    public int countDoneOrdersByExpertId(Long expertId){
+    public int countDoneOrdersByExpertId(Long expertId) {
         return orderRepository.countDoneOrderByExpertId(expertId);
     }
 
     @Override
-    public CustomerWithOrdersReportDTO getCustomerOrdersReport(Long customerId){
+    public CustomerWithOrdersReportDTO getCustomerOrdersReport(Long customerId) {
         Customer customer = customerService.findOptionalCustomerById(customerId)
                 .orElseThrow(() -> new NotFoundException(Customer.class, customerId));
         return CustomerMapper.reportDtoFromCustomer(
@@ -210,14 +210,40 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<CustomerWithOrdersReportDTO> getAllCustomersOrdersReports(){
+    public List<CustomerWithOrdersReportDTO> getAllCustomersOrdersReports() {
         return customerService.findAll()
                 .stream().map(
                         customer -> CustomerMapper.reportDtoFromCustomer(
-                        customer,
-                        orderRepository.countOrderByCustomer_Id(customer.getId()),
-                        orderRepository.countDoneOrderByCustomerId(customer.getId())
-                )).toList();
+                                customer,
+                                orderRepository.countOrderByCustomer_Id(customer.getId()),
+                                orderRepository.countDoneOrderByCustomerId(customer.getId())
+                        )).toList();
+    }
+
+    @Override
+    public List<CustomerWithOrdersReportDTO> filterAllCustomersOrdersReports(
+            ReportSearchDTO searchDTO
+    ) {
+        return getAllCustomersOrdersReports()
+                .stream().filter(report -> {
+                            boolean isAfterRegisterDateFrom = (searchDTO.registerDateFrom() == null
+                                    || !report.registerDateTime().isBefore(searchDTO.registerDateFrom()));
+                            boolean isBeforeRegisterDateTo = (searchDTO.registerDateTo() == null
+                                    || !report.registerDateTime().isAfter(searchDTO.registerDateTo()));
+                            boolean matchesMinOrderCount = (searchDTO.minOrderCount() == null
+                                    || report.countPlacedOrders() >= searchDTO.minOrderCount());
+                            boolean matchesMaxOrderCount = (searchDTO.maxOrderCount() == null
+                                    || report.countPlacedOrders() <= searchDTO.maxOrderCount());
+                            boolean matchesMinDoneOrderCount = (searchDTO.minDoneOrderCount() == null
+                                    || report.countDoneOrders() >= searchDTO.minDoneOrderCount());
+                            boolean matchesMaxDoneOrderCount = (searchDTO.maxDoneOrderCount() == null
+                                    || report.countDoneOrders() <= searchDTO.maxDoneOrderCount());
+
+                            return isAfterRegisterDateFrom && isBeforeRegisterDateTo
+                                    && matchesMinOrderCount && matchesMaxOrderCount
+                                    && matchesMinDoneOrderCount && matchesMaxDoneOrderCount;
+                        }
+                ).toList();
     }
 
     @Transactional
