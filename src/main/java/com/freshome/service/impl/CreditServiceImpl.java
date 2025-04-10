@@ -1,11 +1,13 @@
 package com.freshome.service.impl;
 
+import com.freshome.dto.credit.CreditChargeOrWithdrawDTO;
 import com.freshome.entity.Credit;
 import com.freshome.entity.Customer;
 import com.freshome.dto.credit.CreditCreateDTO;
 import com.freshome.dto.credit.CreditResponseDTO;
 import com.freshome.dto.credit.CreditUpdateDTO;
 import com.freshome.entity.entityMapper.CreditMapper;
+import com.freshome.exception.NotEnoughBalanceException;
 import com.freshome.exception.NotFoundException;
 import com.freshome.repository.CreditRepository;
 import com.freshome.service.CreditService;
@@ -69,6 +71,30 @@ public class CreditServiceImpl implements CreditService {
         if (!creditRepository.existsById(id))
             throw new NotFoundException(Customer.class, id);
         creditRepository.deleteById(id);
+    }
+
+    @Override
+    @Transactional
+    public CreditResponseDTO chargeCredit(CreditChargeOrWithdrawDTO chargeDto){
+        Credit credit = creditRepository.findById(chargeDto.id())
+                .orElseThrow(()-> new NotFoundException(Credit.class, chargeDto.id()));
+        credit.setBalance(credit.getBalance() + chargeDto.amount());
+        return CreditMapper.dtoFromCredit(
+                creditRepository.save(credit)
+        );
+    }
+
+    @Override
+    @Transactional
+    public CreditResponseDTO withdrawFromCredit(CreditChargeOrWithdrawDTO withdrawDto){
+        Credit credit = creditRepository.findById(withdrawDto.id())
+                .orElseThrow(()-> new NotFoundException(Credit.class, withdrawDto.id()));
+        if (credit.getBalance() < withdrawDto.amount())
+            throw new NotEnoughBalanceException();
+        credit.setBalance(credit.getBalance() - withdrawDto.amount());
+        return CreditMapper.dtoFromCredit(
+                creditRepository.save(credit)
+        );
     }
 
     private void updateFields(Credit credit, CreditUpdateDTO updateDTO) {

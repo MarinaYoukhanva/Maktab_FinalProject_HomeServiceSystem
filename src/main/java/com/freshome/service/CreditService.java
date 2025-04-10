@@ -1,5 +1,6 @@
 package com.freshome.service;
 
+import com.freshome.dto.credit.CreditChargeOrWithdrawDTO;
 import com.freshome.entity.Credit;
 import com.freshome.dto.credit.CreditCreateDTO;
 import com.freshome.dto.credit.CreditResponseDTO;
@@ -23,4 +24,8 @@ public interface CreditService {
     CreditResponseDTO updateCredit(@Valid CreditUpdateDTO updateDTO);
 
     void deleteCredit(Long id);
+
+    CreditResponseDTO chargeCredit(CreditChargeOrWithdrawDTO chargeDto);
+
+    CreditResponseDTO withdrawFromCredit(CreditChargeOrWithdrawDTO withdrawDto);
 }
