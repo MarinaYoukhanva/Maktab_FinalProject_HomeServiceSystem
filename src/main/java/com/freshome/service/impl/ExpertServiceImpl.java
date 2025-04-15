@@ -9,21 +9,20 @@ import com.freshome.dto.credit.CreditCreateDTO;
 import com.freshome.dto.expert.ExpertCreatDTO;
 import com.freshome.dto.expert.ExpertResponseDTO;
 import com.freshome.dto.expert.ExpertUpdateDTO;
+import com.freshome.entity.Role;
 import com.freshome.entity.SubService;
 import com.freshome.entity.entityMapper.CreditMapper;
 import com.freshome.entity.entityMapper.ExpertMapper;
 import com.freshome.entity.entityMapper.SubServiceMapper;
-import com.freshome.exception.ChangePasswordException;
 import com.freshome.exception.ExistenceException;
 import com.freshome.exception.NotFoundException;
 import com.freshome.repository.ExpertRepository;
-import com.freshome.service.CreditService;
-import com.freshome.service.ExpertService;
-import com.freshome.service.SubServiceService;
-import com.freshome.specification.ExpertSpecification;
+import com.freshome.service.*;
+import com.freshome.service.specification.ExpertSpecification;
+import com.freshome.service.verification.ExpertVerificationService;
+import com.freshome.service.verification.VerificationTokenService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -35,32 +34,34 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-//@Transactional
 public class ExpertServiceImpl implements ExpertService {
 
     private final ExpertRepository expertRepository;
-    private final PasswordEncoder passwordEncoder;
     private final CreditService creditService;
     private final SubServiceService subServiceService;
+    private final UserService userService;
+    private final RoleService roleService;
+    private final ExpertVerificationService expertVerificationService;
 
     @Override
     @Transactional
     public ExpertResponseDTO createExpert(ExpertCreatDTO expertCreatDTO) throws IOException {
         log.info("create expert in service triggered");
-        if (expertRepository.existsByEmail(expertCreatDTO.getEmail()))
-            throw new ExistenceException("email");
+
+        Role role = roleService.findByName(Role.EXPERT);
+        Expert expert = ExpertMapper.expertFromDto(expertCreatDTO);
+        expert.getUser().getRoles().add(role);
+
         if (expertRepository.existsByPhoneNumber(expertCreatDTO.getPhoneNumber()))
             throw new ExistenceException("phoneNumber");
 
-        Expert expert = ExpertMapper.expertFromDto(expertCreatDTO);
-//        expert.setProfileImage(photo.getBytes());
+        userService.save(expert.getUser());
         Credit credit = creditService.createReturnCredit(new CreditCreateDTO(0.0));
         expert.setCredit(credit);
-//        expert.setScore(0.0);
 
-        return ExpertMapper.dtoFromExpert(
-                expertRepository.save(expert)
-        );
+        Expert savedExpert = expertRepository.save(expert);
+        expertVerificationService.sendVerificationEmail(expert.getUser());
+        return ExpertMapper.dtoFromExpert(savedExpert);
     }
 
 //    @Override
@@ -96,8 +97,9 @@ public class ExpertServiceImpl implements ExpertService {
     @Override
     @Transactional
     public void deleteExpertById(Long id) {
-        if (!expertRepository.existsById(id))
-            throw new NotFoundException(Expert.class, id);
+        Expert expert = expertRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(Expert.class, id));
+        userService.removeRoleAndDeleteUserIfEmptyRoles(expert.getUser(), Role.EXPERT);
         expertRepository.deleteById(id);
     }
 
@@ -107,6 +109,7 @@ public class ExpertServiceImpl implements ExpertService {
         Expert expert = expertRepository.findById(updateDTO.getId())
                 .orElseThrow(() -> new NotFoundException(Expert.class, updateDTO.getId()));
         updateFields(expert, updateDTO);
+        userService.update(expert.getUser(), updateDTO);
         return ExpertMapper.dtoFromExpert(
                 expertRepository.save(expert));
     }
@@ -129,11 +132,9 @@ public class ExpertServiceImpl implements ExpertService {
     public void changePassword(Long expertId, ChangePasswordDTO dto) {
         Expert expert = expertRepository.findById(expertId)
                 .orElseThrow(() -> new NotFoundException(Expert.class, expertId));
-        if (dto.oldPassword().equals(dto.newPassword())
-                || !passwordEncoder.matches(dto.oldPassword(), expert.getPassword()))
-            throw new ChangePasswordException();
-        expert.setPassword(passwordEncoder.encode(dto.newPassword()));
-        expertRepository.save(expert);
+        userService.changePassword(
+                expert.getUser(), dto.oldPassword(), dto.newPassword()
+        );
     }
 
     @Override
@@ -180,23 +181,14 @@ public class ExpertServiceImpl implements ExpertService {
     }
 
     private void updateFields(Expert expert, ExpertUpdateDTO updateDTO) {
-        if (StringUtils.hasText(updateDTO.getFirstname()))
-            expert.setFirstname(updateDTO.getFirstname());
-
-        if (StringUtils.hasText(updateDTO.getLastname()))
-            expert.setLastname(updateDTO.getLastname());
-
-        if (StringUtils.hasText(updateDTO.getEmail())) {
-            if (expertRepository.existsByEmail(updateDTO.getEmail()))
-                throw new ExistenceException("email");
-            expert.setEmail(updateDTO.getEmail());
-        }
-
         if (updateDTO.getStatus() != null)
             expert.setStatus(updateDTO.getStatus());
 
-        if (StringUtils.hasText(updateDTO.getPhoneNumber()))
+        if (StringUtils.hasText(updateDTO.getPhoneNumber())) {
+            if (expertRepository.existsByPhoneNumber(updateDTO.getPhoneNumber()))
+                throw new ExistenceException("phoneNumber");
             expert.setPhoneNumber(updateDTO.getPhoneNumber());
+        }
 
 //        if (updateDTO.getProfileImage() != null)
 //            expert.setProfileImage(updateDTO.getProfileImage());

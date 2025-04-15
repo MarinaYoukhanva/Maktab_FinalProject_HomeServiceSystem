@@ -1,7 +1,6 @@
-package com.freshome.specification;
+package com.freshome.service.specification;
 
 import com.freshome.entity.*;
-import com.freshome.entity.Order;
 import jakarta.persistence.criteria.*;
 import jakarta.persistence.metamodel.SingularAttribute;
 import org.springframework.data.jpa.domain.Specification;
@@ -39,10 +38,16 @@ public class ExpertSpecification {
         List<Predicate> predicates = new ArrayList<>();
         return (((root, query, criteriaBuilder) -> {
             if (fields != null && !fields.isEmpty()) {
+                Join<Expert, User> userExpert = root.join("user");
                 for (int i = 0; i < fields.size(); i++) {
-                    predicates.add(criteriaBuilder.like(
-                            root.get(fields.get(i)), "%" + values.get(i) + "%"
-                    ));
+                    String field = fields.get(i);
+                    String value = values.get(i);
+                    if (isUserField(field))
+                        predicates.add(criteriaBuilder.like(
+                                userExpert.get(field), "%" + value + "%"));
+                    else
+                        predicates.add(criteriaBuilder.like(
+                                root.get(field), "%" + value + "%"));
                 }
             }
             if (expertise != null && !expertise.isEmpty()) {
@@ -59,5 +64,12 @@ public class ExpertSpecification {
             }
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         }));
+    }
+
+    private static boolean isUserField(String field) {
+        return field.equals("firstname")
+                || field.equals("lastname")
+                || field.equals("username")
+                || field.equals("email");
     }
 }

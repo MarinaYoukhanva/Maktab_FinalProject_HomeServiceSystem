@@ -1,17 +1,15 @@
-package com.freshome.specification;
+package com.freshome.service.specification;
 
-import com.freshome.entity.User;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import jakarta.persistence.metamodel.SingularAttribute;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class PredicatesCreator {
 
-    public static <T extends User> List<Predicate> create(
+    public static <T> List<Predicate> create(
             List<SingularAttribute<?, ?>> fields, List<Operator> operators, List<String> values,
             Root<T> root, CriteriaBuilder criteriaBuilder,List<Predicate> predicates
     ){

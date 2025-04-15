@@ -1,4 +1,4 @@
-package com.freshome.specification;
+package com.freshome.service.specification;
 
 public enum Operator {
     GREATER_THAN,

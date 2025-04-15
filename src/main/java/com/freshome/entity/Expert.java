@@ -1,9 +1,12 @@
 package com.freshome.entity;
 
+import com.freshome.entity.base.BaseEntity;
+import com.freshome.entity.enumeration.UserStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.SoftDelete;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,17 +18,23 @@ import java.util.List;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-//@SecondaryTable(name = "user", pkJoinColumns = @PrimaryKeyJoinColumn(name = "id"))
-public class Expert extends User {
+@SoftDelete
+public class Expert extends BaseEntity<Long> {
+
+    @Column(unique = true, length = 15)
+    String phoneNumber;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    UserStatus status;
 
     @Lob
-//    @Column(columnDefinition = "BYTEA")
     byte[] profileImage;
 
-    // in getter -> average based on ratings
-//    @Transient
     Double score;
 
+    @OneToOne(optional = false, fetch = FetchType.EAGER)
+    User user;
 
     @ManyToMany
     @JoinTable(uniqueConstraints = @UniqueConstraint(

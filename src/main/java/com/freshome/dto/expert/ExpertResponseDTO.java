@@ -10,6 +10,7 @@ public record ExpertResponseDTO(
         Long id,
         String firstname,
         String lastname,
+        String username,
         String email,
         LocalDateTime registerDateTime,
         UserStatus status,

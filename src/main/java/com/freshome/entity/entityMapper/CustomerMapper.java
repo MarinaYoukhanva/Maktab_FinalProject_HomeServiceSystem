@@ -1,44 +1,45 @@
 package com.freshome.entity.entityMapper;
 
-import com.freshome.dto.customer.CustomerWithOrdersReportDTO;
-import com.freshome.entity.Customer;
 import com.freshome.dto.customer.CustomerCreateDTO;
 import com.freshome.dto.customer.CustomerResponseDTO;
+import com.freshome.dto.customer.CustomerWithOrdersReportDTO;
+import com.freshome.entity.Customer;
+import com.freshome.entity.User;
 import com.freshome.entity.enumeration.UserStatus;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 
 public class CustomerMapper {
 
-    private static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-
     public static Customer customerFromDto(CustomerCreateDTO customerCreateDTO) {
-        return Customer.builder()
+
+        User user = User.builder()
                 .firstname(customerCreateDTO.getFirstname())
                 .lastname(customerCreateDTO.getLastname())
+                .username(customerCreateDTO.getUsername())
+                .password(customerCreateDTO.getPassword())
                 .email(customerCreateDTO.getEmail())
-                .password(passwordEncoder.encode(customerCreateDTO.getPassword()))
-//                .password(customerCreateDTO.getPassword())
                 .registerDateTime(LocalDateTime.now())
-                .status(UserStatus.NEW)
+                .roles(new HashSet<>())
+                .build();
+        return Customer.builder()
                 .phoneNumber(customerCreateDTO.getPhoneNumber())
-//                .credit(customerCreateDTO.getCredit())
+                .status(UserStatus.NEW)
+                .user(user)
                 .build();
     }
 
         public static CustomerResponseDTO dtoFromCustomer(Customer customer) {
         return new CustomerResponseDTO(
                 customer.getId(),
-                customer.getFirstname(),
-                customer.getLastname(),
-                customer.getEmail(),
-                customer.getRegisterDateTime(),
+                customer.getUser().getFirstname(),
+                customer.getUser().getLastname(),
+                customer.getUser().getUsername(),
+                customer.getUser().getEmail(),
+                customer.getUser().getRegisterDateTime(),
                 customer.getStatus(),
                 customer.getPhoneNumber()
-//                customer.getCredit() != null ? customer.getCredit().getId() : null
-//                customer.getCredit().getId()
         );
     }
 
@@ -48,12 +49,13 @@ public class CustomerMapper {
             int countDoneOrders) {
         return new CustomerWithOrdersReportDTO(
                 customer.getId(),
-                customer.getFirstname(),
-                customer.getLastname(),
-                customer.getEmail(),
+                customer.getUser().getFirstname(),
+                customer.getUser().getLastname(),
+                customer.getUser().getUsername(),
+                customer.getUser().getEmail(),
                 customer.getStatus(),
                 customer.getPhoneNumber(),
-                customer.getRegisterDateTime(),
+                customer.getUser().getRegisterDateTime(),
                 countPlacedOrders,
                 countDoneOrders
         );

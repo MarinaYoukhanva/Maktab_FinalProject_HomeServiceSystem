@@ -3,14 +3,11 @@ package com.freshome.entity;
 import com.freshome.entity.base.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.hibernate.annotations.SoftDelete;
 
 @Getter
 @Setter
@@ -19,6 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
+@SoftDelete
 public class SubService extends BaseEntity<Long> {
 
     @Column(nullable = false, unique = true)
@@ -32,7 +30,4 @@ public class SubService extends BaseEntity<Long> {
 
     @ManyToOne(optional = false)
     ServiceCategory category;
-
-//    @ManyToMany(mappedBy = "subServices")
-//    List<Expert> experts = new ArrayList<>();
 }

@@ -14,6 +14,7 @@ document.getElementById("signupForm").addEventListener("submit", async function(
     const requestBody = {
         firstname: document.getElementById("firstname").value,
         lastname: document.getElementById("lastname").value,
+        username: document.getElementById("username").value,
         email: document.getElementById("email").value,
         password: document.getElementById("password").value,
         phoneNumber: document.getElementById("phoneNumber").value,

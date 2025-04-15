@@ -1,14 +1,12 @@
 package com.freshome.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.PrimaryKeyJoinColumn;
-import jakarta.persistence.SecondaryTable;
+import com.freshome.entity.base.BaseEntity;
+import com.freshome.entity.enumeration.UserStatus;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.annotations.Where;
-import org.hibernate.annotations.WhereJoinTable;
+import org.hibernate.annotations.SoftDelete;
 
 @Getter
 @Setter
@@ -17,11 +15,18 @@ import org.hibernate.annotations.WhereJoinTable;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-//@Where(clause = "deleted = false")
-//@WhereJoinTable(clause = "deleted = false")
-//@SecondaryTable(name = "user", pkJoinColumns = @PrimaryKeyJoinColumn(name = "id"))
-//@SecondaryRow
-public class Customer extends User {
+@SoftDelete
+public class Customer extends BaseEntity<Long> {
+
+    @Column(unique = true, length = 15)
+    String phoneNumber;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    UserStatus status;
+
+    @OneToOne(optional = false, fetch = FetchType.EAGER)
+    User user;
 
     @OneToOne(optional = false, orphanRemoval = true)
     Credit credit;

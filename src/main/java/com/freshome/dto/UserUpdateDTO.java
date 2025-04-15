@@ -1,6 +1,7 @@
 package com.freshome.dto;
 
 import com.freshome.entity.enumeration.UserStatus;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
@@ -25,15 +26,13 @@ public abstract class UserUpdateDTO {
     @Pattern(regexp = "^[a-zA-Z]+$", message = "lastname only can contains letters! ")
     String lastname;
 
+    @NotBlank(message = "username can not be null or blank! ")
+    @Size(min = 2, max = 50, message = "username has to contain 8-50 characters! ")
+    String username;
+
     @Size(max = 150, message = "long email! ")
     @Pattern(regexp = "^[^@]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", message = "invalid email format! ")
     String email;
-
-    UserStatus status;
-
-    @Size(min = 13, max = 15, message = "short or long phone_number! ")
-    @Pattern(regexp = "^((0098)0?9|\\+980?9)[01239]\\d{8}$", message = "invalid phone-number! ")
-    String phoneNumber;
 
     //    String password;
 }

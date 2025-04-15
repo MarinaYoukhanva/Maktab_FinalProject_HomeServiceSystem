@@ -65,6 +65,7 @@ function displayResults(customers) {
                     <th class="border border-gray-300 px-4 py-2">ID</th>
                     <th class="border border-gray-300 px-4 py-2">Firstname</th>
                     <th class="border border-gray-300 px-4 py-2">Lastname</th>
+                    <th class="border border-gray-300 px-4 py-2">Username</th>
                     <th class="border border-gray-300 px-4 py-2">Email</th>
                     <th class="border border-gray-300 px-4 py-2">Register Date</th>
                     <th class="border border-gray-300 px-4 py-2">Status</th>
@@ -80,6 +81,7 @@ function displayResults(customers) {
                 <td class="border border-gray-300 px-4 py-2">${customer.id}</td>
                 <td class="border border-gray-300 px-4 py-2">${customer.firstname}</td>
                 <td class="border border-gray-300 px-4 py-2">${customer.lastname}</td>
+                <td class="border border-gray-300 px-4 py-2">${customer.username}</td>
                 <td class="border border-gray-300 px-4 py-2">${customer.email}</td>
                 <td class="border border-gray-300 px-4 py-2">${formatDate(customer.registerDateTime)}</td>
                 <td class="border border-gray-300 px-4 py-2">${customer.status}</td>

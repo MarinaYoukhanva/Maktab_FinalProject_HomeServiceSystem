@@ -7,6 +7,7 @@ import jakarta.persistence.OneToMany;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.SoftDelete;
 
 import java.util.List;
 
@@ -17,6 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
+@SoftDelete
 public class ServiceCategory extends BaseEntity<Long> {
 
     @Column(nullable = false, unique = true)

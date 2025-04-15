@@ -5,9 +5,9 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.SoftDelete;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 @Setter
@@ -16,6 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
+@SoftDelete
 @Table(uniqueConstraints = @UniqueConstraint(
                 columnNames = {"order_id", "expert_id"}))
 public class Offer extends BaseEntity<Long> {

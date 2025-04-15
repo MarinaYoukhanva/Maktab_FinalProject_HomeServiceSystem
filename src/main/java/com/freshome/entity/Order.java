@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.SoftDelete;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -18,6 +19,7 @@ import java.util.List;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
+@SoftDelete
 public class Order extends BaseEntity<Long> {
 
     Long suggestedPriceByCustomer;
@@ -46,9 +48,6 @@ public class Order extends BaseEntity<Long> {
 
     @ManyToOne
     SubService subService;
-
-//    @OneToOne
-//    Review review;
 
     @OneToMany(mappedBy = "order")
     List<Offer> offers;

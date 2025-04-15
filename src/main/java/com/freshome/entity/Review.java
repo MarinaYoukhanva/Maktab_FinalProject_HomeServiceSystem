@@ -1,10 +1,14 @@
 package com.freshome.entity;
 
 import com.freshome.entity.base.BaseEntity;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.SoftDelete;
 
 @Getter
 @Setter
@@ -14,6 +18,7 @@ import lombok.experimental.SuperBuilder;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 @Table(name = "review")
+@SoftDelete
 public class Review extends BaseEntity<Long> {
 
     @Column(nullable = false)
@@ -23,10 +28,4 @@ public class Review extends BaseEntity<Long> {
 
     @OneToOne(optional = false)
     Order order;
-
-//    @ManyToOne
-//    Customer customer;
-//
-//    @ManyToOne(optional = false)
-//    Expert expert;
 }

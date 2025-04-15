@@ -1,25 +1,30 @@
 package com.freshome.service.impl;
 
 import com.freshome.dto.ChangePasswordDTO;
-import com.freshome.dto.credit.CreditResponseDTO;
-import com.freshome.entity.Credit;
-import com.freshome.entity.Customer;
 import com.freshome.dto.credit.CreditCreateDTO;
+import com.freshome.dto.credit.CreditResponseDTO;
 import com.freshome.dto.customer.CustomerCreateDTO;
 import com.freshome.dto.customer.CustomerResponseDTO;
 import com.freshome.dto.customer.CustomerUpdateDTO;
+import com.freshome.entity.Credit;
+import com.freshome.entity.Customer;
+import com.freshome.entity.Role;
+import com.freshome.entity.User;
 import com.freshome.entity.entityMapper.CreditMapper;
 import com.freshome.entity.entityMapper.CustomerMapper;
-import com.freshome.exception.ChangePasswordException;
 import com.freshome.exception.ExistenceException;
 import com.freshome.exception.NotFoundException;
 import com.freshome.repository.CustomerRepository;
 import com.freshome.service.CreditService;
 import com.freshome.service.CustomerService;
-import com.freshome.specification.CustomerSpecification;
+import com.freshome.service.RoleService;
+import com.freshome.service.UserService;
+import com.freshome.service.specification.CustomerSpecification;
+import com.freshome.service.verification.CustomerVerificationService;
+import com.freshome.service.verification.VerificationTokenService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -30,32 +35,34 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-//@Transactional
-//@Validated
 public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepository customerRepository;
-    private final PasswordEncoder passwordEncoder;
     private final CreditService creditService;
+    private final UserService userService;
+    private final RoleService roleService;
+    private final CustomerVerificationService customerVerificationService;
 
     @Override
     @Transactional
     public CustomerResponseDTO createCustomer(CustomerCreateDTO customerCreateDTO) {
-
         log.info("attempt to create customer");
 
-        if (customerRepository.existsByEmail(customerCreateDTO.getEmail()))
-            throw new ExistenceException("email");
+        Role role = roleService.findByName(Role.CUSTOMER);
+        Customer customer = CustomerMapper.customerFromDto(customerCreateDTO);
+        customer.getUser().getRoles().add(role);
+
         if (customerRepository.existsByPhoneNumber(customerCreateDTO.getPhoneNumber()))
             throw new ExistenceException("phoneNumber");
 
-        Customer customer = CustomerMapper.customerFromDto(customerCreateDTO);
+        userService.save(customer.getUser());
         Credit credit = creditService.createReturnCredit(new CreditCreateDTO(0.0));
         customer.setCredit(credit);
 
         Customer savedCustomer = customerRepository.save(customer);
         log.info("customer with id {} saved successfully", savedCustomer.getId());
 
+        customerVerificationService.sendVerificationEmail(customer.getUser());
         return CustomerMapper.dtoFromCustomer(savedCustomer);
     }
 
@@ -74,7 +81,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public List<Customer> findAll(){
+    public List<Customer> findAll() {
         return customerRepository.findAll();
     }
 
@@ -90,8 +97,9 @@ public class CustomerServiceImpl implements CustomerService {
     public void deleteCustomer(Long id) {
         log.info("attempt to delete customer with id: {}", id);
 
-        if (!customerRepository.existsById(id))
-            throw new NotFoundException(Customer.class, id);
+        Customer customer = customerRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(Customer.class, id));
+        userService.removeRoleAndDeleteUserIfEmptyRoles(customer.getUser(), Role.CUSTOMER);
 
         customerRepository.deleteById(id);
         log.info("customer with id {} deleted successfully", id);
@@ -106,6 +114,8 @@ public class CustomerServiceImpl implements CustomerService {
                 .orElseThrow(() -> new NotFoundException(Customer.class, updateDTO.getId()));
 
         updateFields(customer, updateDTO);
+        userService.update(customer.getUser(), updateDTO);
+
         Customer updatedCustomer = customerRepository.save(customer);
         log.info("customer with id {} updated successfully", updatedCustomer.getId());
 
@@ -117,29 +127,28 @@ public class CustomerServiceImpl implements CustomerService {
             List<String> fields, List<String> values
     ) {
         return customerRepository.findAll(
-                CustomerSpecification.searchCustomer(fields, values))
+                        CustomerSpecification.searchCustomer(fields, values))
                 .stream().map(CustomerMapper::dtoFromCustomer)
                 .toList();
     }
 
     @Override
     @Transactional
-    public void changePassword(Long customerId, ChangePasswordDTO dto) {
+    public void changePassword(Long customerId, ChangePasswordDTO dto, User user) {
         log.info("attempt to change password with id: {} ", customerId);
 
         Customer customer = customerRepository.findById(customerId)
                 .orElseThrow(() -> new NotFoundException(Customer.class, customerId));
-        if (dto.oldPassword().equals(dto.newPassword())
-                || !passwordEncoder.matches(dto.oldPassword(), customer.getPassword()))
-            throw new ChangePasswordException();
-
-        customer.setPassword(passwordEncoder.encode(dto.newPassword()));
-        customerRepository.save(customer);
+        if (!customer.getUser().getId().equals(user.getId()))
+            throw new AuthorizationDeniedException("You are not authorized to change password!");
+//        todo: what exception to throw? is AuthorizationDeniedException ok??
+        userService.changePassword(
+                    customer.getUser(), dto.oldPassword(), dto.newPassword());
         log.info("password changed successfully for customer with id{}", customerId);
     }
 
     @Override
-    public CreditResponseDTO findCreditForCustomer(Long customerId){
+    public CreditResponseDTO findCreditForCustomer(Long customerId) {
         Customer customer = customerRepository.findById(customerId)
                 .orElseThrow(() -> new NotFoundException(Customer.class, customerId));
         return CreditMapper.dtoFromCredit(
@@ -148,23 +157,14 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
 
-    private void updateFields (Customer customer, CustomerUpdateDTO updateDTO){
-        if (StringUtils.hasText(updateDTO.getFirstname()))
-            customer.setFirstname(updateDTO.getFirstname());
-
-        if (StringUtils.hasText(updateDTO.getLastname()))
-            customer.setLastname(updateDTO.getLastname());
-
-        if (StringUtils.hasText(updateDTO.getEmail())){
-            if (customerRepository.existsByEmail(updateDTO.getEmail()))
-                throw new ExistenceException("email");
-            customer.setEmail(updateDTO.getEmail());
-        }
-
+    private void updateFields(Customer customer, CustomerUpdateDTO updateDTO) {
         if (updateDTO.getStatus() != null)
             customer.setStatus(updateDTO.getStatus());
 
-        if (StringUtils.hasText(updateDTO.getPhoneNumber()))
+        if (StringUtils.hasText(updateDTO.getPhoneNumber())) {
+            if (customerRepository.existsByPhoneNumber(updateDTO.getPhoneNumber()))
+                throw new ExistenceException(updateDTO.getPhoneNumber());
             customer.setPhoneNumber(updateDTO.getPhoneNumber());
+        }
     }
 }

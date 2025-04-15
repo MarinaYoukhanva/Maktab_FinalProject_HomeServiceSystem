@@ -1,13 +1,20 @@
 package com.freshome.entity;
 
 import com.freshome.entity.base.BaseEntity;
-import com.freshome.entity.enumeration.UserStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.SQLRestriction;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -16,8 +23,9 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED)
-public abstract class User extends BaseEntity<Long> {
+@Table(name = "users")
+@SQLRestriction(value = "deleted = false")
+public class User extends BaseEntity<Long> implements UserDetails {
 
     @Column(nullable = false, length = 50)
     String firstname;
@@ -25,21 +33,38 @@ public abstract class User extends BaseEntity<Long> {
     @Column(nullable = false, length = 50)
     String lastname;
 
-    @Column(nullable = false, unique = true, length = 150)
-    String email;
+    @Column(nullable = false, unique = true)
+    String username;
 
     @Column(nullable = false)
     String password;
 
+    @Column(nullable = false, unique = true, length = 150)
+    String email;
+
     @Column(nullable = false, updatable = false)
     LocalDateTime registerDateTime;
 
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    UserStatus status;
+    boolean deleted = false;
 
-    @Column(unique = true, length = 15)
-    String phoneNumber;
+    @ManyToMany(fetch = FetchType.EAGER)
+    Set<Role> roles = new HashSet<>();
 
-    //    String username;
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return roles.stream()
+                .map(role -> new SimpleGrantedAuthority(role.getName()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public String getUsername() {
+        return username;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
 }

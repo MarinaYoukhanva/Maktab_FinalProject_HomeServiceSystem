@@ -8,6 +8,7 @@ public record ExpertWithOrdersReportDTO(
         Long id,
         String firstname,
         String lastname,
+        String username,
         String email,
         UserStatus status,
         String phoneNumber,

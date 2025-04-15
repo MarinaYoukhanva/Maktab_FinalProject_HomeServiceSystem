@@ -6,6 +6,7 @@ import com.freshome.entity.Customer;
 import com.freshome.dto.customer.CustomerCreateDTO;
 import com.freshome.dto.customer.CustomerResponseDTO;
 import com.freshome.dto.customer.CustomerUpdateDTO;
+import com.freshome.entity.User;
 
 import java.util.List;
 import java.util.Optional;
@@ -33,7 +34,7 @@ public interface CustomerService {
             List<String> fields, List<String> values
     );
 
-    void changePassword(Long customerId, ChangePasswordDTO dto);
+    void changePassword(Long customerId, ChangePasswordDTO dto, User user);
 
     CreditResponseDTO findCreditForCustomer(Long customerId);
 

@@ -2,26 +2,19 @@ package com.freshome.service;
 
 import com.freshome.dto.ChangePasswordDTO;
 import com.freshome.dto.credit.CreditResponseDTO;
-import com.freshome.dto.subService.SubServiceResponseDTO;
-import com.freshome.entity.Expert;
 import com.freshome.dto.expert.ExpertCreatDTO;
 import com.freshome.dto.expert.ExpertResponseDTO;
 import com.freshome.dto.expert.ExpertUpdateDTO;
-import com.freshome.entity.SubService;
-import com.freshome.specification.Operator;
-import jakarta.persistence.metamodel.SingularAttribute;
-import jakarta.validation.Valid;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.multipart.MultipartFile;
+import com.freshome.dto.subService.SubServiceResponseDTO;
+import com.freshome.entity.Expert;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
-@Validated
 public interface ExpertService {
 
-    ExpertResponseDTO createExpert(@Valid ExpertCreatDTO expertCreatDTO) throws IOException;
+    ExpertResponseDTO createExpert(ExpertCreatDTO expertCreatDTO) throws IOException;
 
 //    void calculateScore(Expert expert);
 
@@ -35,7 +28,7 @@ public interface ExpertService {
 
     void deleteExpertById(Long id);
 
-    ExpertResponseDTO updateExpert(@Valid ExpertUpdateDTO updateDTO);
+    ExpertResponseDTO updateExpert(ExpertUpdateDTO updateDTO);
 
     List<ExpertResponseDTO> searchExpert(
             List<String> fields, List<String> values,

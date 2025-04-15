@@ -1,48 +1,51 @@
 package com.freshome.entity.entityMapper;
 
-import com.freshome.dto.expert.ExpertWithOrdersReportDTO;
-import com.freshome.entity.Expert;
 import com.freshome.dto.expert.ExpertCreatDTO;
 import com.freshome.dto.expert.ExpertResponseDTO;
+import com.freshome.dto.expert.ExpertWithOrdersReportDTO;
+import com.freshome.entity.Expert;
+import com.freshome.entity.User;
 import com.freshome.entity.enumeration.UserStatus;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 
 public class ExpertMapper {
 
-    private static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-
     public static Expert expertFromDto(ExpertCreatDTO expertCreatDTO) throws IOException {
-        return Expert.builder()
+
+        User user = User.builder()
                 .firstname(expertCreatDTO.getFirstname())
                 .lastname(expertCreatDTO.getLastname())
+                .username(expertCreatDTO.getUsername())
+                .password(expertCreatDTO.getPassword())
                 .email(expertCreatDTO.getEmail())
-                .password(passwordEncoder.encode(expertCreatDTO.getPassword()))
-//                .password(expertCreatDTO.getPassword())
                 .registerDateTime(LocalDateTime.now())
-                .status(UserStatus.NEW)
+                .roles(new HashSet<>())
+                .build();
+        return Expert.builder()
                 .phoneNumber(expertCreatDTO.getPhoneNumber())
-                .profileImage(expertCreatDTO.getProfileImage() != null ? expertCreatDTO.getProfileImage().getBytes() : null)
+                .status(UserStatus.NEW)
+                .profileImage(expertCreatDTO
+                        .getProfileImage() != null ? expertCreatDTO.getProfileImage().getBytes() : null)
                 .score(0.0)
-//                .credit(expertCreatDTO.getCredit())
+                .user(user)
                 .build();
     }
 
     public static ExpertResponseDTO dtoFromExpert(Expert expert) {
         return new ExpertResponseDTO(
                 expert.getId(),
-                expert.getFirstname(),
-                expert.getLastname(),
-                expert.getEmail(),
-                expert.getRegisterDateTime(),
+                expert.getUser().getFirstname(),
+                expert.getUser().getLastname(),
+                expert.getUser().getUsername(),
+                expert.getUser().getEmail(),
+                expert.getUser().getRegisterDateTime(),
                 expert.getStatus(),
                 expert.getPhoneNumber(),
 //                expert.getProfileImage(),
                 expert.getScore()
-//                expert.getCredit().getId()
         );
     }
 
@@ -53,13 +56,14 @@ public class ExpertMapper {
             int countOffers) {
         return new ExpertWithOrdersReportDTO(
                 expert.getId(),
-                expert.getFirstname(),
-                expert.getLastname(),
-                expert.getEmail(),
+                expert.getUser().getFirstname(),
+                expert.getUser().getLastname(),
+                expert.getUser().getUsername(),
+                expert.getUser().getEmail(),
                 expert.getStatus(),
                 expert.getPhoneNumber(),
                 expert.getScore(),
-                expert.getRegisterDateTime(),
+                expert.getUser().getRegisterDateTime(),
                 countAllOrders,
                 countDoneOrders,
                 countOffers
