@@ -26,6 +26,10 @@ public interface ExpertService {
 
     List<ExpertResponseDTO> findAllExperts();
 
+    List<ExpertResponseDTO> expertsPendingApproval();
+
+    void approveExpert(Long id);
+
     void deleteExpertById(Long id);
 
     ExpertResponseDTO updateExpert(ExpertUpdateDTO updateDTO);

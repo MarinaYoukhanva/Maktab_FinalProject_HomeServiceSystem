@@ -29,10 +29,10 @@ public class ExpertController {
     private final ExpertService expertService;
     private final ExpertVerificationService expertVerificationService;
 
-    @PostMapping(value = "/signup", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    @PostMapping(value = "/signup", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<ExpertResponseDTO> signup(
             @Valid @ModelAttribute ExpertCreatDTO expertCreatDTO
-            ) throws IOException {
+    ) throws IOException {
         log.info("expert signup triggered ");
         return ResponseEntity.ok(
                 expertService.createExpert(expertCreatDTO)
@@ -42,7 +42,7 @@ public class ExpertController {
     @GetMapping("/verify")
     public ResponseEntity<String> verifyExpert(
             @RequestParam String token
-    ){
+    ) {
         expertVerificationService.verifyExpert(token);
         return ResponseEntity.ok(
                 "Email verified successfully! "
@@ -52,7 +52,7 @@ public class ExpertController {
     @PutMapping("/update")
     public ResponseEntity<ExpertResponseDTO> update(
             @Valid @RequestBody ExpertUpdateDTO expertUpdateDTO
-    ){
+    ) {
         log.info("expert update triggered ");
         return ResponseEntity.ok(
                 expertService.updateExpert(expertUpdateDTO)
@@ -63,7 +63,7 @@ public class ExpertController {
     public ResponseEntity<Void> addSubServiceForExpert(
             @RequestParam(name = "expertId") Long expertId,
             @RequestParam(name = "subServiceId") Long subServiceId
-    ){
+    ) {
         expertService.addSubServiceForExpert(expertId, subServiceId);
         return ResponseEntity.noContent().build();
     }
@@ -72,7 +72,7 @@ public class ExpertController {
     public ResponseEntity<Void> removeSubServiceForExpert(
             @RequestParam(name = "expertId") Long expertId,
             @RequestParam(name = "subServiceId") Long subServiceId
-    ){
+    ) {
         expertService.removeSubServiceForExpert(expertId, subServiceId);
         return ResponseEntity.noContent().build();
     }
@@ -80,7 +80,7 @@ public class ExpertController {
     @GetMapping("/find/{expertId}")
     public ResponseEntity<ExpertResponseDTO> findExpert(
             @PathVariable Long expertId
-    ){
+    ) {
         return ResponseEntity.ok(
                 expertService.findExpertById(expertId)
         );
@@ -93,10 +93,25 @@ public class ExpertController {
         );
     }
 
+    @GetMapping("/find/all/pending_approval")
+    public ResponseEntity<List<ExpertResponseDTO>> findAllPendingApprovalExperts() {
+        return ResponseEntity.ok(
+                expertService.expertsPendingApproval()
+        );
+    }
+
+    @PutMapping("/update/approve/{expertId}")
+    public ResponseEntity<Void> approveExpert(
+            @PathVariable Long expertId
+    ) {
+        expertService.approveExpert(expertId);
+        return ResponseEntity.noContent().build();
+    }
+
     @GetMapping("/find/sub_services/{expertId}")
     public ResponseEntity<List<SubServiceResponseDTO>> findSubServicesOfExpert(
             @PathVariable Long expertId
-    ){
+    ) {
         return ResponseEntity.ok(
                 expertService.findAllSubServicesOfExpert(expertId)
         );
@@ -118,16 +133,16 @@ public class ExpertController {
             @RequestParam(required = false) String expertise,
             @RequestParam(required = false) Double minScore,
             @RequestParam(required = false) Double maxScore
-    ){
+    ) {
         return ResponseEntity.ok(
-                expertService.searchExpert(fields, values, expertise,  minScore,  maxScore)
+                expertService.searchExpert(fields, values, expertise, minScore, maxScore)
         );
     }
 
     @GetMapping("/find_credit/{expertId}")
     public ResponseEntity<CreditResponseDTO> findCredit(
             @PathVariable Long expertId
-    ){
+    ) {
         return ResponseEntity.ok(
                 expertService.findCreditForExpert(expertId)
         );

@@ -14,13 +14,14 @@ import com.freshome.entity.SubService;
 import com.freshome.entity.entityMapper.CreditMapper;
 import com.freshome.entity.entityMapper.ExpertMapper;
 import com.freshome.entity.entityMapper.SubServiceMapper;
+import com.freshome.entity.enumeration.UserStatus;
 import com.freshome.exception.ExistenceException;
 import com.freshome.exception.NotFoundException;
+import com.freshome.exception.NotPendingApprovalExpertException;
 import com.freshome.repository.ExpertRepository;
 import com.freshome.service.*;
 import com.freshome.service.specification.ExpertSpecification;
 import com.freshome.service.verification.ExpertVerificationService;
-import com.freshome.service.verification.VerificationTokenService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -92,6 +93,26 @@ public class ExpertServiceImpl implements ExpertService {
         return expertRepository.findAll().stream()
                 .map(ExpertMapper::dtoFromExpert)
                 .toList();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ExpertResponseDTO> expertsPendingApproval() {
+        return expertRepository.findByStatus(UserStatus.PENDING_APPROVAL)
+                .stream()
+                .map(ExpertMapper::dtoFromExpert)
+                .toList();
+    }
+
+    @Override
+    @Transactional
+    public void approveExpert(Long id) {
+        Expert expert = expertRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(Expert.class, id));
+        if (expert.getStatus() != UserStatus.PENDING_APPROVAL)
+            throw new NotPendingApprovalExpertException();
+        expert.setStatus(UserStatus.APPROVED);
+        expertRepository.save(expert);
     }
 
     @Override
