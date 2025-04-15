@@ -7,6 +7,7 @@ import com.freshome.dto.expert.ExpertResponseDTO;
 import com.freshome.dto.expert.ExpertUpdateDTO;
 import com.freshome.dto.subService.SubServiceResponseDTO;
 import com.freshome.service.ExpertService;
+import com.freshome.service.verification.ExpertVerificationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +15,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
@@ -27,6 +27,7 @@ import java.util.List;
 public class ExpertController {
 
     private final ExpertService expertService;
+    private final ExpertVerificationService expertVerificationService;
 
     @PostMapping(value = "/signup", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     public ResponseEntity<ExpertResponseDTO> signup(
@@ -35,6 +36,16 @@ public class ExpertController {
         log.info("expert signup triggered ");
         return ResponseEntity.ok(
                 expertService.createExpert(expertCreatDTO)
+        );
+    }
+
+    @GetMapping("/verify")
+    public ResponseEntity<String> verifyExpert(
+            @RequestParam String token
+    ){
+        expertVerificationService.verifyExpert(token);
+        return ResponseEntity.ok(
+                "Email verified successfully! "
         );
     }
 

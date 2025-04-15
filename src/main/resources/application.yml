@@ -6,6 +6,17 @@ spring:
       enabled: true
       max-file-size: 300KB
       max-request-size: 300KB
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: freshomeee@gmail.com
+    password: lmizxganzhjjmine
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 
   datasource:
     url: jdbc:postgresql://localhost:5432/spring
@@ -19,7 +30,7 @@ spring:
     properties:
       hibernate:
         show_sql: true
-        default_schema: home
+        default_schema: home_security
   security:
     user:
       name: admin
@@ -28,6 +39,8 @@ spring:
 
 server:
   port: 8081
+
+
 
 #logging:
 #  level:

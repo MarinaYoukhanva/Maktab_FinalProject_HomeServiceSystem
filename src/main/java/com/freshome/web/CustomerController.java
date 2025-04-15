@@ -5,10 +5,13 @@ import com.freshome.dto.credit.CreditResponseDTO;
 import com.freshome.dto.customer.CustomerCreateDTO;
 import com.freshome.dto.customer.CustomerResponseDTO;
 import com.freshome.dto.customer.CustomerUpdateDTO;
+import com.freshome.entity.User;
 import com.freshome.service.CustomerService;
+import com.freshome.service.verification.CustomerVerificationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +24,7 @@ import java.util.List;
 public class CustomerController {
 
     private final CustomerService customerService;
+    private final CustomerVerificationService customerVerificationService;
 
     @PostMapping("/signup")
     public ResponseEntity<CustomerResponseDTO> signup(
@@ -29,6 +33,17 @@ public class CustomerController {
                 customerService.createCustomer(customerCreateDTO)
         );
     }
+
+    @GetMapping("/verify")
+    public ResponseEntity<String> verifyCustomer(
+            @RequestParam String token
+    ){
+        customerVerificationService.verifyCustomer(token);
+        return ResponseEntity.ok(
+                "Email verified successfully! "
+        );
+    }
+
 
     @GetMapping("/find/{id}")
     public ResponseEntity<CustomerResponseDTO> findCustomerById(
@@ -74,9 +89,10 @@ public class CustomerController {
     @PutMapping("/update/change_password/{customerId}")
     public ResponseEntity<Void> changePassword(
             @PathVariable Long customerId,
-            @RequestBody @Valid ChangePasswordDTO passwordDto
+            @RequestBody @Valid ChangePasswordDTO passwordDto,
+            @AuthenticationPrincipal User user
     ) {
-        customerService.changePassword(customerId, passwordDto);
+        customerService.changePassword(customerId, passwordDto, user);
         return ResponseEntity.noContent().build();
     }
 
