@@ -1,0 +1,100 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Select Location with OpenStreetMap and Leaflet</title>
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.css" />
+
+    <!-- Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+
+    <!-- Leaflet JS -->
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.js"></script>
+
+    <style>
+        #map {
+            height: 500px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+
+<div class="w-full max-w-4xl p-4 bg-white rounded-lg shadow-lg">
+    <h3 class="text-2xl font-semibold text-center mb-4">Select a Location on the Map</h3>
+
+    <!-- Map container -->
+    <div id="map"></div>
+
+    <!-- Location info -->
+    <div id="location" class="text-center mt-4">
+        <p><strong>Latitude:</strong> <span id="latitude">-</span></p>
+        <p><strong>Longitude:</strong> <span id="longitude">-</span></p>
+        <button id="saveButton" class="mt-4 bg-blue-500 text-white px-6 py-2 rounded-lg disabled:bg-gray-300" disabled>Save Location</button>
+    </div>
+</div>
+
+<script>
+    // Initialize the map (using OpenStreetMap tiles)
+    const map = L.map('map').setView([35.699739, 51.338097], 14);
+
+    // Use OpenStreetMap tiles
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    // Marker variable
+    let marker = null;
+    let selectedLat = null;
+    let selectedLng = null;
+
+    // Click event for selecting a location on the map
+    map.on('click', function (e) {
+        selectedLat = e.latlng.lat;
+        selectedLng = e.latlng.lng;
+
+        // Remove any previous marker
+        if (marker) {
+            marker.remove();
+        }
+
+        // Add a new marker at the clicked location
+        marker = L.marker([selectedLat, selectedLng]).addTo(map);
+        marker.bindPopup('Lat: ' + selectedLat + ', Lng: ' + selectedLng).openPopup();
+
+        // Display the selected location's coordinates
+        document.getElementById('latitude').textContent = selectedLat;
+        document.getElementById('longitude').textContent = selectedLng;
+
+        // Enable the Save button
+        document.getElementById('saveButton').disabled = false;
+    });
+
+    // Save button logic (send lat/lng to server)
+    document.getElementById("saveButton").onclick = function () {
+        const locationData = {
+            latitude: selectedLat,
+            longitude: selectedLng
+        };
+
+        // Send the location data to the backend (example POST request)
+        fetch('/v1/location/save', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(locationData),
+        })
+            .then(response => response.json())
+            .then(data => {
+                alert("Location saved successfully!");
+            })
+            .catch(error => {
+                console.error('Error saving location:', error);
+            });
+    };
+</script>
+
+</body>
+</html>
