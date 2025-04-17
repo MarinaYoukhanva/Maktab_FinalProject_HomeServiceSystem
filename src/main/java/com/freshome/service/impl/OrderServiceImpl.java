@@ -2,10 +2,7 @@ package com.freshome.service.impl;
 
 import com.freshome.dto.customer.CustomerWithOrdersReportDTO;
 import com.freshome.dto.order.*;
-import com.freshome.entity.Customer;
-import com.freshome.entity.Expert;
-import com.freshome.entity.Order;
-import com.freshome.entity.SubService;
+import com.freshome.entity.*;
 import com.freshome.entity.entityMapper.CustomerMapper;
 import com.freshome.entity.entityMapper.OrderMapper;
 import com.freshome.entity.enumeration.OrderStatus;
@@ -13,6 +10,7 @@ import com.freshome.entity.enumeration.UserStatus;
 import com.freshome.exception.InvalidPriceException;
 import com.freshome.exception.NotApprovedUserException;
 import com.freshome.exception.NotFoundException;
+import com.freshome.repository.OfferRepository;
 import com.freshome.repository.OrderRepository;
 import com.freshome.service.CustomerService;
 import com.freshome.service.ExpertService;
@@ -24,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -33,6 +32,7 @@ import java.util.Optional;
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
+    private final OfferRepository offerRepository;
     private final CustomerService customerService;
     private final ExpertService expertService;
     private final SubServiceService subServiceService;
@@ -172,6 +172,20 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional(readOnly = true)
+    public long delayInHours(Long orderId, Long expertId) {
+        Offer offer = offerRepository.findByOrder_IdAndExpert_Id(orderId, expertId)
+                .orElseThrow(() -> new NotFoundException("Offer not found!"));
+        Order order = offer.getOrder();
+        LocalDateTime start = offer.getStartDateTime();
+        LocalDateTime end = order.getOrderExecutionDateTime();
+        Duration duration = Duration.between(start, end);
+        long hoursSpend = duration.toHours();
+        long hoursEstimated = offer.getDurationInHours();
+        return hoursSpend - hoursEstimated;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public List<OrderHistoryDTO> showOrderHistoryForExpert(Long expertId) {
         List<Order> orders = orderRepository.findDoneOrdersByExpertId(expertId);
         return orders
@@ -245,6 +259,7 @@ public class OrderServiceImpl implements OrderService {
                         }
                 ).toList();
     }
+
 
     @Transactional
     @Override

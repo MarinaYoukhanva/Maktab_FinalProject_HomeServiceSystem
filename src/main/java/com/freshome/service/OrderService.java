@@ -39,6 +39,8 @@ public interface OrderService {
 
     OrderResponseDTO executeOrder(Long orderId);
 
+    long delayInHours(Long orderId, Long expertId);
+
     List<OrderHistoryDTO> showOrderHistoryForExpert(Long expertId);
 
     List<OrderHistoryDTO> showOrderHistoryForCustomer(Long customerId);

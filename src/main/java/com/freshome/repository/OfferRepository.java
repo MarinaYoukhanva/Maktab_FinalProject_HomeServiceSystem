@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface OfferRepository extends JpaRepository<Offer, Long> {
@@ -22,4 +23,7 @@ public interface OfferRepository extends JpaRepository<Offer, Long> {
             WHERE o.expert_id = :expertId AND u.deleted = false AND o.deleted = false
             """, nativeQuery = true)
     int countByExpert_Id(@Param("expertId") Long id);
+
+
+    Optional<Offer> findByOrder_IdAndExpert_Id(Long orderId, Long expertId);
 }

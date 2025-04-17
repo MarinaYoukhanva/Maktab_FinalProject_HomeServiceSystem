@@ -33,10 +33,15 @@ public class ReviewServiceImpl implements ReviewService {
     public ReviewResponseDTO createReview(ReviewCreateDTO reviewCreateDTO) {
 
         Order order = orderService.findOptionalOrderById(reviewCreateDTO.orderId())
-                .orElseThrow(()-> new NotFoundException(Order.class, reviewCreateDTO.orderId()));
-        if (order.getStatus() != OrderStatus.COMPLETED && order.getStatus() != OrderStatus.PAID )
+                .orElseThrow(() -> new NotFoundException(Order.class, reviewCreateDTO.orderId()));
+        if (order.getStatus() != OrderStatus.COMPLETED && order.getStatus() != OrderStatus.PAID)
             throw new NotCompletedOrderException();
+
         Review review = ReviewMapper.reviewFromDto(reviewCreateDTO);
+        long delay = orderService.delayInHours(order.getId(), order.getExpert().getId());
+        if (delay > 0)
+            review.setRating(review.getRating() - (review.getRating() * 0.05 * delay));
+
         review.setOrder(order);
         reviewRepository.save(review);
         updateExpertScore(order.getExpert());
@@ -54,7 +59,7 @@ public class ReviewServiceImpl implements ReviewService {
     public ReviewResponseDTO findReviewById(Long id) {
         return ReviewMapper.dtoFromReview(
                 reviewRepository.findById(id)
-                .orElseThrow(()-> new NotFoundException(Review.class, id)));
+                        .orElseThrow(() -> new NotFoundException(Review.class, id)));
     }
 
     @Override
@@ -73,7 +78,7 @@ public class ReviewServiceImpl implements ReviewService {
     @Transactional
     public ReviewResponseDTO updateReview(ReviewUpdateDTO updateDTO) {
         Review review = reviewRepository.findById(updateDTO.id())
-                .orElseThrow(()-> new NotFoundException(Review.class, updateDTO.id()));
+                .orElseThrow(() -> new NotFoundException(Review.class, updateDTO.id()));
         updateFields(review, updateDTO);
         return ReviewMapper.dtoFromReview(
                 reviewRepository.save(review)
@@ -89,7 +94,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public Double expertScoreFromRatingsAverage(Long expertId){
+    public Double expertScoreFromRatingsAverage(Long expertId) {
         Double score = reviewRepository.expertScoreFromRatingsAverage(expertId);
         return score == null ? 0.0 : score;
     }

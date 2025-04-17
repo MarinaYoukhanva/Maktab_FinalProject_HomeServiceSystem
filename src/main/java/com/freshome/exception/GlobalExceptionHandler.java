@@ -102,6 +102,7 @@ public class GlobalExceptionHandler extends
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(Map.of(
+                        "errorType", "BadRequest",
                         "message", ex.getMessage(),
                         "timestamp", LocalDateTime.now().toString()));
     }

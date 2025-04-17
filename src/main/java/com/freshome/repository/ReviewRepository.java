@@ -6,20 +6,14 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, Long> {
 
-    //@Query("SELECT COALESCE(AVG(r.rating), 0.0) FROM Review r WHERE r.expert.id = :expertId")
-//    @Query(value = "SELECT COALESCE(AVG(r.rating), 0.0) FROM review r JOIN expert e ON r.expert_id = e.id " +
-//            "WHERE e.id = :expertId AND e.deleted = false AND r.deleted = false",
-//            nativeQuery = true)
-    @Query(value = """
-            SELECT AVG(r.rating) FROM home.review r
-            JOIN home."order" o ON r.order_id = o.id
-            JOIN home.expert e ON o.expert_id = e.id
-            JOIN home."user" u ON e.id = u.id
-            WHERE e.id = :expertId AND u.deleted = false AND r.deleted = false AND o.deleted = false
-            """,
-            nativeQuery = true)
-Double expertScoreFromRatingsAverage(@Param("expertId") Long expertId);
+    @Query("SELECT AVG(r.rating) FROM Review r WHERE r.order.expert.id = :expertId")
+    Double expertScoreFromRatingsAverage(@Param("expertId") Long expertId);
+
+
+    Optional<Review> findByOrder_Id(Long orderId);
 }

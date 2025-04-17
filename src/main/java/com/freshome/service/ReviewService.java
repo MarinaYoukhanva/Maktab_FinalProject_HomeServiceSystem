@@ -11,10 +11,9 @@ import org.springframework.validation.annotation.Validated;
 import java.util.List;
 import java.util.Optional;
 
-@Validated
 public interface ReviewService {
 
-    ReviewResponseDTO createReview (@Valid ReviewCreateDTO reviewCreateDTO);
+    ReviewResponseDTO createReview (ReviewCreateDTO reviewCreateDTO);
 
     void updateExpertScore(Expert expert);
 
@@ -24,7 +23,7 @@ public interface ReviewService {
 
     List<ReviewResponseDTO> findAllReviews();
 
-    ReviewResponseDTO updateReview(@Valid ReviewUpdateDTO updateDTO);
+    ReviewResponseDTO updateReview(ReviewUpdateDTO updateDTO);
 
     void deleteReviewById(Long id);
 
