@@ -11,12 +11,18 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.MethodParameter;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BeanPropertyBindingResult;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.Validator;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import java.awt.*;
 import java.io.IOException;
+import java.lang.reflect.Method;
 
 @RestController
 @RequestMapping("/v1/payment")
@@ -25,13 +31,16 @@ import java.io.IOException;
 public class PaymentController {
 
     private final PaymentService paymentService;
+    private final Validator validator;
 
     @GetMapping("/order_price/{orderId}")
     public ResponseEntity<Double> getOrderPaymentAmount(
             @PathVariable Long orderId,
             HttpSession session
     ){
-        session.setAttribute("paymentStartTime", System.currentTimeMillis());
+        if (session.getAttribute("paymentStartTime") == null) {
+            session.setAttribute("paymentStartTime", System.currentTimeMillis());
+        }
         return ResponseEntity.ok(
                 paymentService.getOrderPaymentInfo(orderId).paymentAmount());
     }
@@ -39,13 +48,24 @@ public class PaymentController {
     @PostMapping("/pay_with_card/{orderId}")
     public ResponseEntity<Double> payFromCard(
             @PathVariable Long orderId,
-            @Valid @RequestBody CardInfoDTO cardInfoDTO,
+            @RequestBody CardInfoDTO cardInfoDTO,
             @RequestParam String captchaInput,
             HttpSession session
-    ) {
+    ) throws MethodArgumentNotValidException, NoSuchMethodException {
+
         Long paymentStartTime = (Long) session.getAttribute("paymentStartTime");
-        if (paymentStartTime == null || System.currentTimeMillis() - paymentStartTime >  10 * 60 * 1000) {
+        if (paymentStartTime == null || System.currentTimeMillis() - paymentStartTime > 30 * 1000) {
+            session.removeAttribute("paymentStartTime");
             throw new PaymentSessionExpiredException();
+        }
+        BindingResult bindingResult = new BeanPropertyBindingResult(cardInfoDTO, "cardInfoDTO");
+        validator.validate(cardInfoDTO, bindingResult);
+        if (bindingResult.hasErrors()) {
+            Method method = this.getClass().getMethod(
+                    "payFromCard", Long.class, CardInfoDTO.class, String.class, HttpSession.class
+            );
+            MethodParameter methodParameter = new MethodParameter(method, 1);
+            throw new MethodArgumentNotValidException(methodParameter, bindingResult);
         }
         String storedCaptcha = (String) session.getAttribute("captcha");
         paymentService.validateCaptcha(storedCaptcha, captchaInput);

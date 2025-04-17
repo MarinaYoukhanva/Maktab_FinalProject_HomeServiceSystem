@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="flex justify-center items-center h-screen bg-gray-100">
+<div class="w-full max-w-md p-6 bg-white rounded-lg shadow-md">
+
+    <form id="choice">
+        <label for="role" class="block font-medium">Sign Up as:</label>
+        <select id="role" name="role" class="border p-2 w-full mb-2">
+            <option value="customer">Customer</option>
+            <option value="expert">Expert</option>
+        </select>
+        <button type="submit" class="mt-4 bg-blue-500 text-white p-2 rounded-lg">Submit</button>
+    </form>
+
+</div>
+
+<script>
+    document.getElementById("choice").addEventListener("submit", function(event) {
+        event.preventDefault(); // Prevent default form submission
+
+        const role = document.getElementById("role").value; // Get selected role
+
+        if (role === "customer") {
+            window.location.href = "customer-signup.html";
+        } else if (role === "expert") {
+            window.location.href = "expert-signup.html";
+        }
+    });
+</script>
+
+</body>
+</html>

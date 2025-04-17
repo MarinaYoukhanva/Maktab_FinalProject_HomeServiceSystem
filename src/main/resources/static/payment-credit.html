@@ -7,17 +7,11 @@
 <body class="flex items-center justify-center h-screen bg-gray-100">
 
 <div class="bg-white p-6 rounded-lg shadow-md w-full max-w-md space-y-4">
-    <h1 class="text-xl font-bold text-center">Card Payment</h1>
+    <h1 class="text-xl font-bold text-center">Credit Payment</h1>
 
     <form id="paymentForm" class="space-y-3">
 
         <input type="number" name="orderId" id="orderIdInput" placeholder="orderId" required class="w-full p-2 border rounded" />
-
-        <input type="text" name="cardNumber" placeholder="Card Number" required class="w-full p-2 border rounded" />
-        <input type="text" name="cvv2" placeholder="CVV2" required class="w-full p-2 border rounded" />
-        <input type="date" name="expiryDate" required class="w-full p-2 border rounded" />
-        <input type="password" name="cardPassword" placeholder="Card Password" required class="w-full p-2 border rounded" />
-        <div id="amountDisplay" class="text-center text-gray-700 font-medium"></div>
 
         <div class="flex items-center space-x-4">
             <img id="captchaImage" src="/v1/payment/captcha" alt="CAPTCHA" class="h-12 border" />
@@ -26,13 +20,15 @@
 
         <input type="text" name="captchaInput" placeholder="Enter CAPTCHA" required class="w-full p-2 border rounded" />
 
+        <div id="amountDisplay" class="text-center text-gray-700 font-medium"></div>
+
         <button type="submit" class="bg-blue-600 text-white w-full py-2 rounded hover:bg-blue-700">Pay</button>
     </form>
 
     <div id="message" class="text-center mt-2 text-red-600"></div>
 </div>
 
-<script src="script/payment_card.js"></script>
+<script src="script/payment-credit.js"></script>
 
 </body>
 </html>

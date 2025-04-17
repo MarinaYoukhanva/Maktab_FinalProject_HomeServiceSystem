@@ -1,38 +1,22 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Signup</title>
+    <title>Home Service - Main Menu</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="flex justify-center items-center h-screen bg-gray-100">
-<div class="w-full max-w-md p-6 bg-white rounded-lg shadow-md">
+<body class="bg-blue-100 min-h-screen flex items-center justify-center">
 
-    <form id="choice">
-        <label for="role" class="block font-medium">Sign Up as:</label>
-        <select id="role" name="role" class="border p-2 w-full mb-2">
-            <option value="customer">Customer</option>
-            <option value="expert">Expert</option>
-        </select>
-        <button type="submit" class="mt-4 bg-blue-500 text-white p-2 rounded-lg">Submit</button>
-    </form>
+<div class="bg-white p-10 rounded-2xl shadow-2xl w-full max-w-md text-center">
+    <h1 class="text-2xl font-bold text-blue-700 mb-6">🏠 Welcome to Freshome 🏠</h1>
+    <p class="text-blue-600 mb-8">Choose your action to get started</p>
 
+    <div class="space-y-4">
+        <a href="/customer-panel.html" class="block w-full bg-blue-600 text-white py-3 rounded-xl hover:bg-blue-700 transition">🔑 Login as Customer</a>
+        <a href="/expert-panel.html" class="block w-full bg-blue-600 text-white py-3 rounded-xl hover:bg-blue-700 transition">🛠️ Login as Expert</a>
+        <a href="/admin-panel.html" class="block w-full bg-blue-600 text-white py-3 rounded-xl hover:bg-blue-700 transition">👨‍💼 Login as Admin</a>
+        <a href="/signup.html" class="block w-full bg-gray-100 text-blue-700 border border-blue-300 py-3 rounded-xl hover:bg-gray-200 transition">📝 Sign Up</a>
+    </div>
 </div>
-
-<script>
-    document.getElementById("choice").addEventListener("submit", function(event) {
-        event.preventDefault(); // Prevent default form submission
-
-        const role = document.getElementById("role").value; // Get selected role
-
-        if (role === "customer") {
-            window.location.href = "./customer_signup.html";
-        } else if (role === "expert") {
-            window.location.href = "./expert_signup.html";
-        }
-    });
-</script>
 
 </body>
 </html>
