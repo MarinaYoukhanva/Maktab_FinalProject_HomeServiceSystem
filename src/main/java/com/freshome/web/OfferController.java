@@ -4,6 +4,7 @@ import com.freshome.dto.expert.ExpertWithOrdersReportDTO;
 import com.freshome.dto.offer.OfferCreateDTO;
 import com.freshome.dto.offer.OfferResponseDTO;
 import com.freshome.dto.offer.OfferResponseWithExpertDTO;
+import com.freshome.dto.order.ReportSearchForExpertDTO;
 import com.freshome.service.OfferService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -86,6 +87,15 @@ public class OfferController {
     public ResponseEntity<List<ExpertWithOrdersReportDTO>> getAllExpertsOrdersReports(){
         return ResponseEntity.ok(
                 offerService.getAllExpertsOrdersReports()
+        );
+    }
+
+    @GetMapping("/find/all/filter_report")
+    public ResponseEntity<List<ExpertWithOrdersReportDTO>> filterAllExpertsOrdersReports(
+            @RequestBody ReportSearchForExpertDTO searchDto
+            ){
+        return ResponseEntity.ok(
+                offerService.filterAllExpertsOrdersReports(searchDto)
         );
     }
 }

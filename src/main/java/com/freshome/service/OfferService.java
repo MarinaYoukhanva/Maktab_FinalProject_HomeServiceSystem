@@ -5,6 +5,7 @@ import com.freshome.dto.offer.OfferCreateDTO;
 import com.freshome.dto.offer.OfferResponseDTO;
 import com.freshome.dto.offer.OfferResponseWithExpertDTO;
 import com.freshome.dto.offer.OfferUpdateDTO;
+import com.freshome.dto.order.ReportSearchForExpertDTO;
 import jakarta.validation.Valid;
 import org.springframework.validation.annotation.Validated;
 
@@ -29,6 +30,10 @@ public interface OfferService {
     ExpertWithOrdersReportDTO getExpertOrdersReport(Long expertId);
 
     List<ExpertWithOrdersReportDTO> getAllExpertsOrdersReports();
+
+    List<ExpertWithOrdersReportDTO> filterAllExpertsOrdersReports(
+            ReportSearchForExpertDTO searchDTO
+    );
 
     void deleteOffer(Long id);
 }

@@ -2,13 +2,13 @@ package com.freshome.service.impl;
 
 import com.freshome.dto.expert.ExpertWithOrdersReportDTO;
 import com.freshome.dto.offer.OfferResponseWithExpertDTO;
+import com.freshome.dto.order.ReportSearchForExpertDTO;
 import com.freshome.entity.Expert;
 import com.freshome.entity.Offer;
 import com.freshome.entity.Order;
 import com.freshome.dto.offer.OfferCreateDTO;
 import com.freshome.dto.offer.OfferResponseDTO;
 import com.freshome.dto.offer.OfferUpdateDTO;
-import com.freshome.entity.SubService;
 import com.freshome.entity.entityMapper.ExpertMapper;
 import com.freshome.entity.entityMapper.OfferMapper;
 import com.freshome.entity.enumeration.OrderStatus;
@@ -129,6 +129,37 @@ public class OfferServiceImpl implements OfferService {
                                 orderService.countOrdersByExpertId(expert.getId()),
                                 orderService.countDoneOrdersByExpertId(expert.getId()),
                                 offerRepository.countOffersByExpert_Id(expert.getId()))
+                ).toList();
+    }
+
+    @Override
+    public List<ExpertWithOrdersReportDTO> filterAllExpertsOrdersReports(
+            ReportSearchForExpertDTO searchDTO
+    ) {
+        return getAllExpertsOrdersReports()
+                .stream().filter(report -> {
+                            boolean isAfterRegisterDateFrom = (searchDTO.registerDateFrom() == null
+                                    || !report.registerDateTime().isBefore(searchDTO.registerDateFrom()));
+                            boolean isBeforeRegisterDateTo = (searchDTO.registerDateTo() == null
+                                    || !report.registerDateTime().isAfter(searchDTO.registerDateTo()));
+                            boolean matchesMinOrderCount = (searchDTO.minOrderCount() == null
+                                    || report.countAllOrders() >= searchDTO.minOrderCount());
+                            boolean matchesMaxOrderCount = (searchDTO.maxOrderCount() == null
+                                    || report.countAllOrders() <= searchDTO.maxOrderCount());
+                            boolean matchesMinDoneOrderCount = (searchDTO.minDoneOrderCount() == null
+                                    || report.countDoneOrders() >= searchDTO.minDoneOrderCount());
+                            boolean matchesMaxDoneOrderCount = (searchDTO.maxDoneOrderCount() == null
+                                    || report.countDoneOrders() <= searchDTO.maxDoneOrderCount());
+                            boolean matchesMinOfferCount = (searchDTO.minOfferCount() == null
+                                    || report.countDoneOrders() >= searchDTO.minOfferCount());
+                            boolean matchesMaxOfferCount = (searchDTO.maxOfferCount() == null
+                                    || report.countDoneOrders() <= searchDTO.maxOfferCount());
+
+                            return isAfterRegisterDateFrom && isBeforeRegisterDateTo
+                                    && matchesMinOrderCount && matchesMaxOrderCount
+                                    && matchesMinDoneOrderCount && matchesMaxDoneOrderCount
+                                    && matchesMinOfferCount && matchesMaxOfferCount;
+                        }
                 ).toList();
     }
 
