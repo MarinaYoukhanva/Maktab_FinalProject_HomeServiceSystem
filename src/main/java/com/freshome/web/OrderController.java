@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -21,10 +22,11 @@ public class OrderController {
 
     @PostMapping("/create")
     public ResponseEntity<OrderResponseDTO> createOrder (
-            @Valid @RequestBody OrderCreateDTO createDTO
+            @Valid @RequestBody OrderCreateDTO createDTO,
+            Principal principal
             ){
         return ResponseEntity.ok(
-                orderService.createOrder(createDTO));
+                orderService.createOrder(principal.getName(), createDTO));
     }
 
     @GetMapping("/find/{id}")

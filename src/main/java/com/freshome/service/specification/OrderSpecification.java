@@ -1,4 +1,4 @@
-package com.freshome.specification;
+package com.freshome.service.specification;
 
 import com.freshome.entity.Order;
 import com.freshome.entity.Order_;

@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -23,10 +24,11 @@ public class OfferController {
 
     @PostMapping("/create")
     public ResponseEntity<OfferResponseDTO> createOffer(
-            @Valid @RequestBody OfferCreateDTO createDTO
+            @Valid @RequestBody OfferCreateDTO createDTO,
+            Principal principal
             ){
         return ResponseEntity.ok(
-                offerService.createOffer(createDTO));
+                offerService.createOffer(principal.getName(), createDTO));
     }
 
     @GetMapping("/find/{offerId}")

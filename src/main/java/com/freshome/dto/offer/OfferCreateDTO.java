@@ -11,9 +11,6 @@ import java.time.LocalDateTime;
 
 public record OfferCreateDTO(
 
-//        @NotNull(message = "offerRegisterDateTime can not be null! ")
-//        LocalDateTime offerRegisterDateTime,
-
         @NotNull(message = "suggestedPriceByExpert can not be null! ")
         @PositiveOrZero
         Long suggestedPriceByExpert,
@@ -28,10 +25,6 @@ public record OfferCreateDTO(
 
         @NotNull(message = "orderId can not be null! ")
         @Positive
-        Long orderId,
-
-        @NotNull(message = "expertId can not be null! ")
-        @Positive
-        Long expertId
+        Long orderId
 ) {
 }

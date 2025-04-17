@@ -80,12 +80,12 @@ public class OrderMapper {
                 order.getSubService().getName(),
 
                 order.getCustomer().getId(),
-                order.getCustomer().getFirstname(),
-                order.getCustomer().getLastname(),
+                order.getCustomer().getUser().getFirstname(),
+                order.getCustomer().getUser().getLastname(),
 
                 order.getExpert().getId(),
-                order.getExpert().getFirstname(),
-                order.getExpert().getLastname(),
+                order.getExpert().getUser().getFirstname(),
+                order.getExpert().getUser().getLastname(),
                 order.getExpert().getScore()
         );
     }

@@ -1,12 +1,8 @@
 package com.freshome.dto.order;
 
-import com.freshome.entity.embeddable.Address;
-import com.freshome.entity.enumeration.OrderStatus;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
-
-import java.time.LocalDateTime;
 
 public record OrderCreateDTO(
 
@@ -15,10 +11,6 @@ public record OrderCreateDTO(
         @NotBlank(message = "description can not be null or blank! ")
         String description,
 
-//        @NotNull(message = "orderPlacementDateTime can not be null! ")
-//        LocalDateTime orderPlacementDateTime,
-
-//        LocalDateTime orderExecutionDateTime,
 
         @NotBlank(message = "city can not be null or blank! ")
         String city,
@@ -26,22 +18,9 @@ public record OrderCreateDTO(
         @NotBlank(message = "street can not be null or blank! ")
         String street,
 
-//        @NotBlank(message = "avenue can not be null or blank! ")
-//        String avenue,
 
         @NotBlank(message = "plaque can not be null or blank! ")
         String plaque,
-
-//        @NotNull(message = "status can not be null! ")
-//        OrderStatus status,
-
-        @NotNull(message = "customerId can not be null! ")
-        @Positive
-        Long customerId,
-
-//        @NotNull(message = "expertId can not be null! ")
-//        @Positive
-//        Long expertId,
 
         @NotNull(message = "subServiceId can not be null! ")
         @Positive

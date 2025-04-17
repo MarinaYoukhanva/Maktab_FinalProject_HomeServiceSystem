@@ -40,8 +40,8 @@ public class OfferMapper {
                 offer.getDurationInHours(),
                 offer.getStartDateTime(),
                 offer.getExpert().getId(),
-                offer.getExpert().getFirstname(),
-                offer.getExpert().getLastname(),
+                offer.getExpert().getUser().getFirstname(),
+                offer.getExpert().getUser().getLastname(),
                 offer.getExpert().getScore()
         );
     }

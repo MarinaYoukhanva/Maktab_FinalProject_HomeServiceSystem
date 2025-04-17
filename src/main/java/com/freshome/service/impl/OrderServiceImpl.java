@@ -9,14 +9,16 @@ import com.freshome.entity.SubService;
 import com.freshome.entity.entityMapper.CustomerMapper;
 import com.freshome.entity.entityMapper.OrderMapper;
 import com.freshome.entity.enumeration.OrderStatus;
+import com.freshome.entity.enumeration.UserStatus;
 import com.freshome.exception.InvalidPriceException;
+import com.freshome.exception.NotApprovedUserException;
 import com.freshome.exception.NotFoundException;
 import com.freshome.repository.OrderRepository;
 import com.freshome.service.CustomerService;
 import com.freshome.service.ExpertService;
 import com.freshome.service.OrderService;
 import com.freshome.service.SubServiceService;
-import com.freshome.specification.OrderSpecification;
+import com.freshome.service.specification.OrderSpecification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,19 +39,17 @@ public class OrderServiceImpl implements OrderService {
 
     @Transactional
     @Override
-    public OrderResponseDTO createOrder(OrderCreateDTO orderCreateDTO) {
-
+    public OrderResponseDTO createOrder(String username, OrderCreateDTO orderCreateDTO) {
         Order order = OrderMapper.orderFromDto(orderCreateDTO);
-        Customer customer = customerService.findOptionalCustomerById(orderCreateDTO.customerId())
-                .orElseThrow(() -> new NotFoundException(Customer.class, orderCreateDTO.customerId()));
-//        Expert expert = expertService.findOptionalExpertById(orderCreateDTO.expertId())
-//                .orElseThrow(() -> new NotFoundException(Expert.class, orderCreateDTO.expertId()));
+        Customer customer = customerService.findByUsername(username)
+                .orElseThrow(() -> new NotFoundException(Customer.class, username));
+        if (customer.getStatus()!= UserStatus.APPROVED)
+            throw new NotApprovedUserException();
         SubService subService = subServiceService.findOptionalSubServiceById(orderCreateDTO.subServiceId())
                 .orElseThrow(() -> new NotFoundException(SubService.class, orderCreateDTO.subServiceId()));
         if (orderCreateDTO.suggestedPriceByCustomer() < subService.getBasePrice())
             throw new InvalidPriceException();
         order.setCustomer(customer);
-//        order.setExpert(expert);
         order.setSubService(subService);
 
         return OrderMapper.dtoFromOrder(
@@ -91,7 +91,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional(readOnly = true)
     public List<OrderResponseDTO> findAllByCustomerId(Long customerId) {
-        return orderRepository.findByCustomer_Id(customerId)
+        return orderRepository.findAllByCustomer_Id(customerId)
                 .stream().map(OrderMapper::dtoFromOrder)
                 .toList();
     }
@@ -99,7 +99,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional(readOnly = true)
     public List<OrderResponseDTO> findAllByExpertId(Long expertId) {
-        return orderRepository.findByExpert_Id(expertId)
+        return orderRepository.findAllByExpert_Id(expertId)
                 .stream().map(OrderMapper::dtoFromOrder)
                 .toList();
     }

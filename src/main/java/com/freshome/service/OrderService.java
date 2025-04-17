@@ -9,10 +9,9 @@ import org.springframework.validation.annotation.Validated;
 import java.util.List;
 import java.util.Optional;
 
-@Validated
 public interface OrderService {
 
-    OrderResponseDTO createOrder(@Valid OrderCreateDTO orderCreateDTO);
+    OrderResponseDTO createOrder(String username, OrderCreateDTO orderCreateDTO);
 
     OrderResponseDTO findOrderById(Long id);
 
@@ -20,7 +19,7 @@ public interface OrderService {
 
     List<OrderResponseDTO> findAllOrders();
 
-    OrderResponseDTO updateOrder(@Valid OrderUpdateDTO updateDTO);
+    OrderResponseDTO updateOrder(OrderUpdateDTO updateDTO);
 
     List<OrderResponseDTO> findAllByCustomerId(Long customerId);
 

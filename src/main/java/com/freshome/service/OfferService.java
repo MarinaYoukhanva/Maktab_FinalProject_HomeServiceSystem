@@ -10,10 +10,9 @@ import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
 
-@Validated
 public interface OfferService {
 
-    OfferResponseDTO createOffer(@Valid OfferCreateDTO offerCreateDTO);
+    OfferResponseDTO createOffer(String username, OfferCreateDTO offerCreateDTO);
 
     OfferResponseDTO findOfferById(Long id);
 
@@ -25,7 +24,7 @@ public interface OfferService {
 
     List<OfferResponseWithExpertDTO> findOffersForOrder(Long id, String sortDirection);
 
-    OfferResponseDTO updateOffer(@Valid OfferUpdateDTO updateDTO);
+    OfferResponseDTO updateOffer( OfferUpdateDTO updateDTO);
 
     ExpertWithOrdersReportDTO getExpertOrdersReport(Long expertId);
 

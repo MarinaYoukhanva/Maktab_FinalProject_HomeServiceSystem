@@ -8,9 +8,12 @@ import com.freshome.entity.Order;
 import com.freshome.dto.offer.OfferCreateDTO;
 import com.freshome.dto.offer.OfferResponseDTO;
 import com.freshome.dto.offer.OfferUpdateDTO;
+import com.freshome.entity.SubService;
 import com.freshome.entity.entityMapper.ExpertMapper;
 import com.freshome.entity.entityMapper.OfferMapper;
 import com.freshome.entity.enumeration.OrderStatus;
+import com.freshome.entity.enumeration.UserStatus;
+import com.freshome.exception.NotApprovedUserException;
 import com.freshome.exception.NotFoundException;
 import com.freshome.repository.OfferRepository;
 import com.freshome.service.ExpertService;
@@ -34,13 +37,17 @@ public class OfferServiceImpl implements OfferService {
 
     @Override
     @Transactional
-    public OfferResponseDTO createOffer(OfferCreateDTO offerCreateDTO) {
+    public OfferResponseDTO createOffer(String username, OfferCreateDTO offerCreateDTO) {
 
         Offer offer = OfferMapper.offerFromDto(offerCreateDTO);
-        Expert expert = expertService.findOptionalExpertById(offerCreateDTO.expertId())
-                .orElseThrow(() -> new NotFoundException(Expert.class, offerCreateDTO.expertId()));
+        Expert expert = expertService.findByUsername(username)
+                .orElseThrow(() -> new NotFoundException(Expert.class, username));
+        if (expert.getStatus() != UserStatus.APPROVED)
+            throw new NotApprovedUserException();
         Order order = orderService.findOptionalOrderById(offerCreateDTO.orderId())
                 .orElseThrow(() -> new NotFoundException(Order.class, offerCreateDTO.orderId()));
+        if (!expert.getSubServices().contains(order.getSubService()))
+            throw new NotFoundException("expert does not have the service of the order!");
         order.setStatus(OrderStatus.WAITING_FOR_EXPERT_SELECTION);
         offer.setExpert(expert);
         offer.setOrder(order);
