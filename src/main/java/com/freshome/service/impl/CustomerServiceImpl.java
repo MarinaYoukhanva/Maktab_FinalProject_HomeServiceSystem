@@ -6,10 +6,7 @@ import com.freshome.dto.credit.CreditResponseDTO;
 import com.freshome.dto.customer.CustomerCreateDTO;
 import com.freshome.dto.customer.CustomerResponseDTO;
 import com.freshome.dto.customer.CustomerUpdateDTO;
-import com.freshome.entity.Credit;
-import com.freshome.entity.Customer;
-import com.freshome.entity.Role;
-import com.freshome.entity.User;
+import com.freshome.entity.*;
 import com.freshome.entity.entityMapper.CreditMapper;
 import com.freshome.entity.entityMapper.CustomerMapper;
 import com.freshome.exception.ExistenceException;
@@ -21,10 +18,8 @@ import com.freshome.service.RoleService;
 import com.freshome.service.UserService;
 import com.freshome.service.specification.CustomerSpecification;
 import com.freshome.service.verification.CustomerVerificationService;
-import com.freshome.service.verification.VerificationTokenService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -81,6 +76,11 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
+    public Optional<Customer> findByUsername(String username){
+        return customerRepository.findByUser_Username(username);
+    }
+
+    @Override
     public List<Customer> findAll() {
         return customerRepository.findAll();
     }
@@ -134,23 +134,20 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     @Transactional
-    public void changePassword(Long customerId, ChangePasswordDTO dto, User user) {
-        log.info("attempt to change password with id: {} ", customerId);
+    public void changePassword(ChangePasswordDTO dto, String username) {
+        log.info("attempt to change password with username: {} ", username);
 
-        Customer customer = customerRepository.findById(customerId)
-                .orElseThrow(() -> new NotFoundException(Customer.class, customerId));
-        if (!customer.getUser().getId().equals(user.getId()))
-            throw new AuthorizationDeniedException("You are not authorized to change password!");
-//        todo: what exception to throw? is AuthorizationDeniedException ok??
+        User user = userService.findByUsername(username)
+                .orElseThrow(() -> new NotFoundException(Expert.class, username));
         userService.changePassword(
-                    customer.getUser(), dto.oldPassword(), dto.newPassword());
-        log.info("password changed successfully for customer with id{}", customerId);
+                user, dto.oldPassword(), dto.newPassword());
+        log.info("password changed successfully for customer with username: {}", username);
     }
 
     @Override
-    public CreditResponseDTO findCreditForCustomer(Long customerId) {
-        Customer customer = customerRepository.findById(customerId)
-                .orElseThrow(() -> new NotFoundException(Customer.class, customerId));
+    public CreditResponseDTO findCreditForCustomer(String username) {
+        Customer customer = customerRepository.findByUser_Username(username)
+                .orElseThrow(() -> new NotFoundException(Customer.class, username));
         return CreditMapper.dtoFromCredit(
                 customer.getCredit()
         );

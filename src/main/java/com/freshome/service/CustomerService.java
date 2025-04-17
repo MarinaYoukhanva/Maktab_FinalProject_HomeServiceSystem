@@ -2,16 +2,14 @@ package com.freshome.service;
 
 import com.freshome.dto.ChangePasswordDTO;
 import com.freshome.dto.credit.CreditResponseDTO;
-import com.freshome.entity.Customer;
 import com.freshome.dto.customer.CustomerCreateDTO;
 import com.freshome.dto.customer.CustomerResponseDTO;
 import com.freshome.dto.customer.CustomerUpdateDTO;
-import com.freshome.entity.User;
+import com.freshome.entity.Customer;
 
 import java.util.List;
 import java.util.Optional;
 
-//@Validated
 public interface CustomerService {
 
 //    CustomerResponseDTO createCustomer(@Valid CustomerCreateDTO customerCreateDTO);
@@ -20,6 +18,8 @@ public interface CustomerService {
     CustomerResponseDTO findCustomerById(Long id);
 
     Optional<Customer> findOptionalCustomerById(Long id);
+
+    Optional<Customer> findByUsername(String username);
 
     List<Customer> findAll();
 
@@ -34,8 +34,8 @@ public interface CustomerService {
             List<String> fields, List<String> values
     );
 
-    void changePassword(Long customerId, ChangePasswordDTO dto, User user);
+    void changePassword(ChangePasswordDTO dto, String username);
 
-    CreditResponseDTO findCreditForCustomer(Long customerId);
+    CreditResponseDTO findCreditForCustomer(String username);
 
 }

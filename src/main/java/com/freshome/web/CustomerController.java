@@ -15,6 +15,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -86,22 +87,22 @@ public class CustomerController {
         );
     }
 
-    @PutMapping("/update/change_password/{customerId}")
+    @PutMapping("/update/change_password")
     public ResponseEntity<Void> changePassword(
-            @PathVariable Long customerId,
             @RequestBody @Valid ChangePasswordDTO passwordDto,
-            @AuthenticationPrincipal User user
+//            @AuthenticationPrincipal User user,
+            Principal principal
     ) {
-        customerService.changePassword(customerId, passwordDto, user);
+        customerService.changePassword(passwordDto, principal.getName());
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/find_credit/{customerId}")
+    @GetMapping("/find_credit")
     public ResponseEntity<CreditResponseDTO> findCredit(
-            @PathVariable Long customerId
+            Principal principal
     ){
         return ResponseEntity.ok(
-                customerService.findCreditForCustomer(customerId)
+                customerService.findCreditForCustomer(principal.getName())
         );
     }
 }
