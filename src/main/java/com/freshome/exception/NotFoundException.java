@@ -9,6 +9,10 @@ public class NotFoundException extends RuntimeException {
         super(theClass.getSimpleName() + " with id [ " + id + " ] does not exist! ");
     }
 
+    public NotFoundException(Class<? extends BaseEntity<Long>> theClass, String username) {
+        super(theClass.getSimpleName() + " with username [ " + username + " ] does not exist! ");
+    }
+
     public NotFoundException(String message) {
         super(message);
     }

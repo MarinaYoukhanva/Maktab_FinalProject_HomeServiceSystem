@@ -24,7 +24,7 @@ public abstract class UserCreateDTO {
     String lastname;
 
     @NotBlank(message = "username can not be null or blank! ")
-    @Size(min = 2, max = 50, message = "username has to contain 8-50 characters! ")
+    @Size(min = 5, max = 50, message = "username has to contain 5-50 characters! ")
     String username;
 
     @NotBlank(message = "password can not be null or blank! ")
