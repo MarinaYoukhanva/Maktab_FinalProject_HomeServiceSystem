@@ -43,7 +43,7 @@ public class OrderServiceImpl implements OrderService {
         Order order = OrderMapper.orderFromDto(orderCreateDTO);
         Customer customer = customerService.findByUsername(username)
                 .orElseThrow(() -> new NotFoundException(Customer.class, username));
-        if (customer.getStatus()!= UserStatus.APPROVED)
+        if (customer.getStatus() != UserStatus.APPROVED)
             throw new NotApprovedUserException();
         SubService subService = subServiceService.findOptionalSubServiceById(orderCreateDTO.subServiceId())
                 .orElseThrow(() -> new NotFoundException(SubService.class, orderCreateDTO.subServiceId()));
@@ -187,7 +187,9 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional(readOnly = true)
     public List<OrderHistoryDTO> showOrderHistoryForExpert(Long expertId) {
-        List<Order> orders = orderRepository.findDoneOrdersByExpertId(expertId);
+        List<Order> orders = orderRepository
+                .findAllByStatusInAndExpert_Id(
+                        List.of(OrderStatus.COMPLETED, OrderStatus.PAID), expertId);
         return orders
                 .stream().map(OrderMapper::historyFromOrder)
                 .toList();
@@ -196,7 +198,8 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional(readOnly = true)
     public List<OrderHistoryDTO> showOrderHistoryForCustomer(Long customerId) {
-        return orderRepository.findDoneOrdersByCustomerId(customerId)
+        return orderRepository.findAllByStatusInAndCustomer_Id(
+                        List.of(OrderStatus.COMPLETED, OrderStatus.PAID), customerId)
                 .stream().map(OrderMapper::historyFromOrder)
                 .toList();
     }
