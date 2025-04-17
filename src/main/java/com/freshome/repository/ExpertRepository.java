@@ -17,6 +17,8 @@ public interface ExpertRepository extends JpaRepository<Expert, Long>,
 
     Optional<Expert> findByUser_Id(Long userId);
 
+    Optional<Expert> findByUser_Username(String username);
+
     List<Expert> findByStatus(UserStatus status);
 
 }

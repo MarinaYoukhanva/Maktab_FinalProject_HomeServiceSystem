@@ -3,19 +3,17 @@ package com.freshome.service.impl;
 import com.freshome.dto.ChangePasswordDTO;
 import com.freshome.dto.credit.CreditResponseDTO;
 import com.freshome.dto.subService.SubServiceResponseDTO;
-import com.freshome.entity.Credit;
-import com.freshome.entity.Expert;
+import com.freshome.entity.*;
 import com.freshome.dto.credit.CreditCreateDTO;
 import com.freshome.dto.expert.ExpertCreatDTO;
 import com.freshome.dto.expert.ExpertResponseDTO;
 import com.freshome.dto.expert.ExpertUpdateDTO;
-import com.freshome.entity.Role;
-import com.freshome.entity.SubService;
 import com.freshome.entity.entityMapper.CreditMapper;
 import com.freshome.entity.entityMapper.ExpertMapper;
 import com.freshome.entity.entityMapper.SubServiceMapper;
 import com.freshome.entity.enumeration.UserStatus;
 import com.freshome.exception.ExistenceException;
+import com.freshome.exception.NotApprovedUserException;
 import com.freshome.exception.NotFoundException;
 import com.freshome.exception.NotPendingApprovalExpertException;
 import com.freshome.repository.ExpertRepository;
@@ -81,6 +79,11 @@ public class ExpertServiceImpl implements ExpertService {
     @Override
     public Optional<Expert> findOptionalExpertById(Long id) {
         return expertRepository.findById(id);
+    }
+
+    @Override
+    public Optional<Expert> findByUsername(String username) {
+        return expertRepository.findByUser_Username(username);
     }
 
     @Override
@@ -150,18 +153,18 @@ public class ExpertServiceImpl implements ExpertService {
 
     @Override
     @Transactional
-    public void changePassword(Long expertId, ChangePasswordDTO dto) {
-        Expert expert = expertRepository.findById(expertId)
-                .orElseThrow(() -> new NotFoundException(Expert.class, expertId));
+    public void changePassword(String username, ChangePasswordDTO dto) {
+        User user = userService.findByUsername(username)
+                .orElseThrow(() -> new NotFoundException(Expert.class, username));
         userService.changePassword(
-                expert.getUser(), dto.oldPassword(), dto.newPassword()
+                user, dto.oldPassword(), dto.newPassword()
         );
     }
 
     @Override
-    public CreditResponseDTO findCreditForExpert(Long expertId) {
-        Expert expert = expertRepository.findById(expertId)
-                .orElseThrow(() -> new NotFoundException(Expert.class, expertId));
+    public CreditResponseDTO findCreditForExpert(String username) {
+        Expert expert = expertRepository.findByUser_Username(username)
+                .orElseThrow(()-> new NotFoundException(Expert.class, username));
         return CreditMapper.dtoFromCredit(
                 expert.getCredit()
         );
@@ -169,9 +172,11 @@ public class ExpertServiceImpl implements ExpertService {
 
     @Override
     @Transactional
-    public void addSubServiceForExpert(Long expertId, Long subServiceId) {
-        Expert expert = expertRepository.findById(expertId)
-                .orElseThrow(() -> new NotFoundException(Expert.class, expertId));
+    public void addSubServiceForExpert(String username, Long subServiceId) {
+        Expert expert = expertRepository.findByUser_Username(username)
+                .orElseThrow(() -> new NotFoundException(Expert.class, username));
+        if (expert.getStatus() != UserStatus.APPROVED)
+            throw new NotApprovedUserException();
         SubService subService = subServiceService.findOptionalSubServiceById(subServiceId)
                 .orElseThrow(() -> new NotFoundException(SubService.class, subServiceId));
 //        if(expert.getSubServices().contains(subService))
@@ -182,9 +187,9 @@ public class ExpertServiceImpl implements ExpertService {
 
     @Override
     @Transactional
-    public void removeSubServiceForExpert(Long expertId, Long subServiceId) {
-        Expert expert = expertRepository.findById(expertId)
-                .orElseThrow(() -> new NotFoundException(Expert.class, expertId));
+    public void removeSubServiceForExpert(String username, Long subServiceId) {
+        Expert expert = expertRepository.findByUser_Username(username)
+                .orElseThrow(() -> new NotFoundException(Expert.class, username));
         SubService subService = subServiceService.findOptionalSubServiceById(subServiceId)
                 .orElseThrow(() -> new NotFoundException(SubService.class, subServiceId));
         expert.getSubServices().remove(subService);

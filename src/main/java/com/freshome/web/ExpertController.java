@@ -17,6 +17,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -59,21 +60,29 @@ public class ExpertController {
         );
     }
 
+    @DeleteMapping("/delete/{expertId}")
+    public ResponseEntity<ExpertResponseDTO> delete(
+            @PathVariable Long expertId
+    ){
+        expertService.deleteExpertById(expertId);
+        return ResponseEntity.noContent().build();
+    }
+
     @PutMapping("/update/add_sub_service")
     public ResponseEntity<Void> addSubServiceForExpert(
-            @RequestParam(name = "expertId") Long expertId,
+            Principal principal,
             @RequestParam(name = "subServiceId") Long subServiceId
     ) {
-        expertService.addSubServiceForExpert(expertId, subServiceId);
+        expertService.addSubServiceForExpert(principal.getName(), subServiceId);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/update/remove_sub_service")
     public ResponseEntity<Void> removeSubServiceForExpert(
-            @RequestParam(name = "expertId") Long expertId,
+            Principal principal,
             @RequestParam(name = "subServiceId") Long subServiceId
     ) {
-        expertService.removeSubServiceForExpert(expertId, subServiceId);
+        expertService.removeSubServiceForExpert(principal.getName(), subServiceId);
         return ResponseEntity.noContent().build();
     }
 
@@ -117,12 +126,12 @@ public class ExpertController {
         );
     }
 
-    @PutMapping("/update/change_password/{expertId}")
+    @PutMapping("/update/change_password")
     public ResponseEntity<Void> changePassword(
-            @PathVariable Long expertId,
-            @RequestBody @Valid ChangePasswordDTO passwordDto
+            @RequestBody @Valid ChangePasswordDTO passwordDto,
+            Principal principal
     ) {
-        expertService.changePassword(expertId, passwordDto);
+        expertService.changePassword(principal.getName(), passwordDto);
         return ResponseEntity.noContent().build();
     }
 
@@ -139,12 +148,12 @@ public class ExpertController {
         );
     }
 
-    @GetMapping("/find_credit/{expertId}")
+    @GetMapping("/find_credit")
     public ResponseEntity<CreditResponseDTO> findCredit(
-            @PathVariable Long expertId
+            Principal principal
     ) {
         return ResponseEntity.ok(
-                expertService.findCreditForExpert(expertId)
+                expertService.findCreditForExpert(principal.getName())
         );
     }
 }

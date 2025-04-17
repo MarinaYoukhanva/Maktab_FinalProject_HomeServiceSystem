@@ -22,6 +22,8 @@ public interface ExpertService {
 
     Optional<Expert> findOptionalExpertById(Long id);
 
+    Optional<Expert> findByUsername(String username);
+
     List<Expert> findAll();
 
     List<ExpertResponseDTO> findAllExperts();
@@ -39,13 +41,13 @@ public interface ExpertService {
             String expertise, Double minScore, Double maxScore
     );
 
-    void changePassword(Long expertId, ChangePasswordDTO dto);
+    void changePassword(String username, ChangePasswordDTO dto);
 
-    CreditResponseDTO findCreditForExpert(Long expertId);
+    CreditResponseDTO findCreditForExpert(String username);
 
-    void addSubServiceForExpert(Long expertId, Long subServiceId);
+    void addSubServiceForExpert(String username, Long subServiceId);
 
-    void removeSubServiceForExpert(Long expertId, Long subServiceId);
+    void removeSubServiceForExpert(String username, Long subServiceId);
 
     List<SubServiceResponseDTO> findAllSubServicesOfExpert(Long expertId);
 }
