@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sub Service</title>
+    <title>Service Category</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="flex justify-center items-center h-screen bg-gray-100">
 <div class="w-full max-w-md p-6 bg-white rounded-lg shadow-md">
-    <h3 class="text-2xl font-bold text-center mb-6">Create new Sub Service</h3>
-    <form id="subServiceForm">
+    <h3 class="text-2xl font-bold text-center mb-6">Create new Service Category</h3>
+    <form id="categoryForm">
 
         <div>
             <label for="name" class="block font-medium">Name</label>
@@ -18,21 +18,9 @@
         </div>
 
         <div>
-            <label for="basePrice" class="block font-medium">Base Price</label>
-            <input type="number" id="basePrice" name="basePrice" class="border p-2 w-full">
-            <span id="basePriceError" class="text-red-500 text-sm error-message"></span>
-        </div>
-
-        <div>
             <label for="description" class="block font-medium">Description</label>
             <input type="text" id="description" name="description" class="border p-2 w-full">
             <span id="descriptionError" class="text-red-500 text-sm error-message"></span>
-        </div>
-
-        <div>
-            <label for="categoryId" class="block font-medium">Category Id</label>
-            <input type="number" id="categoryId" name="categoryId" class="border p-2 w-full">
-            <span id="categoryIdError" class="text-red-500 text-sm error-message"></span>
         </div>
 
         <button type="submit" class="mt-4 bg-blue-500 text-white p-2 rounded-lg">Submit</button>
@@ -41,6 +29,8 @@
     <div id="formError" class="text-red-600 mt-4"></div>
 </div>
 
-<script src="./script/sub_service_create.js"></script>
+<script src="script/service-category-create.js"></script>
+<script src="./script/error.js"></script>
+
 </body>
 </html>

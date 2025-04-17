@@ -6,7 +6,7 @@ document.getElementById("signupForm").addEventListener("submit", async function(
     //
     // // If role is 'customer', redirect to customer signup page
     // if (role === "customer") {
-    //     window.location.href = "customer_signup.html"; // Redirect to customer signup page (use .html or .js as per your file structure)
+    //     window.location.href = "customer-signup.html"; // Redirect to customer signup page (use .html or .js as per your file structure)
     //     return; // Stop further execution of the form submission logic
     // }
 
@@ -39,37 +39,11 @@ document.getElementById("signupForm").addEventListener("submit", async function(
         document.querySelectorAll(".error-message").forEach(el => el.innerHTML = "");
 
         if (!response.ok) {
-            if (response.status === 400 && responseData.errors) {
-                Object.keys(responseData.errors).forEach(field => {
-                    const errorElement = document.getElementById(field + "Error");
-                    if (errorElement) {
-                        errorElement.innerHTML = responseData.errors[field]
-                            .map(msg => `<p class="text-red-500">${msg}</p>`)
-                            .join("");
-                    }
-                });
-            } else if (response.status === 409) {
-                if (responseData.errorType === "ExistenceException") {
-                    document.getElementById("formError").innerHTML =
-                        `<p class="text-red-500">${responseData.message}</p>`;
-                } else {
-                    document.getElementById("formError").innerHTML =
-                        `<p class="text-red-500">A conflict occurred! Please try again.</p>`;
-                }
-            }else if (response.status === 413){
-                document.getElementById("formError")
-                    .innerHTML = "too large input value! (up to 300kb for photo)";
-
-            }
-            else {
-                document.getElementById("formError").innerHTML = "An error occurred!";
-                // document.getElementById("formError").innerHTML =
-                //     `<p class="text-red-500">${responseData.message}</p>`;
-
-            }
-        } else {
-            document.getElementById("formError").innerHTML = ""; // Clear form error
-            alert("Signup successful!");
+            handleErrorResponse(response, responseData);
+        }
+        else {
+            document.getElementById("formError").innerHTML = "";
+            alert(`Expert signed up successfully!`);
         }
     } catch (error) {
         document.getElementById("formError").innerHTML =

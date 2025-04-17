@@ -33,6 +33,8 @@
         <p><strong>Longitude:</strong> <span id="longitude">-</span></p>
         <button id="saveButton" class="mt-4 bg-blue-500 text-white px-6 py-2 rounded-lg disabled:bg-gray-300" disabled>Save Location</button>
     </div>
+    <div id="formError" class="text-red-600 mt-4"></div>
+
 </div>
 
 <script>
@@ -72,29 +74,47 @@
     });
 
     // Save button logic (send lat/lng to server)
-    document.getElementById("saveButton").onclick = function () {
+    document.getElementById("saveButton").onclick = async function () {
         const locationData = {
             latitude: selectedLat,
             longitude: selectedLng
         };
 
-        // Send the location data to the backend (example POST request)
-        fetch('/v1/location/save', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(locationData),
-        })
-            .then(response => response.json())
-            .then(data => {
-                alert("Location saved successfully!");
-            })
-            .catch(error => {
-                console.error('Error saving location:', error);
+        try {
+            const orderId = localStorage.getItem("orderId");
+
+            if (!orderId) {
+                document.getElementById("formError").innerHTML =
+                    `<p class="text-red-500">Order ID is missing! Please place an order first.</p>`;
+                return;
+            }
+
+            const response = await fetch(`/v1/location/save?orderId=${orderId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(locationData),
             });
+
+            const responseData = await response.json();
+
+            document.querySelectorAll(".error-message")
+                .forEach(el => el.innerHTML = "");
+
+            if (!response.ok) {
+                handleErrorResponse(response, responseData);
+            } else {
+                document.getElementById("formError").innerHTML = "";
+                alert(`Location saved successfully!`);
+            }
+        } catch (error) {
+            document.getElementById("formError").innerHTML =
+                `<p class="text-red-500">Network error! Please try again.</p>`;
+        }
     };
 </script>
+<script src="./script/error.js"></script>
 
 </body>
 </html>
