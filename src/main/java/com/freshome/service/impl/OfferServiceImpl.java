@@ -116,7 +116,7 @@ public class OfferServiceImpl implements OfferService {
                 expert,
                 orderService.countOrdersByExpertId(expertId),
                 orderService.countDoneOrdersByExpertId(expertId),
-                offerRepository.countByExpert_Id(expertId)
+                offerRepository.countOffersByExpert_Id(expertId)
         );
     }
 
@@ -128,7 +128,7 @@ public class OfferServiceImpl implements OfferService {
                                 expert,
                                 orderService.countOrdersByExpertId(expert.getId()),
                                 orderService.countDoneOrdersByExpertId(expert.getId()),
-                                offerRepository.countByExpert_Id(expert.getId()))
+                                offerRepository.countOffersByExpert_Id(expert.getId()))
                 ).toList();
     }
 

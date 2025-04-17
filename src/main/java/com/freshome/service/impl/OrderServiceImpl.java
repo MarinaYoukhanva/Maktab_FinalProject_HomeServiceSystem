@@ -207,12 +207,13 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public int countOrdersByExpertId(Long expertId) {
-        return orderRepository.countOrderByExpert_Id(expertId);
+        return orderRepository.countOrdersByExpert_Id(expertId);
     }
 
     @Override
     public int countDoneOrdersByExpertId(Long expertId) {
-        return orderRepository.countDoneOrderByExpertId(expertId);
+        return orderRepository.countOrdersByStatusInAndExpert_Id(
+                List.of(OrderStatus.COMPLETED, OrderStatus.PAID),expertId);
     }
 
     @Override
