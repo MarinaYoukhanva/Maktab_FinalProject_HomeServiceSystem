@@ -2,7 +2,6 @@ package com.freshome.repository;
 
 import com.freshome.entity.Order;
 import com.freshome.entity.enumeration.OrderStatus;
-import com.freshome.entity.enumeration.UserStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -19,22 +18,9 @@ public interface OrderRepository extends JpaRepository<Order, Long>,
 
     List<Order> findAllByStatusInAndCustomer_Id (List<OrderStatus> status, Long id);
 
-    @Query(value = """
-            SELECT count(o.id) FROM home.order o
-            JOIN home.customer c ON o.customer_id = c.id
-            JOIN home."user" u ON c.id = u.id
-            WHERE o.customer_id = :customerId AND u.deleted = false AND o.deleted = false
-            """, nativeQuery = true)
-    int countOrderByCustomer_Id(@Param("customerId") Long id);
+    int countOrdersByCustomer_Id( Long id);
 
-    @Query(value = """
-            SELECT count(o.id) FROM home.order o
-            JOIN home.customer c ON o.customer_id = c.id
-            JOIN home."user" u ON c.id = u.id
-            WHERE o.customer_id = :customerId AND u.deleted = false AND o.deleted = false
-            AND o.status IN ('COMPLETED', 'PAID')
-            """, nativeQuery = true)
-    int countDoneOrderByCustomerId (@Param("customerId") Long id);
+    int countOrdersByStatusInAndCustomer_Id (List<OrderStatus> status, Long id);
 
 
     List<Order> findAllByExpert_Id(@Param("expertId") Long id);

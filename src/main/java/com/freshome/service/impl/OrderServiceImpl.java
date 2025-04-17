@@ -221,8 +221,9 @@ public class OrderServiceImpl implements OrderService {
                 .orElseThrow(() -> new NotFoundException(Customer.class, customerId));
         return CustomerMapper.reportDtoFromCustomer(
                 customer,
-                orderRepository.countOrderByCustomer_Id(customerId),
-                orderRepository.countDoneOrderByCustomerId(customerId)
+                orderRepository.countOrdersByCustomer_Id(customerId),
+                orderRepository.countOrdersByStatusInAndCustomer_Id(
+                        List.of(OrderStatus.COMPLETED, OrderStatus.PAID), customerId)
         );
     }
 
@@ -232,8 +233,9 @@ public class OrderServiceImpl implements OrderService {
                 .stream().map(
                         customer -> CustomerMapper.reportDtoFromCustomer(
                                 customer,
-                                orderRepository.countOrderByCustomer_Id(customer.getId()),
-                                orderRepository.countDoneOrderByCustomerId(customer.getId())
+                                orderRepository.countOrdersByCustomer_Id(customer.getId()),
+                                orderRepository.countOrdersByStatusInAndCustomer_Id(
+                                        List.of(OrderStatus.COMPLETED, OrderStatus.PAID), customer.getId())
                         )).toList();
     }
 
